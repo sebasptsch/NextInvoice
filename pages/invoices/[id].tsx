@@ -1,0 +1,111 @@
+import {
+  Badge,
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Spacer,
+  Text,
+  Heading,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Button,
+} from "@chakra-ui/react";
+import Layout from "../../components/Layout";
+import InvoiceInterface from "../../interfaces/Invoice";
+const stripe = require("stripe")(
+  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
+);
+
+export default function InvoicePage({
+  invoice,
+}: {
+  invoice: InvoiceInterface;
+}) {
+  return (
+    <Layout>
+      <Heading size="xl" p={1}>
+        ${invoice.amount_due / 100} <Badge>{invoice.status}</Badge>
+      </Heading>
+      <Box>
+        <Button as={"a"} href={invoice.invoice_pdf} m={2}>
+          Download Invoice
+        </Button>
+        <Button
+          onClick={() => {
+            stripe.invoices.sendInvoice(invoice.id);
+          }}
+          m={2}
+        >
+          Re-send Email
+        </Button>
+        <Button m={2}></Button>
+        <Button m={2}></Button>
+      </Box>
+      <Divider m="1em 0 1em 0" />
+
+      <Flex>
+        <Box padding="0 2em 0 2em">
+          <Text color="gray.500">Date</Text>
+          <Text>{new Date(invoice.due_date * 1000).toLocaleDateString()}</Text>
+        </Box>
+        <Divider orientation="vertical" h="4em" />
+        <Box padding="0 2em 0 2em">
+          <Text color="gray.500">Customer</Text>
+          <Text>{invoice.customer_name}</Text>
+        </Box>
+        {/* <Box m="1em">
+          <Text color="gray.500">Date</Text>
+          <Text>{new Date(invoice.due_date).toLocaleDateString()}</Text>
+        </Box> */}
+      </Flex>
+      <br />
+      <br />
+      <Heading size={"md"}>Payment Details</Heading>
+      <Divider m="1em 0 1em 0" />
+      <Table>
+        <Tbody>
+          <Tr>
+            <Td>Amount</Td>
+            <Td>${invoice.amount_due / 100}</Td>
+          </Tr>
+          <Tr>
+            <Td>Status</Td>
+            <Td>{invoice.status}</Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    </Layout>
+  );
+}
+
+export async function getStaticProps({ params }) {
+  const invoice = await stripe.invoices.retrieve(params.id);
+  //   console.log(invoice);
+  //   const invoice = await res.invoice;
+  //   console.log(await stripe.invoices.retrieve("in_1HQXddIK06OmoiJkg9DVgibR"));
+  //   console.log(invoice);
+  return {
+    props: {
+      invoice,
+    },
+    revalidate: 1,
+  };
+}
+
+export async function getStaticPaths() {
+  const res = await stripe.invoices.list();
+  const invoices = await res.data;
+
+  // console.log(allPosts?.map((post) => `/blog/${post.id}`));
+  //   console.log(invoices);
+  return {
+    paths: (await invoices?.map((invoice) => `/invoices/${invoice.id}`)) || [],
+    fallback: false,
+  };
+}
