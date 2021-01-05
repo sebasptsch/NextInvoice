@@ -1,5 +1,10 @@
 # Todo
 
+## Layout and Other Functionality
+
+- [ ] Add Navigation
+- [ ] Add login?
+
 ## Invoices
 
 - [ ] Get Invoices
