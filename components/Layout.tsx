@@ -15,6 +15,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import DrawerNavigation from "./Drawer";
+import { signIn, signOut, useSession } from "next-auth/client";
 
 export default function Layout({
   children,
@@ -24,7 +25,12 @@ export default function Layout({
   noContainer?: boolean;
 }) {
   const { colorMode, toggleColorMode } = useColorMode();
-  return (
+  const [session, loading] = useSession();
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  return session ? (
     <>
       <Box p="1em" w="100%">
         <Flex>
@@ -40,6 +46,10 @@ export default function Layout({
       </Box>
       {noContainer ? children : <Container>{children}</Container>}
       <Box w="100%">Foooter</Box>
+    </>
+  ) : (
+    <>
+      <Button onClick={signIn}>signIn</Button>
     </>
   );
 }

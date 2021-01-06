@@ -4,11 +4,17 @@ const stripe = new Stripe(
   { apiVersion: "2020-08-27" }
 );
 import type { NextApiRequest, NextApiResponse } from "next";
-
+import { getSession } from "next-auth/client";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await getSession({ req });
+  if (!session) {
+    res.status(403).json({
+      message: "Please Login using valid credentials",
+    });
+  }
   if (req.method == "POST") {
     await stripe.products
       .create(req.body)
