@@ -197,6 +197,6 @@ export async function getStaticPaths() {
   //   console.log(invoices);
   return {
     paths: (await invoices?.map((invoice) => `/invoices/${invoice.id}`)) || [],
-    fallback: false,
+    fallback: true,
   };
 }
