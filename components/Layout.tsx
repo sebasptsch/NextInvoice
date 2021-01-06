@@ -16,7 +16,13 @@ import {
 } from "@chakra-ui/react";
 import DrawerNavigation from "./Drawer";
 
-export default function Layout({ children }) {
+export default function Layout({
+  children,
+  noContainer,
+}: {
+  children: any;
+  noContainer?: boolean;
+}) {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <>
@@ -32,7 +38,7 @@ export default function Layout({ children }) {
           </Button> */}
         </Flex>
       </Box>
-      <Container>{children}</Container>
+      {noContainer ? children : <Container>{children}</Container>}
       <Box w="100%">Foooter</Box>
     </>
   );

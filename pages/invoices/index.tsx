@@ -5,7 +5,11 @@ import {
   Heading,
   LinkBox,
   Spacer,
+  Table,
   Text,
+  Thead,
+  Tr,
+  Th,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Layout from "../../components/Layout";
@@ -19,30 +23,50 @@ export default function Invoices({
 }: {
   invoices: Array<InvoiceInterface>;
 }) {
-  // console.log(invoices);
+  const InvoiceStatus = {
+    draft: "grey.500",
+    open: "blue.300",
+    paid: "green.400",
+  };
   return (
     <Layout>
       <Heading size="xl">Invoices</Heading>
+
       {invoices.map((invoice) => (
-        <>
-          <Box
-            as={LinkBox}
-            href={"/invoices/" + invoice.id}
-            borderWidth="1px"
-            borderRadius="10px"
-            p="1em"
-            m="1em"
-          >
-            <Flex>
-              <Box>{invoice.number}</Box>
-              <Spacer />
-              <Box>
-                ${invoice.amount_due / 100}{" "}
-                <Badge autoCapitalize="true">{invoice.status}</Badge>
-              </Box>
-            </Flex>
-          </Box>
-        </>
+        <Box
+          as={LinkBox}
+          href={"/invoices/" + invoice.id}
+          borderWidth="1px"
+          borderRadius="10px"
+          p="1em"
+          m="1em"
+        >
+          <Flex>
+            <Box>{invoice.number}</Box>
+            <Spacer />
+            <Box>
+              ${invoice.amount_due / 100}{" "}
+              <Badge
+                autoCapitalize="true"
+                bgColor={
+                  invoice.status == "paid"
+                    ? "green.400"
+                    : invoice.status == "draft"
+                    ? "grey.500"
+                    : invoice.due_date < Date.now()
+                    ? "red.300"
+                    : invoice.status == "open"
+                    ? "blue.300"
+                    : null
+                }
+              >
+                {invoice.due_date < Date.now() && invoice.status == "open"
+                  ? "Late"
+                  : invoice.status}
+              </Badge>
+            </Box>
+          </Flex>
+        </Box>
       ))}
     </Layout>
   );

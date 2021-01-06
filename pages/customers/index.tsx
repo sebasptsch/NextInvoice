@@ -49,7 +49,7 @@ export default function Customers({
                   {customer.name}
                 </Box>
                 <Spacer />
-                <Box></Box>
+                <Box>${customer.balance / 100}</Box>
               </Flex>
             </Box>
           </>
