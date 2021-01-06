@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { getSession } from "next-auth/client";
 
 const stripe = new Stripe(
@@ -7,10 +7,7 @@ const stripe = new Stripe(
   { apiVersion: "2020-08-27" }
 );
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req, res) {
   const session = await getSession({ req });
   if (!session) {
     res.status(403).json({
