@@ -14,6 +14,7 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
+import DrawerNavigation from "./Drawer";
 
 export default function Layout({ children }) {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -21,9 +22,10 @@ export default function Layout({ children }) {
     <>
       <Box p="1em" w="100%">
         <Flex>
-          <Button onClick={toggleColorMode}>
+          <Button onClick={toggleColorMode} marginRight={2}>
             Toggle {colorMode === "light" ? "Dark" : "Light"}
           </Button>
+          <DrawerNavigation />
           <Spacer />
           <Button as="a" href="/invoices/create">
             Create Invoice
