@@ -16,16 +16,18 @@ import {
   TableCaption,
   Button,
   Tfoot,
+  useToast,
 } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
+import axios from "axios";
 const stripe = new Stripe(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
   { apiVersion: "2020-08-27" }
 );
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
-  // console.log(invoice);
+  const toast = useToast();
   return (
     <Layout>
       <Flex>
@@ -43,7 +45,14 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Button>
         <Button
           onClick={() => {
-            stripe.invoices.sendInvoice(invoice.id);
+            axios.post(`/api/invoices/${invoice.id}/send`).catch((error) => {
+              // console.log("error", error.message);
+              toast({
+                title: error.response.data.type,
+                status: "error",
+                description: error.response.data.raw.message,
+              });
+            });
           }}
           m={2}
         >
