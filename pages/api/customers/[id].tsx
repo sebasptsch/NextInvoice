@@ -11,7 +11,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    console.log("hello");
+    // console.log("hello");
     await stripe.customers
       .retrieve(req.query.id)
       .then((value) => res.status(200).json(value));

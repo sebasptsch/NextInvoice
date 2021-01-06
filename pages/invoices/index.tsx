@@ -38,18 +38,12 @@ const stripe = new Stripe(
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 
-async () => {
-  const inv = await stripe.invoices.retrieve("in_1I6WFeIK06OmoiJkqRImDcuW");
-  console.log(inv);
-};
-
 export default function Invoices({
   invoices,
 }: {
   invoices: Array<Stripe.Invoice>;
 }) {
   const toast = useToast();
-
   return (
     <Layout>
       <Heading size="xl">Invoices</Heading>
@@ -107,7 +101,10 @@ export default function Invoices({
                     onClick={() => {
                       axios
                         .post(`/api/invoices/${invoice.id}/send`)
-                        .then((data) => console.log(data));
+                        .catch((error) => {
+                          // console.log("error", error.message);
+                          toast({ title: error.message, status: "error" });
+                        });
                     }}
                   >
                     Send
@@ -116,7 +113,10 @@ export default function Invoices({
                     onClick={() => {
                       axios
                         .post(`/api/invoices/${invoice.id}/pay`)
-                        .then((data) => console.log(data));
+                        .catch((error) => {
+                          // console.log("error", error.message);
+                          toast({ title: error.message, status: "error" });
+                        });
                     }}
                   >
                     Pay
@@ -126,7 +126,10 @@ export default function Invoices({
                       onClick={() => {
                         axios
                           .delete(`/api/invoices/${invoice.id}`)
-                          .then((data) => console.log(data));
+                          .catch((error) => {
+                            // console.log("error", error.message);
+                            toast({ title: error.message, status: "error" });
+                          });
                       }}
                     >
                       Delete
@@ -136,7 +139,10 @@ export default function Invoices({
                     onClick={() => {
                       axios
                         .post(`/api/invoices/${invoice.id}/void`)
-                        .then((data) => console.log(data));
+                        .catch((error) => {
+                          // console.log("error", error.message);
+                          toast({ title: error.message, status: "error" });
+                        });
                     }}
                   >
                     Void
