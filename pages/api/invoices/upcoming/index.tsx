@@ -9,14 +9,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method == "POST") {
-    await stripe.customers
-      .create(req.body)
-      .then((value) => res.status(200).json(value));
-  }
   if (req.method == "GET") {
-    await stripe.customers
-      .list(req.body)
+    await stripe.invoices
+      .retrieveUpcoming(req.body)
       .then((value) => res.status(200).json(value));
   }
 }
