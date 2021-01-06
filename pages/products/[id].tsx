@@ -33,6 +33,6 @@ export async function getStaticPaths() {
   //   console.log(invoices);
   return {
     paths: (await products?.map((product) => `/products/${product.id}`)) || [],
-    fallback: false,
+    fallback: true,
   };
 }
