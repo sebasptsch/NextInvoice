@@ -15,6 +15,7 @@ import {
   Td,
   TableCaption,
   Button,
+  Tfoot,
 } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
 import InvoiceInterface from "../../interfaces/Invoice";
@@ -27,11 +28,18 @@ export default function InvoicePage({
 }: {
   invoice: InvoiceInterface;
 }) {
+  // console.log(invoice);
   return (
     <Layout>
-      <Heading size="xl" p={1}>
-        ${invoice.amount_due / 100} <Badge>{invoice.status}</Badge>
-      </Heading>
+      <Flex>
+        <Heading size="xl" p={1}>
+          ${invoice.amount_due / 100} <Badge>{invoice.status}</Badge>
+        </Heading>
+        <Spacer />
+        <Center>
+          <Text>{invoice.number}</Text>
+        </Center>
+      </Flex>
       <Box>
         <Button as={"a"} href={invoice.invoice_pdf} m={2}>
           Download Invoice
@@ -44,8 +52,10 @@ export default function InvoicePage({
         >
           Re-send Email
         </Button>
-        <Button m={2}></Button>
-        <Button m={2}></Button>
+        <Button m={2} as={"a"} href={invoice.hosted_invoice_url}>
+          Payment Page
+        </Button>
+        {/* <Button m={2}></Button> */}
       </Box>
       <Divider m="1em 0 1em 0" />
 
@@ -79,6 +89,79 @@ export default function InvoicePage({
             <Td>{invoice.status}</Td>
           </Tr>
         </Tbody>
+      </Table>
+      <br />
+      <br />
+      <Heading size={"md"}>Summary</Heading>
+      <Divider m="1em 0 1em 0" />
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Description</Th>
+            <Th>QTY</Th>
+            <Th>Unit Price</Th>
+            <Th isNumeric>Amount</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {invoice.lines.data.map((product) => (
+            <Tr>
+              <Td>{product.description}</Td>
+              <Td isNumeric>{product.quantity}</Td>
+              <Td isNumeric>${product.price.unit_amount / 100}</Td>
+              <Td isNumeric>${product.amount / 100}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot>
+          <Tr>
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Text textAlign="right" fontWeight="bold">
+                Subtotal
+              </Text>
+            </Td>
+            <Td isNumeric>${invoice.subtotal / 100}</Td>
+          </Tr>
+          {invoice.discount ? (
+            <Tr>
+              <Td></Td>
+              <Td></Td>
+              <Td>
+                <Text textAlign="right" fontWeight="lighter">
+                  {invoice.discount.coupon.name}
+                </Text>
+              </Td>
+              <Td isNumeric>
+                -$
+                {(invoice.subtotal *
+                  (invoice.discount.coupon.percent_off / 100)) /
+                  100}
+              </Td>
+            </Tr>
+          ) : null}
+          <Tr>
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Text textAlign="right" fontWeight="bold">
+                Total
+              </Text>
+            </Td>
+            <Td isNumeric>${invoice.total / 100}</Td>
+          </Tr>
+          <Tr>
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Text textAlign="right" fontWeight="bold">
+                Amount Due
+              </Text>
+            </Td>
+            <Td isNumeric>${invoice.amount_due / 100}</Td>
+          </Tr>
+        </Tfoot>
       </Table>
     </Layout>
   );

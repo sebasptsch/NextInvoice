@@ -51,7 +51,7 @@ export default interface Invoice {
   receipt_number: string;
   starting_balance: number;
   statement_descriptor: any;
-  status: string;
+  status: "draft" | "open" | "paid" | "uncollectible" | "void";
   status_transitions: StatusTransitions;
   subscription: any;
   subtotal: number;
