@@ -5,20 +5,23 @@ import {
   Flex,
   Heading,
   Input,
+  LinkBox,
   Spacer,
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
+import { Product } from "../../interfaces/Product";
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
-export default function Products({ products }) {
+export default function Products({ products }: { products: Array<Product> }) {
   // console.log(invoices);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
+  //   console.log(products);
   return (
     <Layout>
       <Flex>
@@ -38,9 +41,18 @@ export default function Products({ products }) {
         )
         .map((product) => (
           <>
-            <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
-              <Flex>{product.name}</Flex>
-            </Box>
+            <LinkBox
+              href={"/products/" + product.id}
+              borderWidth="1px"
+              borderRadius="10px"
+              p="1em"
+              m="1em"
+            >
+              <Flex>
+                {product.name}
+                <Text></Text>
+              </Flex>
+            </LinkBox>
           </>
         ))}
     </Layout>

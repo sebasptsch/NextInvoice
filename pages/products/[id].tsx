@@ -1,11 +1,12 @@
 import Layout from "../../components/Layout";
+import { Product } from "../../interfaces/Product";
 
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
-export default function Products({ product }) {
-  //   console.log(product);
+export default function Products({ product }: { product: Product }) {
+  console.log(product);
   return <Layout>{product.name}</Layout>;
 }
 

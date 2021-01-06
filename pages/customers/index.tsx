@@ -11,11 +11,16 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
+import { Customer } from "../../interfaces/Customer";
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
-export default function Customers({ customers }) {
+export default function Customers({
+  customers,
+}: {
+  customers: Array<Customer>;
+}) {
   // console.log(invoices);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);

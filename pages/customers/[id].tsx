@@ -1,10 +1,11 @@
 import Layout from "../../components/Layout";
+import { Customer } from "../../interfaces/Customer";
 
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
-export default function CustomerPage({ customer }) {
+export default function CustomerPage({ customer }: { customer: Customer }) {
   //   console.log(customer);
   return <Layout>{customer.name}</Layout>;
 }
