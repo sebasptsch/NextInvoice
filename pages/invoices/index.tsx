@@ -103,7 +103,11 @@ export default function Invoices({
                         .post(`/api/invoices/${invoice.id}/send`)
                         .catch((error) => {
                           // console.log("error", error.message);
-                          toast({ title: error.message, status: "error" });
+                          toast({
+                            title: error.response.data.type,
+                            status: "error",
+                            description: error.response.data.raw.message,
+                          });
                         });
                     }}
                   >
@@ -115,7 +119,11 @@ export default function Invoices({
                         .post(`/api/invoices/${invoice.id}/pay`)
                         .catch((error) => {
                           // console.log("error", error.message);
-                          toast({ title: error.message, status: "error" });
+                          toast({
+                            title: error.response.data.type,
+                            status: "error",
+                            description: error.response.data.raw.message,
+                          });
                         });
                     }}
                   >
@@ -128,7 +136,11 @@ export default function Invoices({
                           .delete(`/api/invoices/${invoice.id}`)
                           .catch((error) => {
                             // console.log("error", error.message);
-                            toast({ title: error.message, status: "error" });
+                            toast({
+                              title: error.response.data.type,
+                              status: "error",
+                              description: error.response.data.raw.message,
+                            });
                           });
                       }}
                     >
@@ -140,8 +152,11 @@ export default function Invoices({
                       axios
                         .post(`/api/invoices/${invoice.id}/void`)
                         .catch((error) => {
-                          // console.log("error", error.message);
-                          toast({ title: error.message, status: "error" });
+                          toast({
+                            title: error.response.data.type,
+                            status: "error",
+                            description: error.response.data.raw.message,
+                          });
                         });
                     }}
                   >

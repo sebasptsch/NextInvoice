@@ -13,6 +13,7 @@ export default async function handler(
   if (req.method === "POST") {
     await stripe.invoices
       .markUncollectible(req.query.id)
-      .then((value) => res.status(200).json(value));
+      .then((value) => res.status(200).json(value))
+      .catch((error) => res.status(500).json(error));
   }
 }
