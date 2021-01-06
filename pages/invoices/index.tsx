@@ -55,32 +55,32 @@ export default function Invoices({
             borderRadius="10px"
             p="1em"
             m="1em"
-            key={invoice.id}
+            key={invoice?.id}
           >
             <Flex>
-              <LinkBox href={"/invoices/" + invoice.id}>
-                {invoice.number}
+              <LinkBox href={"/invoices/" + invoice?.id}>
+                {invoice?.number}
               </LinkBox>
               <Spacer />
               <Box>
-                ${invoice.amount_due / 100}{" "}
+                ${invoice?.amount_due / 100}{" "}
                 <Badge
                   autoCapitalize="true"
                   bgColor={
-                    invoice.status == "paid"
+                    invoice?.status == "paid"
                       ? "green.400"
-                      : invoice.status == "draft"
+                      : invoice?.status == "draft"
                       ? "grey.500"
-                      : invoice.due_date < Date.now()
+                      : invoice?.due_date < Date.now()
                       ? "red.300"
-                      : invoice.status == "open"
+                      : invoice?.status == "open"
                       ? "blue.300"
                       : null
                   }
                 >
-                  {invoice.due_date < Date.now() && invoice.status == "open"
+                  {invoice?.due_date < Date.now() && invoice?.status == "open"
                     ? "Late"
-                    : invoice.status}
+                    : invoice?.status}
                 </Badge>
               </Box>
               <Menu>
@@ -93,14 +93,16 @@ export default function Invoices({
                   Actions
                 </MenuButton>
                 <MenuList>
-                  {invoice.status == "draft" ? <MenuItem>Edit</MenuItem> : null}
-                  <MenuItem as={Link} href={invoice.invoice_pdf}>
+                  {invoice?.status == "draft" ? (
+                    <MenuItem>Edit</MenuItem>
+                  ) : null}
+                  <MenuItem as={Link} href={invoice?.invoice_pdf}>
                     Download
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
                       axios
-                        .post(`/api/invoices/${invoice.id}/send`)
+                        .post(`/api/invoices/${invoice?.id}/send`)
                         .catch((error) => {
                           // console.log("error", error.message);
                           toast({
@@ -116,7 +118,7 @@ export default function Invoices({
                   <MenuItem
                     onClick={() => {
                       axios
-                        .post(`/api/invoices/${invoice.id}/pay`)
+                        .post(`/api/invoices/${invoice?.id}/pay`)
                         .catch((error) => {
                           // console.log("error", error.message);
                           toast({
@@ -129,11 +131,11 @@ export default function Invoices({
                   >
                     Pay
                   </MenuItem>
-                  {invoice.status == "draft" ? (
+                  {invoice?.status == "draft" ? (
                     <MenuItem
                       onClick={() => {
                         axios
-                          .delete(`/api/invoices/${invoice.id}`)
+                          .delete(`/api/invoices/${invoice?.id}`)
                           .catch((error) => {
                             // console.log("error", error.message);
                             toast({
@@ -150,7 +152,7 @@ export default function Invoices({
                   <MenuItem
                     onClick={() => {
                       axios
-                        .post(`/api/invoices/${invoice.id}/void`)
+                        .post(`/api/invoices/${invoice?.id}/void`)
                         .catch((error) => {
                           toast({
                             title: error.response.data.type,
@@ -172,7 +174,7 @@ export default function Invoices({
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = await stripe.invoices.list({});
   const invoices = await res.data;
 
@@ -180,6 +182,5 @@ export async function getStaticProps() {
     props: {
       invoices,
     },
-    revalidate: 1,
   };
 }

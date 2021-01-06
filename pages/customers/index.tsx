@@ -41,26 +41,30 @@ export default function Customers({
 
       {customers
         .filter((customer) =>
-          customer.name.toLowerCase().includes(value.toLowerCase())
+          customer?.name.toLowerCase().includes(value.toLowerCase())
         )
         .map((customer) => (
-          <>
-            <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
-              <Flex>
-                <Box as="a" href={"/customers/" + customer.id}>
-                  {customer.name}
-                </Box>
-                <Spacer />
-                <Box>${customer.balance / 100}</Box>
-              </Flex>
-            </Box>
-          </>
+          <Box
+            borderWidth="1px"
+            borderRadius="10px"
+            p="1em"
+            m="1em"
+            key={customer?.id}
+          >
+            <Flex>
+              <Box as="a" href={"/customers/" + customer?.id}>
+                {customer?.name}
+              </Box>
+              <Spacer />
+              <Box>${customer?.balance / 100}</Box>
+            </Flex>
+          </Box>
         ))}
     </Layout>
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = await stripe.customers.list();
   const customers = await res.data;
   //   console.log(customers);
@@ -69,6 +73,5 @@ export async function getStaticProps() {
     props: {
       customers,
     },
-    revalidate: 1,
   };
 }

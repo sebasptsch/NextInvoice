@@ -8,10 +8,10 @@ const stripe = new Stripe(
 
 export default function Products({ product }: { product: Stripe.Product }) {
   // console.log(product);
-  return <Layout>{product.name}</Layout>;
+  return <Layout>{product?.name}</Layout>;
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const product = await stripe.products.retrieve(params.id);
   //   console.log(invoice);
   //   const invoice = await res.invoice;
@@ -21,18 +21,17 @@ export async function getStaticProps({ params }) {
     props: {
       product,
     },
-    revalidate: 1,
   };
 }
 
-export async function getStaticPaths() {
-  const res = await stripe.products.list();
-  const products = await res.data;
+// export async function getStaticPaths() {
+//   const res = await stripe.products.list();
+//   const products = await res.data;
 
-  // console.log(allPosts?.map((post) => `/blog/${post.id}`));
-  //   console.log(invoices);
-  return {
-    paths: (await products?.map((product) => `/products/${product.id}`)) || [],
-    fallback: true,
-  };
-}
+//   // console.log(allPosts?.map((post) => `/blog/${post.id}`));
+//   //   console.log(invoices);
+//   return {
+//     paths: (await products?.map((product) => `/products/${product?.id}`)) || [],
+//     fallback: true,
+//   };
+// }

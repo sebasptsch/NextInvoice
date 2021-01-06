@@ -48,8 +48,6 @@ export default function Layout({
       <Box w="100%">Foooter</Box>
     </>
   ) : (
-    <>
-      <Button onClick={() => signIn}>signIn</Button>
-    </>
+    <Button onClick={() => signIn}>signIn</Button>
   );
 }

@@ -12,32 +12,27 @@ export default function CustomerPage({
   customer: Stripe.Customer;
 }) {
   //   console.log(customer);
-  return <Layout>{customer.name}</Layout>;
+  return <Layout>{customer?.name}</Layout>;
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const customer = await stripe.customers.retrieve(params.id);
-  //   console.log(invoice);
-  //   const invoice = await res.invoice;
-  //   console.log(await stripe.invoices.retrieve("in_1HQXddIK06OmoiJkg9DVgibR"));
-  //   console.log(invoice);
   return {
     props: {
       customer,
     },
-    revalidate: 1,
   };
 }
 
-export async function getStaticPaths() {
-  const res = await stripe.customers.list();
-  const customers = await res.data;
+// export async function getStaticPaths() {
+//   const res = await stripe.customers.list();
+//   const customers = await res.data;
 
-  // console.log(allPosts?.map((post) => `/blog/${post.id}`));
-  //   console.log(invoices);
-  return {
-    paths:
-      (await customers?.map((customer) => `/customers/${customer.id}`)) || [],
-    fallback: true,
-  };
-}
+//   // console.log(allPosts?.map((post) => `/blog/${post.id}`));
+//   //   console.log(invoices);
+//   return {
+//     paths:
+//       (await customers?.map((customer) => `/customers/${customer?.id}`)) || [],
+//     fallback: true,
+//   };
+// }

@@ -42,19 +42,19 @@ export default function Products({
 
       {products
         .filter((product) =>
-          product.name.toLowerCase().includes(value.toLowerCase())
+          product?.name.toLowerCase().includes(value.toLowerCase())
         )
         .map((product) => (
           <>
             <LinkBox
-              href={"/products/" + product.id}
+              href={"/products/" + product?.id}
               borderWidth="1px"
               borderRadius="10px"
               p="1em"
               m="1em"
             >
               <Flex>
-                {product.name}
+                {product?.name}
                 <Text></Text>
               </Flex>
             </LinkBox>
@@ -64,7 +64,7 @@ export default function Products({
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = await stripe.products.list({});
   const products = await res.data;
   //   console.log(customers);
@@ -73,6 +73,5 @@ export async function getStaticProps() {
     props: {
       products,
     },
-    revalidate: 1,
   };
 }
