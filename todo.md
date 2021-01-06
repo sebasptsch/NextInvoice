@@ -4,29 +4,27 @@
 
 ## Layout and Other Functionality
 
-- [ ] Add Navigation
+- [x] Add Navigation
 - [ ] Add login?
 
 ## Invoices
 
-- [ ] Get Invoices
-- [ ] See products inside invoice and totals
+- [x] Get Invoices
+- [x] See products inside invoice and totals
 - [ ] Send Reminder Email
 - [ ] Create Invoices
-- [ ] Sort Invoices
+- [x] Sort Invoices
 - [ ] Unpaid
 - [ ] By Customer
 
 ## Customers
 
-- [ ] Customers
-- [ ] List Customers
+- [x] List Customers
 - [ ] List Related Invoices
 
 ## Products
 
-- [ ] Products
-- [ ] Get Products
+- [x] Get Products
 - [ ] Create Products
 - [ ] Modify Products
 - [ ] Operations on Products
