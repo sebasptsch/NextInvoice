@@ -1,10 +1,12 @@
+import Layout from "../../components/Layout";
+
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
 export default function Products({ product }) {
-  console.log(product);
-  return product.name;
+  //   console.log(product);
+  return <Layout>{product.name}</Layout>;
 }
 
 export async function getStaticProps({ params }) {

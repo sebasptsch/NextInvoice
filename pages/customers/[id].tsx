@@ -1,10 +1,12 @@
+import Layout from "../../components/Layout";
+
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
 );
 
 export default function CustomerPage({ customer }) {
-  console.log(customer);
-  return customer.name;
+  //   console.log(customer);
+  return <Layout>{customer.name}</Layout>;
 }
 
 export async function getStaticProps({ params }) {

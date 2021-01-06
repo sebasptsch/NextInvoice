@@ -1,4 +1,12 @@
-import { Badge, Box, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Flex,
+  Heading,
+  LinkBox,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 const stripe = require("stripe")(
@@ -17,11 +25,16 @@ export default function Invoices({
       <Heading size="xl">Invoices</Heading>
       {invoices.map((invoice) => (
         <>
-          <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
+          <Box
+            as={LinkBox}
+            href={"/invoices/" + invoice.id}
+            borderWidth="1px"
+            borderRadius="10px"
+            p="1em"
+            m="1em"
+          >
             <Flex>
-              <Box>
-                <a href={"/invoices/" + invoice.id}>{invoice.id}</a>
-              </Box>
+              <Box>{invoice.number}</Box>
               <Spacer />
               <Box>
                 ${invoice.amount_due / 100}{" "}

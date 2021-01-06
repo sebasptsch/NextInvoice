@@ -94,75 +94,77 @@ export default function InvoicePage({
       <br />
       <Heading size={"md"}>Summary</Heading>
       <Divider m="1em 0 1em 0" />
-      <Table>
-        <Thead>
-          <Tr>
-            <Th>Description</Th>
-            <Th>QTY</Th>
-            <Th>Unit Price</Th>
-            <Th isNumeric>Amount</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {invoice.lines.data.map((product) => (
+      <Box overflow="auto">
+        <Table overflowY="scroll">
+          <Thead>
             <Tr>
-              <Td>{product.description}</Td>
-              <Td isNumeric>{product.quantity}</Td>
-              <Td isNumeric>${product.price.unit_amount / 100}</Td>
-              <Td isNumeric>${product.amount / 100}</Td>
+              <Th>Description</Th>
+              <Th>QTY</Th>
+              <Th>Unit Price</Th>
+              <Th isNumeric>Amount</Th>
             </Tr>
-          ))}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Td></Td>
-            <Td></Td>
-            <Td>
-              <Text textAlign="right" fontWeight="bold">
-                Subtotal
-              </Text>
-            </Td>
-            <Td isNumeric>${invoice.subtotal / 100}</Td>
-          </Tr>
-          {invoice.discount ? (
+          </Thead>
+          <Tbody>
+            {invoice.lines.data.map((product) => (
+              <Tr>
+                <Td>{product.description}</Td>
+                <Td isNumeric>{product.quantity}</Td>
+                <Td isNumeric>${product.price.unit_amount / 100}</Td>
+                <Td isNumeric>${product.amount / 100}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+          <Tfoot>
             <Tr>
               <Td></Td>
               <Td></Td>
               <Td>
-                <Text textAlign="right" fontWeight="lighter">
-                  {invoice.discount.coupon.name}
+                <Text textAlign="right" fontWeight="bold">
+                  Subtotal
                 </Text>
               </Td>
-              <Td isNumeric>
-                -$
-                {(invoice.subtotal *
-                  (invoice.discount.coupon.percent_off / 100)) /
-                  100}
-              </Td>
+              <Td isNumeric>${invoice.subtotal / 100}</Td>
             </Tr>
-          ) : null}
-          <Tr>
-            <Td></Td>
-            <Td></Td>
-            <Td>
-              <Text textAlign="right" fontWeight="bold">
-                Total
-              </Text>
-            </Td>
-            <Td isNumeric>${invoice.total / 100}</Td>
-          </Tr>
-          <Tr>
-            <Td></Td>
-            <Td></Td>
-            <Td>
-              <Text textAlign="right" fontWeight="bold">
-                Amount Due
-              </Text>
-            </Td>
-            <Td isNumeric>${invoice.amount_due / 100}</Td>
-          </Tr>
-        </Tfoot>
-      </Table>
+            {invoice.discount ? (
+              <Tr>
+                <Td></Td>
+                <Td></Td>
+                <Td>
+                  <Text textAlign="right" fontWeight="lighter">
+                    {invoice.discount.coupon.name}
+                  </Text>
+                </Td>
+                <Td isNumeric>
+                  -$
+                  {(invoice.subtotal *
+                    (invoice.discount.coupon.percent_off / 100)) /
+                    100}
+                </Td>
+              </Tr>
+            ) : null}
+            <Tr>
+              <Td></Td>
+              <Td></Td>
+              <Td>
+                <Text textAlign="right" fontWeight="bold">
+                  Total
+                </Text>
+              </Td>
+              <Td isNumeric>${invoice.total / 100}</Td>
+            </Tr>
+            <Tr>
+              <Td></Td>
+              <Td></Td>
+              <Td>
+                <Text textAlign="right" fontWeight="bold">
+                  Amount Due
+                </Text>
+              </Td>
+              <Td isNumeric>${invoice.amount_due / 100}</Td>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </Box>
     </Layout>
   );
 }

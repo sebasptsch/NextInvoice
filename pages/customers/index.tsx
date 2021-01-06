@@ -1,5 +1,15 @@
-import { Badge, Box, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Input,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
+import { useState } from "react";
 import Layout from "../../components/Layout";
 const stripe = require("stripe")(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
@@ -7,22 +17,38 @@ const stripe = require("stripe")(
 
 export default function Customers({ customers }) {
   // console.log(invoices);
+  const [value, setValue] = useState("");
+  const handleChange = (event) => setValue(event.target.value);
   return (
     <Layout>
-      <Heading size="xl">Customers</Heading>
-      {customers.map((customer) => (
-        <>
-          <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
-            <Flex>
-              <Box as="a" href={"/customers/" + customer.id}>
-                {customer.name}
-              </Box>
-              <Spacer />
-              <Box></Box>
-            </Flex>
-          </Box>
-        </>
-      ))}
+      <Flex>
+        <Heading size="xl">Customers</Heading> <Spacer />
+        <Center>
+          <Input
+            placeholder="Search Customers"
+            value={value}
+            onChange={handleChange}
+          />
+        </Center>
+      </Flex>
+
+      {customers
+        .filter((customer) =>
+          customer.name.toLowerCase().includes(value.toLowerCase())
+        )
+        .map((customer) => (
+          <>
+            <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
+              <Flex>
+                <Box as="a" href={"/customers/" + customer.id}>
+                  {customer.name}
+                </Box>
+                <Spacer />
+                <Box></Box>
+              </Flex>
+            </Box>
+          </>
+        ))}
     </Layout>
   );
 }

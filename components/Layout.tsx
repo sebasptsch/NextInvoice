@@ -22,14 +22,14 @@ export default function Layout({ children }) {
     <>
       <Box p="1em" w="100%">
         <Flex>
-          <Button onClick={toggleColorMode} marginRight={2}>
+          <Button onClick={toggleColorMode}>
             Toggle {colorMode === "light" ? "Dark" : "Light"}
           </Button>
-          <DrawerNavigation />
           <Spacer />
-          <Button as="a" href="/invoices/create">
+          <DrawerNavigation />
+          {/* <Button as="a" href="/invoices/create">
             Create Invoice
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
       <Container>{children}</Container>
