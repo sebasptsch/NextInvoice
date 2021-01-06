@@ -24,8 +24,9 @@ import {
   Button,
   Center,
   toast,
+  Link,
 } from "@chakra-ui/react";
-import Link from "next/link";
+
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
@@ -35,6 +36,7 @@ const stripe = new Stripe(
 );
 
 import { useToast } from "@chakra-ui/react";
+import axios from "axios";
 
 async () => {
   const inv = await stripe.invoices.retrieve("in_1I6WFeIK06OmoiJkqRImDcuW");
@@ -97,11 +99,48 @@ export default function Invoices({
                   Actions
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Edit</MenuItem>
-                  <MenuItem>Download</MenuItem>
-                  <MenuItem>Send</MenuItem>
-                  <MenuItem>Pay</MenuItem>
-                  <MenuItem>Delete</MenuItem>
+                  {invoice.status == "draft" ? <MenuItem>Edit</MenuItem> : null}
+                  <MenuItem as={Link} href={invoice.invoice_pdf}>
+                    Download
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      axios
+                        .post(`/api/invoices/${invoice.id}/send`)
+                        .then((data) => console.log(data));
+                    }}
+                  >
+                    Send
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      axios
+                        .post(`/api/invoices/${invoice.id}/pay`)
+                        .then((data) => console.log(data));
+                    }}
+                  >
+                    Pay
+                  </MenuItem>
+                  {invoice.status == "draft" ? (
+                    <MenuItem
+                      onClick={() => {
+                        axios
+                          .delete(`/api/invoices/${invoice.id}`)
+                          .then((data) => console.log(data));
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                  ) : null}
+                  <MenuItem
+                    onClick={() => {
+                      axios
+                        .post(`/api/invoices/${invoice.id}/void`)
+                        .then((data) => console.log(data));
+                    }}
+                  >
+                    Void
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Flex>
