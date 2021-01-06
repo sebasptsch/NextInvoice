@@ -38,6 +38,6 @@ export async function getStaticPaths() {
   return {
     paths:
       (await customers?.map((customer) => `/customers/${customer.id}`)) || [],
-    fallback: false,
+    fallback: true,
   };
 }
