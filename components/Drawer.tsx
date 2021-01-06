@@ -45,7 +45,7 @@ export default function DrawerNavigation() {
               <Link href="https://dashboard.stripe.com" isExternal>
                 More Settings
               </Link>
-              <Button m={"1em"} onClick={signOut}>
+              <Button m={"1em"} as="button" onClick={() => signOut}>
                 Logout
               </Button>
             </DrawerFooter>

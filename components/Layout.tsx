@@ -49,7 +49,7 @@ export default function Layout({
     </>
   ) : (
     <>
-      <Button onClick={signIn}>signIn</Button>
+      <Button onClick={() => signIn}>signIn</Button>
     </>
   );
 }
