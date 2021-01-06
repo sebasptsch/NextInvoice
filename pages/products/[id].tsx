@@ -1,11 +1,12 @@
 import Layout from "../../components/Layout";
-import { Product } from "../../interfaces/Product";
 
-const stripe = require("stripe")(
-  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
+import Stripe from "stripe";
+const stripe = new Stripe(
+  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
+  { apiVersion: "2020-08-27" }
 );
 
-export default function Products({ product }: { product: Product }) {
+export default function Products({ product }: { product: Stripe.Product }) {
   console.log(product);
   return <Layout>{product.name}</Layout>;
 }

@@ -18,16 +18,13 @@ import {
   Tfoot,
 } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
-import InvoiceInterface from "../../interfaces/Invoice";
-const stripe = require("stripe")(
-  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
+import Stripe from "stripe";
+const stripe = new Stripe(
+  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
+  { apiVersion: "2020-08-27" }
 );
 
-export default function InvoicePage({
-  invoice,
-}: {
-  invoice: InvoiceInterface;
-}) {
+export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   // console.log(invoice);
   return (
     <Layout>

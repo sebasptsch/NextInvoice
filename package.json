@@ -8,10 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.2",
     "@chakra-ui/react": "^1.1.1",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
     "@types/stripe": "^8.0.417",
+    "axios": "^0.21.1",
     "chakra-ui-autocomplete": "^1.2.3",
     "child_process": "^1.0.2",
     "framer-motion": "^3.1.3",

@@ -11,15 +11,17 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
-import { Customer } from "../../interfaces/Customer";
-const stripe = require("stripe")(
-  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN"
+import Stripe from "stripe";
+import axios from "axios";
+const stripe = new Stripe(
+  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
+  { apiVersion: "2020-08-27" }
 );
 
 export default function Customers({
   customers,
 }: {
-  customers: Array<Customer>;
+  customers: Array<Stripe.Customer>;
 }) {
   // console.log(invoices);
   const [value, setValue] = useState("");
@@ -59,7 +61,7 @@ export default function Customers({
 }
 
 export async function getStaticProps() {
-  const res = await stripe.customers.list({});
+  const res = await stripe.customers.list();
   const customers = await res.data;
   //   console.log(customers);
 
