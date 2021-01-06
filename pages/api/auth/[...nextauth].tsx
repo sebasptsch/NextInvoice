@@ -18,8 +18,8 @@ const options = {
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
         if (
-          credentials.username === "admin" &&
-          credentials.password === "password"
+          credentials.username === process.env.NEXTAUTH_USERNAME &&
+          credentials.password === process.env.NEXTAUTH_PASSWORD
         ) {
           const user = { id: 1, name: "Admin" };
           return Promise.resolve(user);
