@@ -39,22 +39,10 @@ export default function CustomerCreation({
 
   const schema = yup.object().shape({
     email: yup.string().email().required(),
-    // .test(
-    //   "email-test",
-    //   "This email is already in use",
-    //   (value) => {
-    //     return !customers.some((customer) => customer.email === value);
-    //   }
-    // ),
+
     description: yup.string(),
     phone: yup.string().phone(),
-    // .test(
-    //   "phone-test",
-    //   "This phone is already in use",
-    //   (value) => {
-    //     return !customers.some((customer) => customer.phone === value);
-    //   }
-    // ),
+
     name: yup.string().required(),
   });
   const { handleSubmit, errors, register, formState } = useForm({
