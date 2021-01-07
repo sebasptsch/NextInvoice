@@ -11,16 +11,16 @@
 
 - [x] Get Invoices
 - [x] See products inside invoice and totals
-- [ ] Send Reminder Email
+- [x] Send Reminder Email
 - [ ] Create Invoices
 - [x] Sort Invoices
-- [ ] Unpaid
-- [ ] By Customer
+- [x] Unpaid
+- [x] By Customer
 
 ## Customers
 
 - [x] List Customers
-- [ ] List Related Invoices
+- [x] List Related Invoices
 
 ## Products
 
@@ -31,5 +31,5 @@
 
 ## Other
 
-- [ ] Buy domain?
-- [ ] Connect domain email to stripe
+- [x] Buy domain?
+- [x] Connect domain email to stripe
