@@ -17,6 +17,7 @@ import {
   Button,
   Tfoot,
   useToast,
+  LinkBox,
 } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
@@ -67,14 +68,14 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
 
       <Flex>
         <Box padding="0 2em 0 2em">
-          <Text color="gray.500">Date</Text>
+          <Text color="gray.500">Due Date</Text>
           <Text>{new Date(invoice?.due_date * 1000).toLocaleDateString()}</Text>
         </Box>
         <Divider orientation="vertical" h="4em" />
-        <Box padding="0 2em 0 2em">
+        <LinkBox href={`/customers/${invoice.customer}`} padding="0 2em 0 2em">
           <Text color="gray.500">Customer</Text>
           <Text>{invoice?.customer_name}</Text>
-        </Box>
+        </LinkBox>
         {/* <Box m="1em">
           <Text color="gray.500">Date</Text>
           <Text>{new Date(invoice?.due_date).toLocaleDateString()}</Text>
