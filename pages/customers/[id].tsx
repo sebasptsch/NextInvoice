@@ -84,11 +84,21 @@ export default function CustomerPage({
         <Center>
           <Select value={value} onChange={handleStatus}>
             {/* <option value="all">All</option> */}
-            <option value="draft">Draft</option>
-            <option value="open">Open</option>
-            <option value="paid">Paid</option>
-            <option value="uncollectible">Uncollectible</option>
-            <option value="void">Void</option>
+            <option value="draft" key="draft">
+              Draft
+            </option>
+            <option value="open" key="open">
+              Open
+            </option>
+            <option value="paid" key="paid">
+              Paid
+            </option>
+            <option value="uncollectible" key="uncollectible">
+              Uncollectible
+            </option>
+            <option value="void" key="void">
+              Void
+            </option>
           </Select>
         </Center>
       </Flex>

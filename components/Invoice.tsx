@@ -69,10 +69,11 @@ export default function InvoiceComponent({
           </MenuButton>
           <MenuList>
             {invoice?.status == "draft" ? <MenuItem>Edit</MenuItem> : null}
-            <MenuItem as={Link} href={invoice?.invoice_pdf}>
+            <MenuItem as={Link} href={invoice?.invoice_pdf} key="download">
               Download
             </MenuItem>
             <MenuItem
+              key="send"
               onClick={() => {
                 axios
                   .post(`/api/invoices/${invoice?.id}/send`)
@@ -98,6 +99,7 @@ export default function InvoiceComponent({
               Send
             </MenuItem>
             <MenuItem
+              key="pay"
               onClick={() => {
                 axios
                   .post(`/api/invoices/${invoice?.id}/pay`)
@@ -124,6 +126,7 @@ export default function InvoiceComponent({
             </MenuItem>
             {invoice?.status == "draft" ? (
               <MenuItem
+                key="Delete"
                 onClick={() => {
                   axios
                     .delete(`/api/invoices/${invoice?.id}`)
@@ -150,6 +153,7 @@ export default function InvoiceComponent({
               </MenuItem>
             ) : null}
             <MenuItem
+              key="Void"
               onClick={() => {
                 axios
                   .post(`/api/invoices/${invoice?.id}/void`)
