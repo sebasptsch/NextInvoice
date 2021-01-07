@@ -7,7 +7,7 @@ const stripe = new Stripe(
 );
 
 export default function Products({ product }: { product: Stripe.Product }) {
-  // console.log(product);
+  console.log(product);
   return <Layout>{product?.name}</Layout>;
 }
 

@@ -30,6 +30,7 @@
 - [ ] Create Products
 - [ ] Modify Products
 - [ ] Operations on Products
+- [ ] Sort Prices by Product
 
 ## Other
 

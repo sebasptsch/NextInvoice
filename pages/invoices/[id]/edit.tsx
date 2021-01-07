@@ -25,10 +25,10 @@ const stripe = new Stripe(
 
 export default function EditInvoice({
   invoice,
-  products,
+  prices,
 }: {
   invoice: Stripe.Invoice;
-  products: Array<Stripe.Product>;
+  prices: Array<Stripe.Price>;
 }) {
   const invoiceLines = invoice.lines.data;
   const [lines, setLines] = useState(invoiceLines);
@@ -59,10 +59,10 @@ export default function EditInvoice({
           <Tr>
             <Td>
               <Select>
-                {console.log(products)}
-                {products.map((product) => (
-                  <option value={product.id} key={product.id}>
-                    {product.name}
+                {console.log(prices)}
+                {prices.map((price) => (
+                  <option value={price.id} key={price.id}>
+                    {price}
                   </option>
                 ))}
               </Select>
@@ -114,11 +114,11 @@ function ItemRow(
 
 export async function getServerSideProps({ params }) {
   const invoice = await stripe.invoices.retrieve(params.id);
-  const products = await stripe.products.list();
+  const prices = await stripe.prices.list();
   return {
     props: {
       invoice,
-      products: products.data,
+      prices: prices.data,
     },
   };
 }
