@@ -9,6 +9,7 @@ import {
   Heading,
   Select,
   Spacer,
+  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -16,27 +17,42 @@ import {
   StatNumber,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InvoiceComponent from "../../components/Invoice";
+import axios from "axios";
 const stripe = new Stripe(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
   { apiVersion: "2020-08-27" }
 );
+import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 export default function CustomerPage({
   customer,
-  invoices,
 }: {
   customer: Stripe.Customer;
-  invoices: Array<Stripe.Invoice>;
 }) {
+  const [invoices, setInvoices] = useState([]);
+  const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
+  useEffect(() => {
+    isLoading(true);
+    setInvoices([]);
+    axios({
+      method: "GET",
+      url: "/api/invoices",
+      params: {
+        status: value,
+        customer: customer.id,
+      },
+    }).then((response) => {
+      setInvoices(response.data.data.sort((invoice) => invoice.due_date));
+      isLoading(false);
+    });
+  }, [value]);
+
   const handleStatus = (e) => {
     setValue(e.target.value);
   };
-  const invoiceSearch = invoices
-    .filter((invoice) => invoice.status === value || value === "all")
-    .sort((invoice) => invoice.due_date);
   return (
     <Layout>
       <Heading>{customer.name}</Heading>
@@ -67,7 +83,7 @@ export default function CustomerPage({
         <Spacer />
         <Center>
           <Select value={value} onChange={handleStatus}>
-            <option value="all">All</option>
+            {/* <option value="all">All</option> */}
             <option value="draft">Draft</option>
             <option value="open">Open</option>
             <option value="paid">Paid</option>
@@ -78,13 +94,24 @@ export default function CustomerPage({
       </Flex>
 
       <Divider marginBottom={2} />
-      {invoiceSearch.length != 0 ? (
-        invoiceSearch.map((invoice) => (
+      {loading ? (
+        <Box
+          borderWidth="1px"
+          borderRadius="10px"
+          p="1em"
+          m="1em"
+          height="82px"
+        >
+          <SkeletonText height="100%" />
+        </Box>
+      ) : null}
+      {invoices.length != 0 ? (
+        invoices.map((invoice) => (
           <>
             <InvoiceComponent invoice={invoice} key={invoice.id} />
           </>
         ))
-      ) : (
+      ) : loading ? null : (
         <Text>No invoices here.</Text>
       )}
     </Layout>

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
   if (req.method == "GET") {
     await stripe.invoices
-      .listUpcomingLineItems(req.body)
+      .listUpcomingLineItems(req.query)
       .then((value) => res.status(200).json(value))
       .catch((error) => res.status(500).json(error));
   }
