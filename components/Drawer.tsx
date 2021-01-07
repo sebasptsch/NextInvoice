@@ -10,6 +10,7 @@ import {
   useDisclosure,
   Input,
   Link,
+  Text,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
@@ -17,6 +18,7 @@ import { signIn, signOut, useSession } from "next-auth/client";
 export default function DrawerNavigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
+  const [session, loading] = useSession();
   return (
     <>
       <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
@@ -45,9 +47,6 @@ export default function DrawerNavigation() {
               <Link href="https://dashboard.stripe.com" isExternal>
                 More Settings
               </Link>
-              <Button m={"1em"} as="button" onClick={() => signOut}>
-                Logout
-              </Button>
             </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>

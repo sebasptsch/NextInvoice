@@ -1,7 +1,15 @@
-import NextAuth from "next-auth";
+import NextAuth, { InitOptions } from "next-auth";
 import Providers from "next-auth/providers";
 
-const options = {
+const options: InitOptions = {
+  pages: {
+    signIn: "/auth/signin",
+    // signOut: "/auth/signout",
+
+    // error: "/auth/error", // Error code passed in query string as ?error=
+    // verifyRequest: "/auth/verify-request", // (used for check email message)
+    // newUser: null, // If set, new users will be directed here on first sign in
+  },
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
