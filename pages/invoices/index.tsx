@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Center, Flex, Heading, Select, Spacer } from "@chakra-ui/react";
+import { Center, Flex, Heading, Select, Spacer, Text } from "@chakra-ui/react";
 
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
@@ -20,7 +20,11 @@ export default function Invoices({
   const [value, setValue] = useState("open");
   const handleStatus = (e) => {
     setValue(e.target.value);
+    console.log(invoiceSearch.length);
   };
+  const invoiceSearch = invoices
+    .filter((invoice) => invoice.status === value || value === "all")
+    .sort((invoice) => invoice.due_date);
   return (
     <Layout>
       <Flex>
@@ -37,12 +41,14 @@ export default function Invoices({
           </Select>
         </Center>
       </Flex>
-      {invoices
-        .filter((invoice) => invoice.status === value || value === "all")
-        .sort((invoice) => invoice.due_date)
-        .map((invoice) => {
+      {console.log(invoiceSearch.length)}
+      {invoiceSearch.length != 0 ? (
+        invoiceSearch.map((invoice) => {
           return <InvoiceComponent invoice={invoice} key={invoice.id} />;
-        })}
+        })
+      ) : (
+        <Text>No invoices here.</Text>
+      )}
     </Layout>
   );
 }

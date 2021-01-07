@@ -34,6 +34,9 @@ export default function CustomerPage({
   const handleStatus = (e) => {
     setValue(e.target.value);
   };
+  const invoiceSearch = invoices
+    .filter((invoice) => invoice.status === value || value === "all")
+    .sort((invoice) => invoice.due_date);
   return (
     <Layout>
       <Heading>{customer.name}</Heading>
@@ -75,14 +78,15 @@ export default function CustomerPage({
       </Flex>
 
       <Divider marginBottom={2} />
-      {invoices
-        .filter((invoice) => invoice.status === value || value === "all")
-        .sort((invoice) => invoice.due_date)
-        .map((invoice) => (
+      {invoiceSearch.length != 0 ? (
+        invoiceSearch.map((invoice) => (
           <>
             <InvoiceComponent invoice={invoice} key={invoice.id} />
           </>
-        ))}
+        ))
+      ) : (
+        <Text>No invoices here.</Text>
+      )}
     </Layout>
   );
 }
