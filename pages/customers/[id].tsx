@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Link,
   Select,
   Spacer,
   Spinner,
@@ -56,7 +57,13 @@ export default function CustomerPage({
   return (
     <Layout>
       <Heading>{customer.name}</Heading>
-      <Text color="gray.500">{customer.email}</Text>
+      <Text color="gray.500" as={Link} href={`mailto: ${customer.email}`}>
+        {customer.email}
+      </Text>
+      <br />
+      <Text color="gray.500" as={Link} href={`tel: ${customer.phone}`}>
+        {customer?.phone}
+      </Text>
       <br />
       <Divider />
       <br />

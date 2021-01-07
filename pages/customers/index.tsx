@@ -41,7 +41,7 @@ export default function Customers({
 
       {customers
         .filter((customer) =>
-          customer?.name.toLowerCase().includes(value.toLowerCase())
+          customer.name?.toLowerCase().includes(value.toLowerCase())
         )
         .map((customer) => (
           <Box

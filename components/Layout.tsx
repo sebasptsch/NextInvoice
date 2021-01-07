@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   Modal,
@@ -67,7 +68,9 @@ export default function Layout({
         </Flex>
       </Box>
       {session && (noContainer ? children : <Container>{children}</Container>)}
-      <Box w="100%">Foooter</Box>
+      <Box w="100%">
+        <Center>Made by Sebastian for Juli</Center>
+      </Box>
     </>
   );
 }

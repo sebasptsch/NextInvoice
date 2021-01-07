@@ -5,7 +5,7 @@
 ## Layout and Other Functionality
 
 - [x] Add Navigation
-- [ ] Add login?
+- [x] Add login?
 
 ## Invoices
 
@@ -21,6 +21,8 @@
 
 - [x] List Customers
 - [x] List Related Invoices
+- [x] Create Customers
+- [ ] Operations on Customers
 
 ## Products
 
