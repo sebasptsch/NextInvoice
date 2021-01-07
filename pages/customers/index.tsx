@@ -13,6 +13,7 @@ import { useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
+import CustomerComponent from "../../components/Customer";
 const stripe = new Stripe(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
   { apiVersion: "2020-08-27" }
@@ -44,21 +45,7 @@ export default function Customers({
           customer.name?.toLowerCase().includes(value.toLowerCase())
         )
         .map((customer) => (
-          <Box
-            borderWidth="1px"
-            borderRadius="10px"
-            p="1em"
-            m="1em"
-            key={customer?.id}
-          >
-            <Flex>
-              <Box as="a" href={"/customers/" + customer?.id}>
-                {customer?.name}
-              </Box>
-              <Spacer />
-              <Box>${customer?.balance / 100}</Box>
-            </Flex>
-          </Box>
+          <CustomerComponent customer={customer} />
         ))}
     </Layout>
   );

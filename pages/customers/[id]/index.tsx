@@ -1,4 +1,4 @@
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 
 import Stripe from "stripe";
 import {
@@ -19,7 +19,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import InvoiceComponent from "../../components/Invoice";
+import InvoiceComponent from "../../../components/Invoice";
 import axios from "axios";
 const stripe = new Stripe(
   "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
