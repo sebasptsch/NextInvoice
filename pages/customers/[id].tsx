@@ -130,11 +130,9 @@ export default function CustomerPage({
 
 export async function getServerSideProps({ params }) {
   const customer = await stripe.customers.retrieve(params.id);
-  const invoices = await stripe.invoices.list({ customer: customer.id });
   return {
     props: {
       customer,
-      invoices: invoices.data,
     },
   };
 }
