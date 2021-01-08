@@ -21,10 +21,9 @@ import {
 import { useEffect, useState } from "react";
 import InvoiceComponent from "../../../components/Invoice";
 import axios from "axios";
-const stripe = new Stripe(
-  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
-  { apiVersion: "2020-08-27" }
-);
+const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
+  apiVersion: "2020-08-27",
+});
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 export default function CustomerPage({
@@ -81,6 +80,13 @@ export default function CustomerPage({
           <StatHelpText></StatHelpText>
         </Stat>
       </StatGroup>
+      <br />
+
+      <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+        Description
+      </Heading>
+      <Divider marginBottom={2} />
+      <Text>{customer.description}</Text>
       <br />
 
       <Flex>

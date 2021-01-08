@@ -15,10 +15,9 @@ import {
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Stripe from "stripe";
-const stripe = new Stripe(
-  "sk_test_51HBFOKIK06OmoiJkBem5hBPEBcwF0W5hKSf7BAWGaQrpRgRTOwGa3OwSZx8897KtwxHXCgFNmk44fVpw9vpaqdqh00UJ3zr5lN",
-  { apiVersion: "2020-08-27" }
-);
+const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
+  apiVersion: "2020-08-27",
+});
 
 export default function InvoiceComponent({
   invoice,
