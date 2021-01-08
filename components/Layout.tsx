@@ -20,15 +20,10 @@ import DrawerNavigation from "./Drawer";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
-export default function Layout({
-  children,
-  noContainer,
-}: {
-  children: any;
-  noContainer?: boolean;
-}) {
+export default function Layout({ children }: { children: any }) {
   const [session, loading] = useSession();
   const router = useRouter();
+
   if (loading) {
     return (
       <Center h="100vh" w="100%">
@@ -67,7 +62,7 @@ export default function Layout({
           <DrawerNavigation />
         </Flex>
       </Box>
-      {session && (noContainer ? children : <Container>{children}</Container>)}
+      {session && <Container>{children}</Container>}
       <Box w="100%">
         <Center>Made by Sebastian for Juli</Center>
       </Box>

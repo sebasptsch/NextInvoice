@@ -24,7 +24,7 @@ import Stripe from "stripe";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { METHODS } from "http";
+import ProductComponent from "../../components/Product";
 
 export default function Products() {
   const toast = useToast();
@@ -34,6 +34,8 @@ export default function Products() {
   const [productsLoading, setProductsLoading] = useState(true);
 
   useEffect(() => {
+    setProductsLoading(true);
+    setProducts([]);
     axios({ url: `/api/products`, method: "GET" }).then((products) => {
       setProductsLoading(false);
       setProducts(products.data.data);
@@ -65,65 +67,7 @@ export default function Products() {
         )
         .sort((product) => (product.active ? -1 : 1))
         .map((product) => (
-          <Box
-            borderWidth="1px"
-            borderRadius="10px"
-            p="1em"
-            m="1em"
-            key={product.id}
-          >
-            <Flex>
-              <Link href={`/products/${product.id}`}>{product.name}</Link>
-              <Spacer />
-              <Center>
-                <Badge colorScheme={product.active ? "green" : "red"}>
-                  {product.active ? "Enabled" : "Disabled"}
-                </Badge>
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    size={"sm"}
-                    rightIcon={<ChevronDownIcon />}
-                    marginLeft="1em"
-                  >
-                    Actions
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem
-                      onClick={() => {
-                        axios
-                          .post(`/api/products/${product.id}`, {
-                            active: !product.active,
-                          })
-                          .then((response) => {
-                            if (response.status === 200) {
-                              toast({
-                                title: "Success",
-                                description:
-                                  "Reload the page to see the changes.",
-                                status: "success",
-                              });
-                              router.reload();
-                            }
-                          })
-                          .catch((error) => {
-                            // console.log("error", error.message);
-                            toast({
-                              title: error.response.data.type,
-                              status: "error",
-                              description: error.response.data.raw.message,
-                            });
-                          });
-                      }}
-                      key="delete"
-                    >
-                      {product.active ? "Disable" : "Enable"}
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              </Center>
-            </Flex>
-          </Box>
+          <ProductComponent product={product} />
         ))}
     </Layout>
   );

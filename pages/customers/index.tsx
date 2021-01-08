@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Input,
+  SkeletonText,
   Spacer,
   Text,
 } from "@chakra-ui/react";
@@ -16,9 +17,12 @@ import axios from "axios";
 
 export default function Customers() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
+  const [customersLoading, setCustomersLoading] = useState(true);
   useEffect(() => {
+    setCustomersLoading(true);
+    setCustomers([]);
     axios({ url: `/api/customers`, method: "GET" }).then((customers) => {
-      console.log(customers.data.data);
+      setCustomersLoading(false);
       setCustomers(customers.data.data);
     });
   }, []);
@@ -44,6 +48,17 @@ export default function Customers() {
         .map((customer) => (
           <CustomerComponent customer={customer} key={customer.id} />
         ))}
+      {customersLoading ? (
+        <Box
+          borderWidth="1px"
+          borderRadius="10px"
+          p="1em"
+          m="1em"
+          height="82px"
+        >
+          <SkeletonText height="100%" />
+        </Box>
+      ) : null}
     </Layout>
   );
 }
