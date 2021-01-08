@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spacer,
+  Spinner,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -26,11 +27,14 @@ export default function Layout({
   children: any;
   noContainer?: boolean;
 }) {
-  const { colorMode, toggleColorMode } = useColorMode();
   const [session, loading] = useSession();
   const router = useRouter();
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <Center h="100vh" w="100%">
+        <Spinner />
+      </Center>
+    );
   }
   if (!session) {
     router.push("/api/auth/signin");
@@ -40,9 +44,6 @@ export default function Layout({
     <>
       <Box p="1em" w="100%">
         <Flex>
-          <Button onClick={toggleColorMode}>
-            Toggle {colorMode === "light" ? "Dark" : "Light"}
-          </Button>
           <Spacer />
           {session ? (
             <Button

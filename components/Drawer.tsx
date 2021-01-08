@@ -11,6 +11,9 @@ import {
   Input,
   Link,
   Text,
+  useColorMode,
+  Spacer,
+  Flex,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
@@ -19,10 +22,11 @@ export default function DrawerNavigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const [session, loading] = useSession();
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <>
       <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
+        Navigation
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -36,6 +40,11 @@ export default function DrawerNavigation() {
             <DrawerHeader>Navigate</DrawerHeader>
 
             <DrawerBody>
+              <Button onClick={toggleColorMode}>
+                Toggle {colorMode === "light" ? "Dark" : "Light"}
+              </Button>
+              <br />
+              <br />
               <Link href="/invoices">Invoices</Link>
               <br />
               <Link href="/customers">Customers</Link>

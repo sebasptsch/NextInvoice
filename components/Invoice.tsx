@@ -59,7 +59,7 @@ export default function InvoiceComponent({
               ? "Late"
               : invoice?.status}
           </Badge>
-          <Menu marginLeft="1em">
+          <Menu>
             <MenuButton
               as={Button}
               size={"sm"}
