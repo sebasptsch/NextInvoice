@@ -10,10 +10,12 @@ import {
   SkeletonText,
   Spacer,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import InvoiceComponent from "./Invoice";
+import NewInvoiceModal from "./NewInvoiceModal";
 
 export default function InvoiceList({ customer }: { customer?: string }) {
   const [invoices, setInvoices] = useState([]);
@@ -38,13 +40,25 @@ export default function InvoiceList({ customer }: { customer?: string }) {
   const handleStatus = (e) => {
     setValue(e.target.value);
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       <Flex>
         <Heading size="lg">Invoices</Heading>
         <Spacer />
 
-        <IconButton aria-label="Add Invoice" icon={<AddIcon />} disabled />
+        <IconButton
+          aria-label="Add Invoice"
+          onClick={onOpen}
+          icon={<AddIcon />}
+        />
+        <NewInvoiceModal
+          isOpen={isOpen}
+          onClose={onClose}
+          customerId={customer}
+        />
       </Flex>
 
       <Select value={value} onChange={handleStatus} marginTop="1em">

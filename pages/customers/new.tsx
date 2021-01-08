@@ -82,9 +82,10 @@ export default function CustomerCreation() {
         }
       })
       .catch((error) => {
+        console.log(error);
         toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
+          title: error.response?.data.type,
+          description: error.response?.data.code,
         });
       });
   }
