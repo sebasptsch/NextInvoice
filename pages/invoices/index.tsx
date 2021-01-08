@@ -18,6 +18,7 @@ import Stripe from "stripe";
 import InvoiceComponent from "../../components/Invoice";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Head from "next/head";
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([]);
@@ -43,6 +44,9 @@ export default function Invoices() {
   return (
     <Layout>
       <Flex>
+        <Head>
+          <title>Invoices</title>
+        </Head>
         <Heading size="lg">Invoices</Heading>
         <Spacer />
 

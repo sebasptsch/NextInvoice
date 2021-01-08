@@ -17,6 +17,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export default function SignIn({ csrfToken }) {
   const router = useRouter();
@@ -54,6 +55,9 @@ export default function SignIn({ csrfToken }) {
   errorMessage ? toast({ description: errorMessage, status: "error" }) : null;
   return (
     <>
+      <Head>
+        <title>Sign In</title>
+      </Head>
       <Box p="1em" w="100%">
         <Button onClick={toggleColorMode}>
           Toggle {colorMode === "light" ? "Dark" : "Light"}

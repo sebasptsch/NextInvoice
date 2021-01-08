@@ -27,6 +27,7 @@ import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 import ProductComponent from "../../components/Product";
+import Head from "next/head";
 
 export default function Products() {
   const toast = useToast();
@@ -48,6 +49,9 @@ export default function Products() {
   //   console.log(products);
   return (
     <Layout>
+      <Head>
+        <title>Products</title>
+      </Head>
       <Flex>
         <Heading size="lg">Products</Heading> <Spacer />
         <IconButton

@@ -34,6 +34,7 @@ import Stripe from "stripe";
 import Layout from "../../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export default function PriceView({ price }: { price: Stripe.Price }) {
   const { handleSubmit, errors, register, formState } = useForm();
@@ -73,6 +74,9 @@ export default function PriceView({ price }: { price: Stripe.Price }) {
 
   return (
     <Layout>
+      <Head>
+        <title>View Price</title>
+      </Head>
       <form onSubmit={handleSubmit(submitHandler)}>
         <Heading autoCapitalize="words">{price.nickname}</Heading>
         <Divider m="1em 0 2em 0" />

@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 export default function EditInvoice({
   invoice,
@@ -37,6 +38,9 @@ export default function EditInvoice({
   console.log(lines);
   return (
     <Layout>
+      <Head>
+        <title>Edit Invoice</title>
+      </Head>
       <Table overflowY="scroll">
         <Thead>
           <Tr>

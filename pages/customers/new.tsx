@@ -24,6 +24,7 @@ import "yup-phone";
 import { useEffect, useState } from "react";
 import Stripe from "stripe";
 import { CheckIcon } from "@chakra-ui/icons";
+import Head from "next/head";
 
 export default function CustomerCreation() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
@@ -90,6 +91,7 @@ export default function CustomerCreation() {
 
   return (
     <Layout>
+      <Head>New Customer</Head>
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Create Customer
       </Heading>

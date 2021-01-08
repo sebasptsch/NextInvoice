@@ -24,6 +24,7 @@ import InvoiceComponent from "../../../components/Invoice";
 import axios from "axios";
 
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import Head from "next/head";
 
 export default function CustomerPage({
   customer,
@@ -54,6 +55,9 @@ export default function CustomerPage({
   };
   return (
     <Layout>
+      <Head>
+        <title>View Customer</title>
+      </Head>
       <Heading>{customer.name}</Heading>
       <Text color="gray.500" as={Link} href={`mailto: ${customer.email}`}>
         {customer.email}

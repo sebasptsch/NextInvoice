@@ -18,6 +18,7 @@ import CustomerComponent from "../../components/Customer";
 import axios from "axios";
 import { AddIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export default function Customers() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
@@ -35,6 +36,9 @@ export default function Customers() {
   const handleChange = (event) => setValue(event.target.value);
   return (
     <Layout>
+      <Head>
+        <title>Customers</title>
+      </Head>
       <Flex>
         <Heading size="lg">Customers</Heading>
         <Spacer />

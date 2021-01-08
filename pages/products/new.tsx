@@ -40,6 +40,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import Head from "next/head";
 
 export default function Products() {
   const { handleSubmit, errors, register, formState } = useForm();
@@ -77,6 +78,9 @@ export default function Products() {
   };
   return (
     <Layout>
+      <Head>
+        <title>New Product</title>
+      </Head>
       <form onSubmit={handleSubmit(submitHandler)}>
         <Heading>Create New Product</Heading>
         <br />

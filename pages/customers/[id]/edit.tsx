@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import Stripe from "stripe";
 
 import { CheckIcon } from "@chakra-ui/icons";
+import Head from "next/head";
 
 export default function CustomerCreation({
   customer,
@@ -82,6 +83,9 @@ export default function CustomerCreation({
 
   return (
     <Layout>
+      <Head>
+        <title>Edit Customer</title>
+      </Head>
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Edit Customer
       </Heading>

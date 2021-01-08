@@ -22,11 +22,15 @@ import {
 import Layout from "../../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
+import Head from "next/head";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   const toast = useToast();
   return (
     <Layout>
+      <Head>
+        <title>View Invoice</title>
+      </Head>
       <Flex>
         <Heading size="xl" p={1}>
           ${invoice?.amount_due / 100} <Badge>{invoice?.status}</Badge>
