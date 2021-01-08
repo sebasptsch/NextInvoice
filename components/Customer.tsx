@@ -38,7 +38,7 @@ export default function CustomerComponent({
     >
       <Flex>
         <Center>
-          <LinkBox href={`/customers/${customer.id}`}>{customer?.name}</LinkBox>
+          <Link href={`/customers/${customer.id}`}>{customer?.name}</Link>
         </Center>
         <Spacer />
 
