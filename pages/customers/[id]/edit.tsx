@@ -24,9 +24,7 @@ import * as yup from "yup";
 import "yup-phone";
 import { useEffect, useState } from "react";
 import Stripe from "stripe";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
+
 import { CheckIcon } from "@chakra-ui/icons";
 
 export default function CustomerCreation({
@@ -166,6 +164,9 @@ export default function CustomerCreation({
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const customer = await stripe.customers.retrieve(params.id);
   return {
     props: {

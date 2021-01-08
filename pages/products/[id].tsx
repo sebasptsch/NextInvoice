@@ -37,9 +37,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
 
 export default function Products({
   product,
@@ -244,6 +241,9 @@ export default function Products({
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const product = await stripe.products.retrieve(params.id);
   const prices = await stripe.prices.list({ product: params.id });
   //   console.log(invoice);

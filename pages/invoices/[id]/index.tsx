@@ -22,9 +22,6 @@ import {
 import Layout from "../../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   const toast = useToast();
@@ -176,6 +173,9 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const invoice = await stripe.invoices.retrieve(params.id);
   //   console.log(invoice);
   //   const invoice = await res.invoice;

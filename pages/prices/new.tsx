@@ -34,9 +34,6 @@ import Stripe from "stripe";
 import Layout from "../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
 
 export default function PriceView({
   products,
@@ -164,6 +161,9 @@ export default function PriceView({
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const products = await stripe.products.list();
   return {
     props: {

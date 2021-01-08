@@ -21,9 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import InvoiceComponent from "../../../components/Invoice";
 import axios from "axios";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
+
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 export default function CustomerPage({
@@ -142,6 +140,9 @@ export default function CustomerPage({
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const customer = await stripe.customers.retrieve(params.id);
   return {
     props: {

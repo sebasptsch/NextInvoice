@@ -15,7 +15,7 @@ import {
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Stripe from "stripe";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 

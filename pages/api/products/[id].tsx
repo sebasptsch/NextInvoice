@@ -1,9 +1,9 @@
 import Stripe from "stripe";
-import type { NextApiRequest } from "next";
 
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
+
 import { getSession } from "next-auth/client";
 export default async function handler(req, res) {
   const session = await getSession({ req });

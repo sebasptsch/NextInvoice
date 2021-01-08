@@ -1,11 +1,16 @@
 import {
   Badge,
   Box,
+  Button,
   Center,
   Flex,
   Heading,
   Input,
   LinkBox,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Menu,
   Spacer,
   Text,
 } from "@chakra-ui/react";
@@ -13,9 +18,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export default function Products({
   products,
@@ -53,8 +56,26 @@ export default function Products({
               m="1em"
             >
               <Flex>
-                {product?.name}
-                <Text></Text>
+                <Text>{product?.name}</Text>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    size={"sm"}
+                    rightIcon={<ChevronDownIcon />}
+                    marginLeft="1em"
+                  >
+                    Actions
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      as={Link}
+                      // href={invoice?.invoice_pdf}
+                      key="download"
+                    >
+                      Download
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
               </Flex>
             </LinkBox>
           </>
@@ -64,6 +85,9 @@ export default function Products({
 }
 
 export async function getServerSideProps() {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const res = await stripe.products.list({});
   const products = await res.data;
   //   console.log(customers);

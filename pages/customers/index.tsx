@@ -14,10 +14,6 @@ import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
 import CustomerComponent from "../../components/Customer";
-console.log(process.env.STRIPE_KEY);
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
 
 export default function Customers({
   customers,
@@ -45,13 +41,17 @@ export default function Customers({
           customer.name?.toLowerCase().includes(value.toLowerCase())
         )
         .map((customer) => (
-          <CustomerComponent customer={customer} />
+          <CustomerComponent customer={customer} key={customer.id} />
         ))}
     </Layout>
   );
 }
 
 export async function getServerSideProps() {
+  console.log(process.env.STRIPE_KEY);
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const res = await stripe.customers.list();
   const customers = await res.data;
   //   console.log(customers);

@@ -18,9 +18,6 @@ import {
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useEffect, useState } from "react";
-const stripe = new Stripe(`${process.env.STRIPE_KEY}`, {
-  apiVersion: "2020-08-27",
-});
 
 export default function EditInvoice({
   invoice,
@@ -112,6 +109,9 @@ function ItemRow(
 }
 
 export async function getServerSideProps({ params }) {
+  const stripe = new Stripe(process.env.STRIPE_KEY, {
+    apiVersion: "2020-08-27",
+  });
   const invoice = await stripe.invoices.retrieve(params.id);
   const prices = await stripe.prices.list();
   return {
