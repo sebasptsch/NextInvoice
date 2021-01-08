@@ -15,7 +15,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import InvoiceComponent from "./Invoice";
 
-export default function InvoiceList({ customer }: { customer?: number }) {
+export default function InvoiceList({ customer }: { customer?: string }) {
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");

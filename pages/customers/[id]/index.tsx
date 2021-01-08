@@ -100,7 +100,7 @@ export default function CustomerPage({
           </Text>
         </Box>
       </Flex>
-      <InvoiceList customerId={customer.id} />
+      <InvoiceList customer={customer.id} />
     </Layout>
   );
 }
