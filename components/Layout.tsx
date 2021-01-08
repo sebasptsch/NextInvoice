@@ -25,21 +25,18 @@ export default function Layout({ children }: { children: any }) {
   const [session, loading] = useSession();
   const router = useRouter();
 
-  if (loading) {
-    return (
-      <>
-        <Head>
-          <title>Loading...</title>
-        </Head>
-        <Center h="100vh" w="100%">
-          <Spinner />
-        </Center>
-      </>
-    );
-  }
-  if (!session) {
-    router.push("/api/auth/signin", "/api/auth/signin");
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <Head>
+  //         <title>Loading...</title>
+  //       </Head>
+  //       <Center h="100vh" w="100%">
+  //         <Spinner />
+  //       </Center>
+  //     </>
+  //   );
+  // }
 
   return (
     <>
@@ -68,7 +65,7 @@ export default function Layout({ children }: { children: any }) {
           <DrawerNavigation />
         </Flex>
       </Box>
-      {session && <Container>{children}</Container>}
+      {session ? <Container>{children}</Container> : null}
       <Box w="100%">
         <Center>Made by Sebastian for Juli</Center>
       </Box>
