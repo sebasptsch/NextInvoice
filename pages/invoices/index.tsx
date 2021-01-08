@@ -19,6 +19,7 @@ import InvoiceComponent from "../../components/Invoice";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Head from "next/head";
+import InvoiceList from "../../components/InvoiceList";
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([]);
@@ -43,58 +44,10 @@ export default function Invoices() {
   };
   return (
     <Layout>
-      <Flex>
-        <Head>
-          <title>Invoices</title>
-        </Head>
-        <Heading size="lg">Invoices</Heading>
-        <Spacer />
-
-        <IconButton aria-label="Add Invoice" icon={<AddIcon />} disabled />
-      </Flex>
-
-      <Select value={value} onChange={handleStatus} marginTop="1em">
-        {/* <option value="all">All</option> */}
-        <option value="draft" key="draft">
-          Draft
-        </option>
-        <option value="open" key="open">
-          Open
-        </option>
-        <option value="paid" key="paid">
-          Paid
-        </option>
-        <option value="uncollectible" key="uncollectible">
-          Uncollectible
-        </option>
-        <option value="void" key="void">
-          Void
-        </option>
-      </Select>
-
-      <br />
-
-      <Divider marginBottom={2} />
-      {loading ? (
-        <Box
-          borderWidth="1px"
-          borderRadius="10px"
-          p="1em"
-          m="1em"
-          height="82px"
-        >
-          <SkeletonText height="100%" />
-        </Box>
-      ) : null}
-      {invoices.length != 0 ? (
-        invoices.map((invoice) => (
-          <>
-            <InvoiceComponent invoice={invoice} key={invoice.id} />
-          </>
-        ))
-      ) : loading ? null : (
-        <Text>No invoices here.</Text>
-      )}
+      <Head>
+        <title>Invoices</title>
+      </Head>
+      <InvoiceList />
     </Layout>
   );
 }
