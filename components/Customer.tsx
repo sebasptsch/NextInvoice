@@ -10,16 +10,14 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Link,
+  Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_KEY, {
-  apiVersion: "2020-08-27",
-});
+import Link from "next/link";
 
 export default function CustomerComponent({
   customer,
@@ -38,7 +36,11 @@ export default function CustomerComponent({
     >
       <Flex>
         <Center>
-          <Link href={`/customers/${customer.id}`}>{customer?.name}</Link>
+          <Link
+            href={`/customers/${customer.id}`}
+            passHref
+            children={<ChakraLink>{customer?.name}</ChakraLink>}
+          />
         </Center>
         <Spacer />
 

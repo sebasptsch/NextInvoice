@@ -3,7 +3,7 @@ import {
   Box,
   Flex,
   useToast,
-  Link,
+  Link as ChakraLink,
   Spacer,
   Center,
   Badge,
@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Stripe } from "stripe";
+import Link from "next/link";
 
 export default function ProductComponent({
   product,
@@ -27,7 +28,11 @@ export default function ProductComponent({
   return (
     <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em" key={product.id}>
       <Flex>
-        <Link href={`/products/${product.id}`}>{product.name}</Link>
+        <Link
+          href={`/products/${product.id}`}
+          passHref
+          children={<ChakraLink>{product.name}</ChakraLink>}
+        />
         <Spacer />
         <Center>
           <Badge colorScheme={product.active ? "green" : "red"}>

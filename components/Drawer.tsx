@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 export default function DrawerNavigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -69,7 +70,12 @@ export default function DrawerNavigation() {
               <Link
                 passHref
                 href="https://dashboard.stripe.com"
-                children={<ChakraLink isExternal>Products</ChakraLink>}
+                children={
+                  <ChakraLink isExternal>
+                    Products
+                    <ExternalLinkIcon mx="2px" />
+                  </ChakraLink>
+                }
               />
             </DrawerFooter>
           </DrawerContent>

@@ -10,15 +10,13 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Link,
+  Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_KEY, {
-  apiVersion: "2020-08-27",
-});
+import Link from "next/link";
 
 export default function InvoiceComponent({
   invoice,
@@ -36,7 +34,11 @@ export default function InvoiceComponent({
     >
       <Flex>
         <Center>
-          <Link href={"/invoices/" + invoice?.id}>{invoice?.number}</Link>
+          <Link
+            passHref
+            href={"/invoices/" + invoice?.id}
+            children={<ChakraLink>{invoice?.number}</ChakraLink>}
+          />
         </Center>
         <Spacer />
         <Center>
