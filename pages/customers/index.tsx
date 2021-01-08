@@ -2,8 +2,10 @@ import {
   Badge,
   Box,
   Center,
+  Divider,
   Flex,
   Heading,
+  IconButton,
   Input,
   SkeletonText,
   Spacer,
@@ -14,10 +16,13 @@ import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import CustomerComponent from "../../components/Customer";
 import axios from "axios";
+import { AddIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
 
 export default function Customers() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const [customersLoading, setCustomersLoading] = useState(true);
+  const router = useRouter();
   useEffect(() => {
     setCustomersLoading(true);
     setCustomers([]);
@@ -31,15 +36,22 @@ export default function Customers() {
   return (
     <Layout>
       <Flex>
-        <Heading size="xl">Customers</Heading> <Spacer />
-        <Center>
-          <Input
-            placeholder="Search Customers"
-            value={value}
-            onChange={handleChange}
-          />
-        </Center>
+        <Heading size="lg">Customers</Heading>
+        <Spacer />
+        <IconButton
+          aria-label="Add Customer"
+          icon={<AddIcon />}
+          onClick={() => {
+            router.push(`/customers/new`);
+          }}
+        />
       </Flex>
+
+      <Center marginTop="1em">
+        <Input placeholder="Search" value={value} onChange={handleChange} />
+      </Center>
+      <br />
+      <Divider />
 
       {customers
         .filter((customer) =>

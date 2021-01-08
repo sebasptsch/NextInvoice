@@ -1,10 +1,11 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Center,
   Divider,
   Flex,
   Heading,
+  IconButton,
   Select,
   SkeletonText,
   Spacer,
@@ -42,31 +43,32 @@ export default function Invoices() {
   return (
     <Layout>
       <Flex>
-        <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-          Invoices
-        </Heading>
+        <Heading size="lg">Invoices</Heading>
         <Spacer />
-        <Center>
-          <Select value={value} onChange={handleStatus}>
-            {/* <option value="all">All</option> */}
-            <option value="draft" key="draft">
-              Draft
-            </option>
-            <option value="open" key="open">
-              Open
-            </option>
-            <option value="paid" key="paid">
-              Paid
-            </option>
-            <option value="uncollectible" key="uncollectible">
-              Uncollectible
-            </option>
-            <option value="void" key="void">
-              Void
-            </option>
-          </Select>
-        </Center>
+
+        <IconButton aria-label="Add Invoice" icon={<AddIcon />} disabled />
       </Flex>
+
+      <Select value={value} onChange={handleStatus} marginTop="1em">
+        {/* <option value="all">All</option> */}
+        <option value="draft" key="draft">
+          Draft
+        </option>
+        <option value="open" key="open">
+          Open
+        </option>
+        <option value="paid" key="paid">
+          Paid
+        </option>
+        <option value="uncollectible" key="uncollectible">
+          Uncollectible
+        </option>
+        <option value="void" key="void">
+          Void
+        </option>
+      </Select>
+
+      <br />
 
       <Divider marginBottom={2} />
       {loading ? (

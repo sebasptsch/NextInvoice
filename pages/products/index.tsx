@@ -16,12 +16,14 @@ import {
   useToast,
   Spinner,
   SkeletonText,
+  Divider,
+  IconButton,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 import ProductComponent from "../../components/Product";
@@ -47,15 +49,23 @@ export default function Products() {
   return (
     <Layout>
       <Flex>
-        <Heading size="xl">Products</Heading> <Spacer />
-        <Center>
-          <Input
-            placeholder="Search Products"
-            value={value}
-            onChange={handleChange}
-          />
-        </Center>
+        <Heading size="lg">Products</Heading> <Spacer />
+        <IconButton
+          aria-label="Add Product"
+          icon={<AddIcon />}
+          onClick={() => router.push("/products/new")}
+        />
       </Flex>
+      <Center marginTop="1em">
+        <Input
+          placeholder="Search Products"
+          value={value}
+          onChange={handleChange}
+        />
+      </Center>
+      <br />
+      <Divider />
+      <br />
       {productsLoading ? (
         <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
           <SkeletonText h="52px" />
