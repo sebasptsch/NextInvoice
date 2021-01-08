@@ -15,7 +15,7 @@ import {
   Spacer,
   Flex,
 } from "@chakra-ui/react";
-import Link from 'next/link';
+import Link from "next/link";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 
@@ -46,17 +46,31 @@ export default function DrawerNavigation() {
               </Button>
               <br />
               <br />
-              <Link passHref href="/invoices" children={<ChakraLink>Invoices</ChakraLink>}/>
+              <Link
+                passHref
+                href="/invoices"
+                children={<ChakraLink>Invoices</ChakraLink>}
+              />
               <br />
-              <Link href="/customers">Customers</Link>
+              <Link
+                passHref
+                href="/customers"
+                children={<ChakraLink>Customers</ChakraLink>}
+              />
               <br />
-              <Link href="/products">Products</Link>
+              <Link
+                passHref
+                href="/products"
+                children={<ChakraLink>Products</ChakraLink>}
+              />
             </DrawerBody>
 
             <DrawerFooter>
-              <Link href="https://dashboard.stripe.com" isExternal>
-                More Settings
-              </Link>
+              <Link
+                passHref
+                href="https://dashboard.stripe.com"
+                children={<ChakraLink isExternal>Products</ChakraLink>}
+              />
             </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
