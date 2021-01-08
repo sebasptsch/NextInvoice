@@ -13,19 +13,23 @@ import {
   Menu,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Products({
   products,
 }: {
   products: Array<Stripe.Product>;
 }) {
-  // console.log(invoices);
+  const toast = useToast();
+  const router = useRouter();
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
   //   console.log(products);
@@ -46,38 +50,62 @@ export default function Products({
         .filter((product) =>
           product?.name.toLowerCase().includes(value.toLowerCase())
         )
+        .sort((product) => (product.active ? -1 : 1))
         .map((product) => (
           <>
-            <LinkBox
-              href={"/products/" + product?.id}
-              borderWidth="1px"
-              borderRadius="10px"
-              p="1em"
-              m="1em"
-            >
+            <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
               <Flex>
-                <Text>{product?.name}</Text>
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    size={"sm"}
-                    rightIcon={<ChevronDownIcon />}
-                    marginLeft="1em"
-                  >
-                    Actions
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem
-                      as={Link}
-                      // href={invoice?.invoice_pdf}
-                      key="download"
+                <Link href={`/products/${product.id}`}>{product.name}</Link>
+                <Spacer />
+                <Center>
+                  <Badge colorScheme={product.active ? "green" : "red"}>
+                    {product.active ? "Enabled" : "Disabled"}
+                  </Badge>
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      size={"sm"}
+                      rightIcon={<ChevronDownIcon />}
+                      marginLeft="1em"
                     >
-                      Download
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                      Actions
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => {
+                          axios
+                            .post(`/api/products/${product.id}`, {
+                              active: !product.active,
+                            })
+                            .then((response) => {
+                              if (response.status === 200) {
+                                toast({
+                                  title: "Success",
+                                  description:
+                                    "Reload the page to see the changes.",
+                                  status: "success",
+                                });
+                                router.reload();
+                              }
+                            })
+                            .catch((error) => {
+                              // console.log("error", error.message);
+                              toast({
+                                title: error.response.data.type,
+                                status: "error",
+                                description: error.response.data.raw.message,
+                              });
+                            });
+                        }}
+                        key="delete"
+                      >
+                        {product.active ? "Disable" : "Enable"}
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Center>
               </Flex>
-            </LinkBox>
+            </Box>
           </>
         ))}
     </Layout>

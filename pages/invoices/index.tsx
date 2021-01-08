@@ -13,9 +13,6 @@ import {
 
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_KEY, {
-  apiVersion: "2020-08-27",
-});
 
 import InvoiceComponent from "../../components/Invoice";
 import { useEffect, useState } from "react";

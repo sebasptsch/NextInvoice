@@ -178,57 +178,60 @@ export default function Products({
                 key={price.id}
               >
                 <Flex>
-                  <Text textTransform={"capitalize"}>{price.nickname}</Text>
-                  <Badge colorScheme={price.active ? "green" : "red"}>
-                    {price.active ? "Enabled" : "Disabled"}
-                  </Badge>
+                  <Text textTransform={"capitalize"}>
+                    {price.nickname} <br />${price.unit_amount / 100}
+                  </Text>
                   <Spacer />
-                  <Text>${price.unit_amount / 100}</Text>
-                  <Spacer />
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      size={"sm"}
-                      rightIcon={<ChevronDownIcon />}
-                      marginLeft="1em"
-                    >
-                      Actions
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem as={Link} href={`/prices/${price.id}`}>
-                        Edit/View
-                      </MenuItem>
-                      <MenuItem
-                        as={Link}
-                        onClick={() => {
-                          axios
-                            .post(`/api/prices/${price?.id}`, {
-                              active: !price.active,
-                            })
-                            .then((response) => {
-                              if (response.status === 200) {
-                                toast({
-                                  title: "Success",
-
-                                  status: "success",
-                                });
-                                router.reload();
-                              }
-                            })
-                            .catch((error) => {
-                              // console.log("error", error.message);
-                              toast({
-                                title: error.response.data.type,
-                                status: "error",
-                                description: error.response.data.raw.message,
-                              });
-                            });
-                        }}
+                  <Center>
+                    <Badge colorScheme={price.active ? "green" : "red"}>
+                      {price.active ? "Enabled" : "Disabled"}
+                    </Badge>
+                  </Center>
+                  <Center>
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        size={"sm"}
+                        rightIcon={<ChevronDownIcon />}
+                        marginLeft="1em"
                       >
-                        {price.active ? "Disable Price" : "Enable Price"}
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
+                        Actions
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem as={Link} href={`/prices/${price.id}`}>
+                          Edit/View
+                        </MenuItem>
+                        <MenuItem
+                          as={Link}
+                          onClick={() => {
+                            axios
+                              .post(`/api/prices/${price?.id}`, {
+                                active: !price.active,
+                              })
+                              .then((response) => {
+                                if (response.status === 200) {
+                                  toast({
+                                    title: "Success",
+                                    status: "success",
+                                  });
+                                  router.reload();
+                                }
+                              })
+                              .catch((error) => {
+                                // console.log("error", error.message);
+                                toast({
+                                  title: error.response.data.type,
+                                  status: "error",
+                                  description: error.response.data.raw.message,
+                                });
+                              });
+                          }}
+                        >
+                          {price.active ? "Disable Price" : "Enable Price"}
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Center>
                 </Flex>
               </Box>
             );
