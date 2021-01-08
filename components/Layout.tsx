@@ -25,7 +25,7 @@ import { useState } from "react";
 export default function Layout({ children }: { children: any }) {
   const [session] = useSession();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   Router.events.on("routeChangeStart", () => setLoading(true));
   Router.events.on("routeChangeComplete", () => setLoading(false));
   Router.events.on("routeChangeError", () => setLoading(false));
