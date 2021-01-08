@@ -9,7 +9,7 @@ import {
   Button,
   useDisclosure,
   Input,
-  Link as Chakra link,
+  Link as ChakraLink,
   Text,
   useColorMode,
   Spacer,
