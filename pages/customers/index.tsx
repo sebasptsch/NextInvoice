@@ -8,17 +8,20 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import CustomerComponent from "../../components/Customer";
+import axios from "axios";
 
-export default function Customers({
-  customers,
-}: {
-  customers: Array<Stripe.Customer>;
-}) {
-  // console.log(invoices);
+export default function Customers() {
+  const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
+  useEffect(() => {
+    axios({ url: `/api/customers`, method: "GET" }).then((customers) => {
+      console.log(customers.data.data);
+      setCustomers(customers.data.data);
+    });
+  }, []);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
   return (
@@ -43,20 +46,4 @@ export default function Customers({
         ))}
     </Layout>
   );
-}
-
-export async function getServerSideProps() {
-  // console.log(process.env.STRIPE_KEY);
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const res = await stripe.customers.list();
-  const customers = await res.data;
-  //   console.log(customers);
-
-  return {
-    props: {
-      customers,
-    },
-  };
 }

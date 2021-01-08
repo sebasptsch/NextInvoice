@@ -14,23 +14,32 @@ import {
   Spacer,
   Text,
   useToast,
+  Spinner,
+  SkeletonText,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { METHODS } from "http";
 
-export default function Products({
-  products,
-}: {
-  products: Array<Stripe.Product>;
-}) {
+export default function Products() {
   const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("");
+  const [products, setProducts] = useState<Array<Stripe.Product>>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+
+  useEffect(() => {
+    axios({ url: `/api/products`, method: "GET" }).then((products) => {
+      setProductsLoading(false);
+      setProducts(products.data.data);
+    });
+  }, []);
+
   const handleChange = (event) => setValue(event.target.value);
   //   console.log(products);
   return (
@@ -45,7 +54,11 @@ export default function Products({
           />
         </Center>
       </Flex>
-
+      {productsLoading ? (
+        <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
+          <SkeletonText h="52px" />
+        </Box>
+      ) : null}
       {products
         .filter((product) =>
           product?.name.toLowerCase().includes(value.toLowerCase())
@@ -114,19 +127,4 @@ export default function Products({
         ))}
     </Layout>
   );
-}
-
-export async function getServerSideProps() {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const res = await stripe.products.list({});
-  const products = await res.data;
-  //   console.log(customers);
-
-  return {
-    props: {
-      products,
-    },
-  };
 }
