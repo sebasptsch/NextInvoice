@@ -45,7 +45,6 @@ export default function Layout({ children }: { children: any }) {
 
   return (
     <>
-      {loading.toString()}
       <Box p="1em" w="100%">
         <Flex>
           {session ? (
