@@ -2,6 +2,7 @@ import Layout from "../../../components/Layout";
 
 import Stripe from "stripe";
 import {
+  Badge,
   Box,
   Center,
   Divider,
@@ -79,13 +80,26 @@ export default function CustomerPage({
         </Stat>
       </StatGroup>
       <br />
-
-      <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-        Description
-      </Heading>
-      <Divider marginBottom={2} />
-      <Text>{customer.description}</Text>
-      <br />
+      <Flex>
+        <Box m={2} w="100%">
+          <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+            Description
+          </Heading>
+          <Divider marginBottom={2} />
+          <Text>{customer.description}</Text>
+        </Box>
+        <Box m={2} w="100%">
+          <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+            Students
+          </Heading>
+          <Divider marginBottom={2} />
+          <Text>
+            {JSON.parse(customer.metadata?.students).map((value) => (
+              <Badge m={1}>{value}</Badge>
+            ))}
+          </Text>
+        </Box>
+      </Flex>
 
       <Flex>
         <Heading marginTop="1em" marginBottom="0.5em" size="lg">

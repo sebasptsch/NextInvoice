@@ -8,11 +8,9 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
-import axios from "axios";
 import CustomerComponent from "../../components/Customer";
 
 export default function Customers({
@@ -48,7 +46,7 @@ export default function Customers({
 }
 
 export async function getServerSideProps() {
-  console.log(process.env.STRIPE_KEY);
+  // console.log(process.env.STRIPE_KEY);
   const stripe = new Stripe(process.env.STRIPE_KEY, {
     apiVersion: "2020-08-27",
   });
