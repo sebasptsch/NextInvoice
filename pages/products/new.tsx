@@ -65,7 +65,7 @@ export default function Products() {
             // description: "Redirecting...",
           });
           //   router.push(`/customers/${res.data.id}`);
-          router.push(`/products/${res.data.id}`);
+          router.push(`/products/[id]`, `/products/${res.data.id}`);
         }
       })
       .catch((error) => {

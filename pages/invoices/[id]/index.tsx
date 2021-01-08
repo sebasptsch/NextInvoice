@@ -24,6 +24,7 @@ import Stripe from "stripe";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
+import { NextChakraLinkBox } from "../../../components/NextChakraLinkBox";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   const toast = useToast();
@@ -42,7 +43,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Center>
       </Flex>
       <Box>
-        <Button as={Link} href={invoice?.invoice_pdf} m={2}>
+        <Button href={invoice?.invoice_pdf} m={2}>
           Download Invoice
         </Button>
         <Button
@@ -73,14 +74,14 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           <Text>{new Date(invoice?.due_date * 1000).toLocaleDateString()}</Text>
         </Box>
         <Divider orientation="vertical" h="4em" />
-        <LinkBox
-          as={Link}
-          href={`/customers/${invoice.customer}`}
+        <NextChakraLinkBox
+          as={`/customers/${invoice.customer}`}
+          href={`/customers/[id]`}
           padding="0 2em 0 2em"
         >
           <Text color="gray.500">Customer</Text>
           <Text>{invoice?.customer_name}</Text>
-        </LinkBox>
+        </NextChakraLinkBox>
         {/* <Box m="1em">
           <Text color="gray.500">Date</Text>
           <Text>{new Date(invoice?.due_date).toLocaleDateString()}</Text>

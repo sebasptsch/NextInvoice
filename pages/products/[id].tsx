@@ -162,7 +162,14 @@ export default function Products({
 
           <Spacer />
           <Center>
-            <Button as={Link} href={`/prices/new/?product=${product.id}`}>
+            <Button
+              onClick={() => {
+                router.push(
+                  `/prices/new/?product=[id]`,
+                  `/prices/new/?product=${product.id}`
+                );
+              }}
+            >
               New Price
             </Button>
           </Center>
@@ -202,11 +209,14 @@ export default function Products({
                         Actions
                       </MenuButton>
                       <MenuList>
-                        <MenuItem as={Link} href={`/prices/${price.id}`}>
+                        <MenuItem
+                          onClick={() => {
+                            router.push(`/prices/[id]`, `/prices/${price.id}`);
+                          }}
+                        >
                           Edit/View
                         </MenuItem>
                         <MenuItem
-                          as={Link}
                           onClick={() => {
                             axios
                               .post(`/api/prices/${price?.id}`, {

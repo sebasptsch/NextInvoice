@@ -46,7 +46,7 @@ export default function Customers() {
           aria-label="Add Customer"
           icon={<AddIcon />}
           onClick={() => {
-            router.push(`/customers/new`);
+            router.push(`/customers/new`, `/customers/new`);
           }}
         />
       </Flex>

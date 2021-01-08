@@ -10,13 +10,14 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Stripe from "stripe";
-import Link from "next/link";
+
+import { useRouter } from "next/router";
+import { NextChakraLink } from "./NextChakraLink";
 
 export default function InvoiceComponent({
   invoice,
@@ -24,6 +25,7 @@ export default function InvoiceComponent({
   invoice: Stripe.Invoice;
 }): JSX.Element {
   const toast = useToast();
+  const router = useRouter();
   return (
     <Box
       borderWidth="1px"
@@ -34,11 +36,12 @@ export default function InvoiceComponent({
     >
       <Flex>
         <Center>
-          <Link
-            passHref
-            href={"/invoices/" + invoice?.id}
-            children={<ChakraLink>{invoice?.number}</ChakraLink>}
-          />
+          <NextChakraLink
+            as={"/invoices/" + invoice?.id}
+            href={`/invoices/[id]`}
+          >
+            {invoice?.number}
+          </NextChakraLink>
         </Center>
         <Spacer />
         <Center>
@@ -72,15 +75,11 @@ export default function InvoiceComponent({
             </MenuButton>
             <MenuList>
               {invoice?.status == "draft" ? <MenuItem>Edit</MenuItem> : null}
-              <MenuItem as={Link} href={invoice?.invoice_pdf} key="download">
+              <MenuItem href={invoice?.invoice_pdf} key="download">
                 Download
               </MenuItem>
               {invoice.status === "open" ? (
-                <MenuItem
-                  as={Link}
-                  href={invoice.hosted_invoice_url}
-                  key="webpage"
-                >
+                <MenuItem href={invoice.hosted_invoice_url} key="webpage">
                   Checkout Page
                 </MenuItem>
               ) : null}

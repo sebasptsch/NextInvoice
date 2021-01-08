@@ -78,7 +78,7 @@ export default function CustomerCreation() {
             status: "success",
             description: "Redirecting...",
           });
-          router.push(`/customers/${res.data.id}`);
+          router.push(`/customers/[id]`, `/customers/${res.data.customer.id}`);
         }
       })
       .catch((error) => {

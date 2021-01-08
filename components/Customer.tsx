@@ -10,14 +10,13 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import Stripe from "stripe";
-import Link from "next/link";
+import { NextChakraLink } from "./NextChakraLink";
 
 export default function CustomerComponent({
   customer,
@@ -36,11 +35,12 @@ export default function CustomerComponent({
     >
       <Flex>
         <Center>
-          <Link
-            href={`/customers/${customer.id}`}
-            passHref
-            children={<ChakraLink>{customer?.name}</ChakraLink>}
-          />
+          <NextChakraLink
+            href="/customers/[id]"
+            as={`/customers/${customer.id}`}
+          >
+            {customer?.name}
+          </NextChakraLink>
         </Center>
         <Spacer />
 
@@ -55,7 +55,14 @@ export default function CustomerComponent({
               Actions
             </MenuButton>
             <MenuList>
-              <MenuItem as={Link} href={`/customers/${customer.id}/edit`}>
+              <MenuItem
+                onClick={() =>
+                  router.push(
+                    `/customers/[id]/edit`,
+                    `/customers/${customer.id}/edit`
+                  )
+                }
+              >
                 Edit
               </MenuItem>
 

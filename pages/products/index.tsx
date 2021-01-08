@@ -57,7 +57,7 @@ export default function Products() {
         <IconButton
           aria-label="Add Product"
           icon={<AddIcon />}
-          onClick={() => router.push("/products/new")}
+          onClick={() => router.push("/products/new", "/products/new")}
         />
       </Flex>
       <Center marginTop="1em">

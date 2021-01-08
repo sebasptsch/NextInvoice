@@ -71,7 +71,7 @@ export default function PriceView() {
             // description: "Redirecting...",
           });
           //   router.push(`/customers/${res.data.id}`);
-          router.push(`/prices/${res.data.id}`);
+          router.push(`/prices/[id]`, `/prices/${res.data.id}`);
         }
       })
       .catch((error) => {

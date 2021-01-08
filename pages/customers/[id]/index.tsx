@@ -25,6 +25,7 @@ import axios from "axios";
 
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import Head from "next/head";
+import { NextChakraLink } from "../../../components/NextChakraLink";
 
 export default function CustomerPage({
   customer,
@@ -59,13 +60,13 @@ export default function CustomerPage({
         <title>View Customer</title>
       </Head>
       <Heading>{customer.name}</Heading>
-      <Text color="gray.500" as={Link} href={`mailto: ${customer.email}`}>
+      <NextChakraLink color="gray.500" href={`mailto: ${customer.email}`}>
         {customer.email}
-      </Text>
+      </NextChakraLink>
       <br />
-      <Text color="gray.500" as={Link} href={`tel: ${customer.phone}`}>
+      <NextChakraLink color="gray.500" href={`tel: ${customer.phone}`}>
         {customer?.phone}
-      </Text>
+      </NextChakraLink>
       <br />
       <Divider />
       <br />

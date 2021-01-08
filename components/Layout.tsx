@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: any }) {
     );
   }
   if (!session) {
-    router.push("/api/auth/signin");
+    router.push("/api/auth/signin", "/api/auth/signin");
   }
 
   return (
@@ -49,7 +49,7 @@ export default function Layout({ children }: { children: any }) {
             <Button
               as="button"
               onClick={() => {
-                router.push("/api/auth/signout");
+                router.push("/api/auth/signout", "/api/auth/signout");
               }}
             >
               Logout
@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: any }) {
             <Button
               as="button"
               onClick={() => {
-                router.push("/api/auth/signin");
+                router.push("/api/auth/signin", "/api/auth/signin");
               }}
             >
               SignIn
