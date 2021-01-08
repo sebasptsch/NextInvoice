@@ -9,12 +9,13 @@ import {
   Button,
   useDisclosure,
   Input,
-  Link,
+  Link as Chakra link,
   Text,
   useColorMode,
   Spacer,
   Flex,
 } from "@chakra-ui/react";
+import Link from 'next/link';
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 
@@ -45,7 +46,7 @@ export default function DrawerNavigation() {
               </Button>
               <br />
               <br />
-              <Link href="/invoices">Invoices</Link>
+              <Link passHref href="/invoices" children={<ChakraLink>Invoices</ChakraLink>}/>
               <br />
               <Link href="/customers">Customers</Link>
               <br />
