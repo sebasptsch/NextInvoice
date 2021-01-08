@@ -57,12 +57,18 @@ export default function CustomerCreation() {
   const router = useRouter();
   function onSubmit(values) {
     const { email, description, phone, name } = values;
+    let { students } = values;
+    // console.log(children.split(","));
+    students = students.split(",").map((el) => el.trim());
+    const metadata = { students: JSON.stringify(students) };
+    // console.log(metadata);
     axios
       .post("/api/customers", {
         email,
         description,
         name,
         phone,
+        metadata,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -111,20 +117,6 @@ export default function CustomerCreation() {
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
 
-        {/* <FormControl isInvalid={errors.phone}>
-          <FormLabel htmlFor="phone">Address</FormLabel>
-          <Input
-            name="address"
-            isRequired
-            placeholder="address"
-            type="address"
-            ref={register({ required: "Required." })}
-          />
-          <FormErrorMessage>
-            {errors.address && errors.address.message}
-          </FormErrorMessage>
-        </FormControl> */}
-
         <FormControl isInvalid={errors.phone}>
           <FormLabel htmlFor="phone">Phone</FormLabel>
 
@@ -141,6 +133,18 @@ export default function CustomerCreation() {
             ref={register}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={errors.students}>
+          <FormLabel>Children</FormLabel>
+          <Input
+            name="students"
+            placeholder="Enter student names seperated by a comma (,)"
+            ref={register({
+              required: "This is required",
+              validate: (value) => value.split(",").length > 0,
+            })}
+          />
+          <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
         </FormControl>
         <Button
           mt={4}
