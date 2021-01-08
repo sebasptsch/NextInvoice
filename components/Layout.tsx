@@ -18,28 +18,34 @@ import {
 } from "@chakra-ui/react";
 import DrawerNavigation from "./Drawer";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import Head from "next/head";
+import { useState } from "react";
 
 export default function Layout({ children }: { children: any }) {
-  const [session, loading] = useSession();
+  const [session] = useSession();
   const router = useRouter();
-
-  // if (loading) {
-  //   return (
-  //     <>
-  //       <Head>
-  //         <title>Loading...</title>
-  //       </Head>
-  //       <Center h="100vh" w="100%">
-  //         <Spinner />
-  //       </Center>
-  //     </>
-  //   );
-  // }
+  const [loading, setLoading] = useState(true);
+  Router.events.on("routeChangeStart", () => setLoading(true));
+  Router.events.on("routeChangeComplete", () => setLoading(false));
+  Router.events.on("routeChangeError", () => setLoading(false));
+  if (loading) {
+    return (
+      <>
+        <Head>
+          <title>Loading...</title>
+        </Head>
+        <Center h="100vh" w="100%">
+          <Spinner />
+        </Center>
+      </>
+    );
+  }
+  
 
   return (
     <>
+      {loading.toString()}
       <Box p="1em" w="100%">
         <Flex>
           {session ? (
