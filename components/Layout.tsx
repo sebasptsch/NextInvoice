@@ -44,7 +44,6 @@ export default function Layout({
     <>
       <Box p="1em" w="100%">
         <Flex>
-          <Spacer />
           {session ? (
             <Button
               as="button"
