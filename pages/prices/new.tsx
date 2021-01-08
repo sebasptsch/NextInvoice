@@ -27,7 +27,7 @@ import {
 
 // Hook Imports
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Serverside Imports
 import Stripe from "stripe";
@@ -35,11 +35,7 @@ import Layout from "../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-export default function PriceView({
-  products,
-}: {
-  products: Array<Stripe.Product>;
-}) {
+export default function PriceView() {
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
@@ -47,9 +43,14 @@ export default function PriceView({
   const parse = (val) => val.replace(/^\$/, "");
 
   const [value, setValue] = useState("0");
+  const [products, setProducts] = useState<Array<Stripe.Product>>([]);
   function submitHandler(values) {
     const { nickname, unit_amount, product, active } = values;
-
+    useEffect(() => {
+      axios.get(`/api/products`).then((response) => {
+        setProducts(response.data.data);
+      });
+    }, []);
     axios({
       method: "POST",
       url: `/api/prices`,
@@ -158,16 +159,4 @@ export default function PriceView({
       </form>
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const products = await stripe.products.list();
-  return {
-    props: {
-      products: products.data,
-    },
-  };
 }
