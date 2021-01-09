@@ -47,9 +47,12 @@ export default function Products({
   product: Stripe.Product;
   prices: Array<Stripe.Price>;
 }) {
+  // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
+
+  // Component Functions
   const submitHandler = (values) => {
     const { active, name, description } = values;
     axios({
@@ -66,9 +69,7 @@ export default function Products({
           toast({
             title: "Success",
             status: "success",
-            // description: "Redirecting...",
           });
-          //   router.push(`/customers/${res.data.id}`);
           router.reload();
         }
       })
@@ -172,7 +173,6 @@ export default function Products({
 
         <Divider marginBottom={2} />
         {prices
-          // .filter((price) => price.active)
           .sort((price) => (price.active ? -1 : 1))
           .map((price) => {
             return (
@@ -227,7 +227,6 @@ export default function Products({
                                 }
                               })
                               .catch((error) => {
-                                // console.log("error", error.message);
                                 toast({
                                   title: error.response.data.type,
                                   status: "error",
@@ -258,10 +257,6 @@ export async function getServerSideProps({ params }) {
   });
   const product = await stripe.products.retrieve(params.id);
   const prices = await stripe.prices.list({ product: params.id });
-  //   console.log(invoice);
-  //   const invoice = await res.invoice;
-  //   console.log(await stripe.invoices.retrieve("in_1HQXddIK06OmoiJkg9DVgibR"));
-  //   console.log(invoice);
   return {
     props: {
       product: product,
@@ -269,15 +264,3 @@ export async function getServerSideProps({ params }) {
     },
   };
 }
-
-// export async function getStaticPaths() {
-//   const res = await stripe.products.list();
-//   const products = await res.data;
-
-//   // console.log(allPosts?.map((post) => `/blog/${post.id}`));
-//   //   console.log(invoices);
-//   return {
-//     paths: (await products?.map((product) => `/products/${product?.id}`)) || [],
-//     fallback: true,
-//   };
-// }

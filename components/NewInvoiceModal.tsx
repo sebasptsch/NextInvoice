@@ -37,12 +37,12 @@ export default function NewInvoiceModal({
   onClose: any;
   customerId?: string;
 }) {
+  // Hooks
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
-
   useEffect(() => {
     axios
       .get(`/api/customers`)
@@ -58,13 +58,12 @@ export default function NewInvoiceModal({
       );
   }, []);
 
+  // Component Functions
   const handleData = (values) => {
     let { customer, collection_method, days_until_due, description } = values;
-    console.log(days_until_due);
     if (collection_method !== "send_invoice") {
       days_until_due = undefined;
     }
-    console.log(customer, collection_method, days_until_due, description);
     axios
       .post(`/api/invoices`, {
         customer,
@@ -135,12 +134,8 @@ export default function NewInvoiceModal({
 
               <FormControl>
                 <FormLabel>Days until due</FormLabel>
-                <NumberInput isDisabled={DUDDisabled}>
-                  <NumberInputField
-                    defaultValue={30}
-                    ref={register}
-                    name="days_until_due"
-                  />
+                <NumberInput isDisabled={DUDDisabled} defaultValue={30}>
+                  <NumberInputField ref={register()} name="days_until_due" />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />

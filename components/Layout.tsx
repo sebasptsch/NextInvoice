@@ -23,9 +23,12 @@ import Head from "next/head";
 import { useState } from "react";
 
 export default function Layout({ children }: { children: any }) {
+  // Hooks
   const [session] = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  // Loading Screen
   Router.events.on("routeChangeStart", () => setLoading(true));
   Router.events.on("routeChangeComplete", () => setLoading(false));
   Router.events.on("routeChangeError", () => setLoading(false));
@@ -41,7 +44,6 @@ export default function Layout({ children }: { children: any }) {
       </>
     );
   }
-  
 
   return (
     <>

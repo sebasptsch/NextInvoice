@@ -18,4 +18,3 @@ export default async function handler(req, res) {
       .catch((error) => res.status(error.statusCode).json(error));
   }
 }
-// hlell

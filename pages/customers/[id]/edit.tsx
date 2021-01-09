@@ -1,30 +1,22 @@
 import {
   Divider,
   Heading,
-  InputGroup,
-  InputRightElement,
   Textarea,
   useToast,
-} from "@chakra-ui/react";
-import Layout from "../../../components/Layout";
-import { useForm } from "react-hook-form";
-import {
   FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
   Button,
 } from "@chakra-ui/react";
-
+import Layout from "../../../components/Layout";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "yup-phone";
-import { useEffect, useState } from "react";
 import Stripe from "stripe";
-
-import { CheckIcon } from "@chakra-ui/icons";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
 
@@ -33,8 +25,7 @@ export default function CustomerCreation({
 }: {
   customer: Stripe.Customer;
 }) {
-  const router = useRouter();
-
+  // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
 
@@ -43,14 +34,18 @@ export default function CustomerCreation({
 
     name: yup.string().required(),
   });
+
+  // Hooks
+  const router = useRouter();
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
+
+  // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students } = values;
-    // console.log(children.split(","));
     students = students.split(",").map((el) => el.trim());
     const metadata = { students: JSON.stringify(students) };
     axios({

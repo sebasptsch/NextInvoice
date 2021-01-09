@@ -13,7 +13,6 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   Button,
   Tfoot,
   useToast,
@@ -23,11 +22,11 @@ import Layout from "../../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
 import Head from "next/head";
-import Link from "next/link";
 import { NextChakraLinkBox } from "../../../components/NextChakraLinkBox";
 import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
+  // Hooks
   const toast = useToast();
   return (
     <Layout>
@@ -60,7 +59,6 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         <Button m={2} as={"a"} href={invoice?.hosted_invoice_url}>
           Payment Page
         </Button>
-        {/* <Button m={2}></Button> */}
       </Box>
       <Divider m="1em 0 1em 0" />
 
@@ -78,10 +76,6 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           <Text color="gray.500">Customer</Text>
           <Text>{invoice?.customer_name}</Text>
         </NextChakraLinkBox>
-        {/* <Box m="1em">
-          <Text color="gray.500">Date</Text>
-          <Text>{new Date(invoice?.due_date).toLocaleDateString()}</Text>
-        </Box> */}
       </Flex>
       <br />
       <br />
@@ -183,25 +177,10 @@ export async function getServerSideProps({ params }) {
     apiVersion: "2020-08-27",
   });
   const invoice = await stripe.invoices.retrieve(params.id);
-  //   console.log(invoice);
-  //   const invoice = await res.invoice;
-  //   console.log(await stripe.invoices.retrieve("in_1HQXddIK06OmoiJkg9DVgibR"));
-  //   console.log(invoice);
+
   return {
     props: {
       invoice,
     },
   };
 }
-
-// export async function getStaticPaths() {
-//   const res = await stripe.invoices.list();
-//   const invoices = await res.data;
-
-//   // console.log(allPosts?.map((post) => `/blog/${post.id}`));
-//   //   console.log(invoices);
-//   return {
-//     paths: (await invoices?.map((invoice) => `/invoices/${invoice?.id}`)) || [],
-//     fallback: true,
-//   };
-// }

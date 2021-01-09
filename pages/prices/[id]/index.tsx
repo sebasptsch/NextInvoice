@@ -6,30 +6,18 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   StatGroup,
   Stat,
   StatLabel,
   StatNumber,
   Heading,
   Divider,
-  Editable,
-  EditablePreview,
-  EditableInput,
   Select,
   Button,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Input,
   useToast,
 } from "@chakra-ui/react";
-
-// Hook Imports
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-
-// Serverside Imports
 import Stripe from "stripe";
 import Layout from "../../../components/Layout";
 import axios from "axios";
@@ -38,13 +26,14 @@ import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function PriceView({ price }: { price: Stripe.Price }) {
+  // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
 
+  // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
-
     axios({
       method: "POST",
       url: `/api/prices/${price.id}`,

@@ -6,21 +6,16 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   StatGroup,
   Stat,
   StatLabel,
   StatNumber,
   Heading,
   Divider,
-  Editable,
-  EditablePreview,
-  EditableInput,
   Select,
   Button,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -38,14 +33,16 @@ import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function PriceView() {
+  // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  const format = (val) => `$` + val;
-  const parse = (val) => val.replace(/^\$/, "");
-
   const [value, setValue] = useState("0");
   const [products, setProducts] = useState<Array<Stripe.Product>>([]);
+
+  // Component Functions
+  const format = (val) => `$` + val;
+  const parse = (val) => val.replace(/^\$/, "");
   function submitHandler(values) {
     const { nickname, unit_amount, product, active } = values;
     useEffect(() => {
@@ -69,9 +66,8 @@ export default function PriceView() {
           toast({
             title: "Success",
             status: "success",
-            // description: "Redirecting...",
           });
-          //   router.push(`/customers/${res.data.id}`);
+
           router.push(`/prices/[id]`, `/prices/${res.data.id}`);
         }
       })

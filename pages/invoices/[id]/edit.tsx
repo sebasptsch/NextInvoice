@@ -25,11 +25,9 @@ export async function getServerSideProps({ params }) {
     apiVersion: "2020-08-27",
   });
   const invoice = await stripe.invoices.retrieve(params.id);
-  const prices = await stripe.prices.list();
   return {
     props: {
       invoice,
-      // prices: prices.data,
     },
   };
 }

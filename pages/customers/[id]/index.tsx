@@ -32,6 +32,7 @@ export default function CustomerPage({
 }: {
   customer: Stripe.Customer;
 }) {
+  // Hooks
   const router = useRouter();
 
   return (
@@ -116,16 +117,3 @@ export async function getServerSideProps({ params }) {
     },
   };
 }
-
-// export async function getStaticPaths() {
-//   const res = await stripe.customers.list();
-//   const customers = await res.data;
-
-//   // console.log(allPosts?.map((post) => `/blog/${post.id}`));
-//   //   console.log(invoices);
-//   return {
-//     paths:
-//       (await customers?.map((customer) => `/customers/${customer?.id}`)) || [],
-//     fallback: true,
-//   };
-// }

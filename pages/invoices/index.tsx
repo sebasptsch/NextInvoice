@@ -24,6 +24,7 @@ import InvoiceList from "../../components/InvoiceList";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Invoices() {
+  // Hooks
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
@@ -43,9 +44,7 @@ export default function Invoices() {
       })
       .catch((error) => ErrorHandler(error, toast));
   }, [value]);
-  const handleStatus = (e) => {
-    setValue(e.target.value);
-  };
+
   return (
     <Layout>
       <Head>

@@ -28,13 +28,7 @@ import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function CustomerCreation() {
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
-  useEffect(() => {
-    axios
-      .get(`/api/customers`)
-      .then((response) => setCustomers(response.data.data));
-  }, []);
-
+  // Validation Schema for Form
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -52,18 +46,26 @@ export default function CustomerCreation() {
       }),
     name: yup.string().required(),
   });
+
+  // Hooks
+  const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
   const router = useRouter();
+  useEffect(() => {
+    axios
+      .get(`/api/customers`)
+      .then((response) => setCustomers(response.data.data));
+  }, []);
+
+  // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students } = values;
-    // console.log(children.split(","));
     students = students.split(",").map((el) => el.trim());
     const metadata = { students: JSON.stringify(students) };
-    // console.log(metadata);
     axios
       .post("/api/customers", {
         email,

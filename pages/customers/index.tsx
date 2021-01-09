@@ -23,10 +23,12 @@ import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Customers() {
+  // Hooks
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const [customersLoading, setCustomersLoading] = useState(true);
   const router = useRouter();
   const toast = useToast();
+  const [value, setValue] = useState("");
   useEffect(() => {
     setCustomersLoading(true);
     setCustomers([]);
@@ -37,8 +39,10 @@ export default function Customers() {
       })
       .catch((error) => ErrorHandler(error, toast));
   }, []);
-  const [value, setValue] = useState("");
+
+  // Component Functions
   const handleChange = (event) => setValue(event.target.value);
+
   return (
     <Layout>
       <Head>

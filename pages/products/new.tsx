@@ -44,9 +44,12 @@ import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products() {
+  // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
+
+  // Component Functions
   const submitHandler = (values) => {
     const { active, name, description } = values;
     axios({
@@ -63,9 +66,7 @@ export default function Products() {
           toast({
             title: "Success",
             status: "success",
-            // description: "Redirecting...",
           });
-          //   router.push(`/customers/${res.data.id}`);
           router.push(`/products/[id]`, `/products/${res.data.id}`);
         }
       })

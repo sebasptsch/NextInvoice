@@ -31,12 +31,12 @@ import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products() {
+  // Hooks
   const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("");
   const [products, setProducts] = useState<Array<Stripe.Product>>([]);
   const [productsLoading, setProductsLoading] = useState(true);
-
   useEffect(() => {
     setProductsLoading(true);
     setProducts([]);
@@ -48,8 +48,9 @@ export default function Products() {
       .catch((error) => ErrorHandler(error, toast));
   }, []);
 
+  // Component Functions
   const handleChange = (event) => setValue(event.target.value);
-  //   console.log(products);
+
   return (
     <Layout>
       <Head>

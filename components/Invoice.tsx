@@ -25,8 +25,8 @@ export default function InvoiceComponent({
 }: {
   invoice: Stripe.Invoice;
 }): JSX.Element {
+  // Hooks
   const toast = useToast();
-  const router = useRouter();
   return (
     <Box
       borderWidth="1px"

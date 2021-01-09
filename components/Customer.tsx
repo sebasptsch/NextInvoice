@@ -24,8 +24,10 @@ export default function CustomerComponent({
 }: {
   customer: Stripe.Customer;
 }): JSX.Element {
+  // Hooks
   const toast = useToast();
   const router = useRouter();
+
   return (
     <Box
       borderWidth="1px"

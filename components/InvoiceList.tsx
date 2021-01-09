@@ -20,6 +20,8 @@ import InvoiceComponent from "./Invoice";
 import NewInvoiceModal from "./NewInvoiceModal";
 
 export default function InvoiceList({ customer }: { customer?: string }) {
+  // Hooks
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
@@ -42,11 +44,10 @@ export default function InvoiceList({ customer }: { customer?: string }) {
       .catch((error) => ErrorHandler(error, toast));
   }, [value]);
 
+  // Component Functions
   const handleStatus = (e) => {
     setValue(e.target.value);
   };
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>

@@ -21,10 +21,11 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 export default function DrawerNavigation() {
+  // Hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const [session, loading] = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <>
       <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
