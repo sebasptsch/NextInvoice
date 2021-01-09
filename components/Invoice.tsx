@@ -16,7 +16,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Stripe from "stripe";
 
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { NextChakraLink } from "./NextChakraLink";
 import ErrorHandler from "./ErrorHandler";
 
@@ -27,6 +27,7 @@ export default function InvoiceComponent({
 }): JSX.Element {
   // Hooks
   const toast = useToast();
+  const router = useRouter();
   return (
     <Box
       borderWidth="1px"
@@ -84,55 +85,16 @@ export default function InvoiceComponent({
                   Checkout Page
                 </MenuItem>
               ) : null}
-              <MenuItem
-                key="send"
-                onClick={() => {
-                  axios
-                    .post(`/api/invoices/${invoice?.id}/send`)
-                    .then((response) => {
-                      if (response.status === 200) {
-                        toast({
-                          title: "Success",
-                          description: "Reload the page to see the changes.",
-                          status: "success",
-                        });
-                      }
-                    })
-                    .catch((error) => ErrorHandler(error, toast));
-                }}
-              >
-                Send
-              </MenuItem>
-              <MenuItem
-                key="pay"
-                onClick={() => {
-                  axios
-                    .post(`/api/invoices/${invoice?.id}/pay`)
-                    .then((response) => {
-                      if (response.status === 200) {
-                        toast({
-                          title: "Success",
-                          description: "Reload the page to see the changes.",
-                          status: "success",
-                        });
-                      }
-                    })
-                    .catch((error) => ErrorHandler(error, toast));
-                }}
-              >
-                Pay
-              </MenuItem>
-              {invoice?.status == "draft" ? (
+              {invoice.status === "open" ? (
                 <MenuItem
-                  key="Delete"
+                  key="send"
                   onClick={() => {
                     axios
-                      .delete(`/api/invoices/${invoice?.id}`)
+                      .post(`/api/invoices/${invoice?.id}/send`)
                       .then((response) => {
                         if (response.status === 200) {
                           toast({
-                            title: "Success",
-                            description: "Reload the page to see the changes.",
+                            title: "Sent!",
                             status: "success",
                           });
                         }
@@ -140,28 +102,95 @@ export default function InvoiceComponent({
                       .catch((error) => ErrorHandler(error, toast));
                   }}
                 >
-                  Delete
+                  Send
                 </MenuItem>
               ) : null}
-              <MenuItem
-                key="Void"
-                onClick={() => {
-                  axios
-                    .post(`/api/invoices/${invoice?.id}/void`)
-                    .then((response) => {
-                      if (response.status === 200) {
-                        toast({
-                          title: "Success",
-                          description: "Reload the page to see the changes.",
-                          status: "success",
-                        });
-                      }
-                    })
-                    .catch((error) => ErrorHandler(error, toast));
-                }}
-              >
-                Void
-              </MenuItem>
+              {invoice.status !== "paid" ? (
+                <MenuItem
+                  key="pay"
+                  onClick={() => {
+                    axios
+                      .post(`/api/invoices/${invoice?.id}/pay`)
+                      .then((response) => {
+                        if (response.status === 200) {
+                          toast({
+                            title: "Success",
+
+                            status: "success",
+                          });
+                          router.reload();
+                        }
+                      })
+                      .catch((error) => ErrorHandler(error, toast));
+                  }}
+                >
+                  Pay
+                </MenuItem>
+              ) : null}
+              {invoice?.status == "draft" ? (
+                <>
+                  <MenuItem
+                    key="Delete"
+                    onClick={() => {
+                      axios
+                        .delete(`/api/invoices/${invoice?.id}`)
+                        .then((response) => {
+                          if (response.status === 200) {
+                            toast({
+                              title: "Success",
+                              status: "success",
+                            });
+                            router.reload();
+                          }
+                        })
+                        .catch((error) => ErrorHandler(error, toast));
+                    }}
+                  >
+                    Delete
+                  </MenuItem>
+                  <MenuItem
+                    key="finalize"
+                    onClick={() => {
+                      axios
+                        .post(`/api/invoices/${invoice.id}/finalize`)
+                        .then((response) => {
+                          if (response.status === 200) {
+                            toast({
+                              title: "Success",
+                              status: "success",
+                            });
+                            router.reload();
+                          }
+                        })
+                        .catch((error) => ErrorHandler(error, toast));
+                    }}
+                  >
+                    Finalize
+                  </MenuItem>
+                </>
+              ) : null}
+              {invoice.status === "open" ? (
+                <MenuItem
+                  key="Void"
+                  onClick={() => {
+                    axios
+                      .post(`/api/invoices/${invoice?.id}/void`)
+                      .then((response) => {
+                        if (response.status === 200) {
+                          toast({
+                            title: "Success",
+
+                            status: "success",
+                          });
+                          router.reload();
+                        }
+                      })
+                      .catch((error) => ErrorHandler(error, toast));
+                  }}
+                >
+                  Void
+                </MenuItem>
+              ) : null}
             </MenuList>
           </Menu>
         </Center>
