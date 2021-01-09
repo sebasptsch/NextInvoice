@@ -41,6 +41,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products() {
   const { handleSubmit, errors, register, formState } = useForm();
@@ -68,13 +69,7 @@ export default function Products() {
           router.push(`/products/[id]`, `/products/${res.data.id}`);
         }
       })
-      .catch((error) => {
-        toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
-        });
-        console.log(error);
-      });
+      .catch((error) => ErrorHandler(error, toast));
   };
   return (
     <Layout>

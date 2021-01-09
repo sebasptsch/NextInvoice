@@ -25,6 +25,7 @@ import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { NextChakraLinkBox } from "../../../components/NextChakraLinkBox";
+import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   const toast = useToast();
@@ -48,14 +49,9 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Button>
         <Button
           onClick={() => {
-            axios.post(`/api/invoices/${invoice?.id}/send`).catch((error) => {
-              // console.log("error", error.message);
-              toast({
-                title: error.response.data.type,
-                status: "error",
-                description: error.response.data.raw.message,
-              });
-            });
+            axios
+              .post(`/api/invoices/${invoice?.id}/send`)
+              .catch((error) => ErrorHandler(error, toast));
           }}
           m={2}
         >

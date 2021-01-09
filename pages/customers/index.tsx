@@ -10,6 +10,7 @@ import {
   SkeletonText,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
@@ -19,18 +20,22 @@ import axios from "axios";
 import { AddIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Customers() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const [customersLoading, setCustomersLoading] = useState(true);
   const router = useRouter();
+  const toast = useToast();
   useEffect(() => {
     setCustomersLoading(true);
     setCustomers([]);
-    axios({ url: `/api/customers`, method: "GET" }).then((customers) => {
-      setCustomersLoading(false);
-      setCustomers(customers.data.data);
-    });
+    axios({ url: `/api/customers`, method: "GET" })
+      .then((customers) => {
+        setCustomersLoading(false);
+        setCustomers(customers.data.data);
+      })
+      .catch((error) => ErrorHandler(error, toast));
   }, []);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);

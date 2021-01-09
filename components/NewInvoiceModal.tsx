@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
+import ErrorHandler from "./ErrorHandler";
 
 export default function NewInvoiceModal({
   isOpen,
@@ -74,13 +75,7 @@ export default function NewInvoiceModal({
       .then((response) =>
         router.push(`/invoices/[id]`, `/invoices/${response.data.id}`)
       )
-      .catch((error) =>
-        toast({
-          title: error.response.data.type,
-          status: "error",
-          description: error.response.data.raw.message,
-        })
-      );
+      .catch((error) => ErrorHandler(error, toast));
   };
 
   return (

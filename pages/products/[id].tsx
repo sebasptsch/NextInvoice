@@ -38,6 +38,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products({
   product,
@@ -71,13 +72,7 @@ export default function Products({
           router.reload();
         }
       })
-      .catch((error) => {
-        toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
-        });
-        console.log(error);
-      });
+      .catch((error) => ErrorHandler(error, toast));
   };
   return (
     <Layout>

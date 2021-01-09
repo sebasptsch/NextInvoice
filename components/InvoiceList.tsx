@@ -11,9 +11,11 @@ import {
   Spacer,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ErrorHandler from "./ErrorHandler";
 import InvoiceComponent from "./Invoice";
 import NewInvoiceModal from "./NewInvoiceModal";
 
@@ -21,6 +23,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
+  const toast = useToast();
   useEffect(() => {
     isLoading(true);
     setInvoices([]);
@@ -31,10 +34,12 @@ export default function InvoiceList({ customer }: { customer?: string }) {
         status: value,
         customer,
       },
-    }).then((response) => {
-      setInvoices(response.data.data.sort((invoice) => invoice.due_date));
-      isLoading(false);
-    });
+    })
+      .then((response) => {
+        setInvoices(response.data.data.sort((invoice) => invoice.due_date));
+        isLoading(false);
+      })
+      .catch((error) => ErrorHandler(error, toast));
   }, [value]);
 
   const handleStatus = (e) => {

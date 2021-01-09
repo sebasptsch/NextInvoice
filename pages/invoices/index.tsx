@@ -10,6 +10,7 @@ import {
   SkeletonText,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 import Layout from "../../components/Layout";
@@ -20,11 +21,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Head from "next/head";
 import InvoiceList from "../../components/InvoiceList";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
+  const toast = useToast();
   useEffect(() => {
     isLoading(true);
     setInvoices([]);
@@ -37,7 +40,8 @@ export default function Invoices() {
             .sort((invoice) => invoice.due_date)
         );
         isLoading(false);
-      });
+      })
+      .catch((error) => ErrorHandler(error, toast));
   }, [value]);
   const handleStatus = (e) => {
     setValue(e.target.value);

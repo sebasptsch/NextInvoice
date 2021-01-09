@@ -26,6 +26,7 @@ import Stripe from "stripe";
 
 import { CheckIcon } from "@chakra-ui/icons";
 import Head from "next/head";
+import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function CustomerCreation({
   customer,
@@ -73,12 +74,7 @@ export default function CustomerCreation({
           router.push(`/customers/[id]`, `/customers/${res.data.id}`);
         }
       })
-      .catch((error) => {
-        toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
-        });
-      });
+      .catch((error) => ErrorHandler(error, toast));
   }
 
   return (

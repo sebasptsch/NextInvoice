@@ -17,6 +17,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { Stripe } from "stripe";
 import Link from "next/link";
+import ErrorHandler from "./ErrorHandler";
 
 export default function ProductComponent({
   product,
@@ -64,14 +65,7 @@ export default function ProductComponent({
                         router.reload();
                       }
                     })
-                    .catch((error) => {
-                      // console.log("error", error.message);
-                      toast({
-                        title: error.response.data.type,
-                        status: "error",
-                        description: error.response.data.raw.message,
-                      });
-                    });
+                    .catch((error) => ErrorHandler(error, toast));
                 }}
                 key="delete"
               >

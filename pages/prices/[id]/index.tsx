@@ -35,6 +35,7 @@ import Layout from "../../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function PriceView({ price }: { price: Stripe.Price }) {
   const { handleSubmit, errors, register, formState } = useForm();
@@ -63,13 +64,7 @@ export default function PriceView({ price }: { price: Stripe.Price }) {
           router.reload();
         }
       })
-      .catch((error) => {
-        toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
-        });
-        console.log(error);
-      });
+      .catch((error) => ErrorHandler(error, toast));
   }
 
   return (

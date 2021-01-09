@@ -18,6 +18,7 @@ import Stripe from "stripe";
 
 import { useRouter } from "next/router";
 import { NextChakraLink } from "./NextChakraLink";
+import ErrorHandler from "./ErrorHandler";
 
 export default function InvoiceComponent({
   invoice,
@@ -97,14 +98,7 @@ export default function InvoiceComponent({
                         });
                       }
                     })
-                    .catch((error) => {
-                      // console.log("error", error.message);
-                      toast({
-                        title: error.response.data.type,
-                        status: "error",
-                        description: error.response.data.raw.message,
-                      });
-                    });
+                    .catch((error) => ErrorHandler(error, toast));
                 }}
               >
                 Send
@@ -123,14 +117,7 @@ export default function InvoiceComponent({
                         });
                       }
                     })
-                    .catch((error) => {
-                      // console.log("error", error.message);
-                      toast({
-                        title: error.response.data.type,
-                        status: "error",
-                        description: error.response.data.raw.message,
-                      });
-                    });
+                    .catch((error) => ErrorHandler(error, toast));
                 }}
               >
                 Pay
@@ -150,14 +137,7 @@ export default function InvoiceComponent({
                           });
                         }
                       })
-                      .catch((error) => {
-                        // console.log("error", error.message);
-                        toast({
-                          title: error.response.data.type,
-                          status: "error",
-                          description: error.response.data.raw.message,
-                        });
-                      });
+                      .catch((error) => ErrorHandler(error, toast));
                   }}
                 >
                   Delete
@@ -177,13 +157,7 @@ export default function InvoiceComponent({
                         });
                       }
                     })
-                    .catch((error) => {
-                      toast({
-                        title: error.response.data.type,
-                        status: "error",
-                        description: error.response.data.raw.message,
-                      });
-                    });
+                    .catch((error) => ErrorHandler(error, toast));
                 }}
               >
                 Void

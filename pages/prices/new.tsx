@@ -35,6 +35,7 @@ import Layout from "../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function PriceView() {
   const { handleSubmit, errors, register, formState } = useForm();
@@ -74,13 +75,7 @@ export default function PriceView() {
           router.push(`/prices/[id]`, `/prices/${res.data.id}`);
         }
       })
-      .catch((error) => {
-        toast({
-          title: error?.response.data.type,
-          description: error?.response.data.code,
-        });
-        console.log(error);
-      });
+      .catch((error) => ErrorHandler(error, toast));
   }
 
   return (

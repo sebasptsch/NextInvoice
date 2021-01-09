@@ -28,6 +28,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import ProductComponent from "../../components/Product";
 import Head from "next/head";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products() {
   const toast = useToast();
@@ -39,10 +40,12 @@ export default function Products() {
   useEffect(() => {
     setProductsLoading(true);
     setProducts([]);
-    axios({ url: `/api/products`, method: "GET" }).then((products) => {
-      setProductsLoading(false);
-      setProducts(products.data.data);
-    });
+    axios({ url: `/api/products`, method: "GET" })
+      .then((products) => {
+        setProductsLoading(false);
+        setProducts(products.data.data);
+      })
+      .catch((error) => ErrorHandler(error, toast));
   }, []);
 
   const handleChange = (event) => setValue(event.target.value);

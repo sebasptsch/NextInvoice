@@ -16,6 +16,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { Router, useRouter } from "next/router";
 import Stripe from "stripe";
+import ErrorHandler from "./ErrorHandler";
 import { NextChakraLink } from "./NextChakraLink";
 
 export default function CustomerComponent({
@@ -80,14 +81,7 @@ export default function CustomerComponent({
                         router.reload();
                       }
                     })
-                    .catch((error) => {
-                      // console.log("error", error.message);
-                      toast({
-                        title: error.response.data.type,
-                        status: "error",
-                        description: error.response.data.raw.message,
-                      });
-                    });
+                    .catch((error) => ErrorHandler(error, toast));
                 }}
               >
                 Delete
