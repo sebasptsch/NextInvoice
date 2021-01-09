@@ -17,6 +17,8 @@ import {
   Tfoot,
   useToast,
   LinkBox,
+  ButtonGroup,
+  Stack,
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import Stripe from "stripe";
@@ -50,12 +52,12 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           Download Invoice
         </Button>
         <Button
+          m={2}
           onClick={() => {
             axios
               .post(`/api/invoices/${invoice?.id}/send`)
               .catch((error) => ErrorHandler(error, toast));
           }}
-          m={2}
         >
           Re-send Email
         </Button>
@@ -63,6 +65,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           Payment Page
         </Button>
         <Button
+          m={2}
           disabled={invoice.status !== "draft"}
           onClick={() => {
             axios.delete(`/api/invoices/${invoice.id}`).then(() => {

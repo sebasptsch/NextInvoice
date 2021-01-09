@@ -11,6 +11,7 @@ import {
   MenuList,
   Spacer,
   Center,
+  Text,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
@@ -40,12 +41,10 @@ export default function InvoiceLineItemComponent({
     >
       <Flex>
         <Center>
-          <NextChakraLink
-            href={`/invoiceitems/${lineitem.invoice_item}`}
-            as={`/invoiceitems/${lineitem.invoice_item}`}
-          >
-            {lineitem.price.nickname}
-          </NextChakraLink>
+          <Badge marginRight={2} colorScheme="blue">
+            {lineitem.quantity}
+          </Badge>
+          {" " + lineitem.price.nickname?.toString()}
         </Center>
         <Spacer />
         <Center>

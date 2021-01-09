@@ -55,7 +55,7 @@ export default function InvoiceComponent({
                 ? "green"
                 : invoice?.status == "draft"
                 ? "grey"
-                : invoice?.due_date < Date.now() && invoice?.status != "open"
+                : invoice?.due_date < Date.now() && invoice?.status === "open"
                 ? "red"
                 : invoice?.status == "open"
                 ? "blue"

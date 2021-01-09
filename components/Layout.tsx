@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: any }) {
           <title>Loading...</title>
         </Head>
         <Center h="100vh" w="100%">
-          <Spinner />
+          <Spinner size="xl" />
         </Center>
       </>
     );
