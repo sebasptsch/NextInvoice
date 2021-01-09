@@ -1,122 +1,28 @@
-{
-    "id": "in_1HQTX6IK06OmoiJkWbidt8bI",
-    "object": "invoice",
-    "account_country": "AU",
-    "account_name": "Julie's Art Classes",
-    "account_tax_ids": null,
-    "amount_due": 7300,
-    "amount_paid": 7300,
-    "amount_remaining": 0,
-    "application_fee_amount": null,
-    "attempt_count": 1,
-    "attempted": true,
-    "auto_advance": false,
-    "billing_reason": "manual",
-    "charge": "ch_1HQTctIK06OmoiJkGTdzCQGf",
-    "collection_method": "send_invoice",
-    "created": 1599897148,
-    "currency": "aud",
-    "custom_fields": null,
-    "customer": "cus_I0XZaIprpvWjZo",
-    "customer_address": null,
-    "customer_email": "sebastian.pietschner@gmail.com",
-    "customer_name": null,
-    "customer_phone": null,
-    "customer_shipping": null,
-    "customer_tax_exempt": "none",
-    "customer_tax_ids": [],
-    "default_payment_method": null,
-    "default_source": null,
-    "default_tax_rates": [],
-    "description": null,
-    "discount": null,
-    "discounts": [],
-    "due_date": 1601711852,
-    "ending_balance": 0,
-    "footer": null,
-    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1HBFOKIK06OmoiJk/invst_I0UWdTPkgT5vGaVkCmbAeYOLYD8cNLo",
-    "invoice_pdf": "https://pay.stripe.com/invoice/acct_1HBFOKIK06OmoiJk/invst_I0UWdTPkgT5vGaVkCmbAeYOLYD8cNLo/pdf",
-    "last_finalization_error": null,
-    "lines": {
-        "data": [
+[
+    {
+        "student": "Kai",
+        "days": [
             {
-                "id": "il_tmp_5f9f0b0c976b0a",
-                "object": "line_item",
-                "amount": 2000,
-                "currency": "aud",
-                "description": "1 × Gold Special (at $20.00 / month)",
-                "discount_amounts": [],
-                "discountable": true,
-                "discounts": [],
-                "livemode": false,
-                "metadata": {},
-                "period": {
-                    "end": 1612520900,
-                    "start": 1609842500
-                },
-                "price": {
-                    "id": "gold",
-                    "object": "price",
-                    "active": true,
-                    "billing_scheme": "per_unit",
-                    "created": 1590177591,
-                    "currency": "aud",
-                    "livemode": false,
-                    "lookup_key": null,
-                    "metadata": {},
-                    "nickname": null,
-                    "product": "prod_HKLjSQyujmIQwQ",
-                    "recurring": {
-                        "aggregate_usage": null,
-                        "interval": "month",
-                        "interval_count": 1,
-                        "usage_type": "licensed"
-                    },
-                    "tiers_mode": null,
-                    "transform_quantity": null,
-                    "type": "recurring",
-                    "unit_amount": 2000,
-                    "unit_amount_decimal": "2000"
-                },
-                "proration": false,
-                "quantity": 1,
-                "subscription": "sub_Ihc0izuKTC18Jh",
-                "subscription_item": "si_Ihc0dRWugqD1qN",
-                "tax_amounts": [],
-                "tax_rates": [],
-                "type": "subscription"
+                "day": "Tuesday",
+                "time": "price_1I7bodIK06OmoiJkDsyk1xnE"
+            },
+            {
+                "day": "Friday",
+                "time": "price_1I7bodIK06OmoiJkDsyk1xnE"
             }
-        ],
-        "has_more": false,
-        "object": "list",
-        "url": "/v1/invoices/in_1HQTX6IK06OmoiJkWbidt8bI/lines"
+        ]
     },
-    "livemode": false,
-    "metadata": {},
-    "next_payment_attempt": null,
-    "number": "7D82BC00-0001",
-    "paid": true,
-    "payment_intent": "pi_1HQTc0IK06OmoiJkwUbJOzc8",
-    "period_end": 1599897148,
-    "period_start": 1599897148,
-    "post_payment_credit_notes_amount": 0,
-    "pre_payment_credit_notes_amount": 0,
-    "receipt_number": "2954-3476",
-    "starting_balance": 0,
-    "statement_descriptor": null,
-    "status": "paid",
-    "status_transitions": {
-        "finalized_at": 1599897452,
-        "marked_uncollectible_at": null,
-        "paid_at": 1599897507,
-        "voided_at": null
-    },
-    "subscription": null,
-    "subtotal": 7300,
-    "tax": null,
-    "total": 7300,
-    "total_discount_amounts": [],
-    "total_tax_amounts": [],
-    "transfer_data": null,
-    "webhooks_delivered_at": 1599897148
-}
+    {
+        "student": "Heidi",
+        "days": [
+            {
+                "day": "Tuesday",
+                "time": "price_1I7bodIK06OmoiJkDsyk1xnE"
+            },
+            {
+                "day": "Friday",
+                "time": "price_1I7bodIK06OmoiJkDsyk1xnE"
+            }
+        ]
+    }
+]
