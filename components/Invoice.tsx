@@ -42,7 +42,7 @@ export default function InvoiceComponent({
             as={"/invoices/" + invoice?.id}
             href={`/invoices/[id]`}
           >
-            {invoice?.number}
+            {invoice.number}
           </NextChakraLink>
         </Center>
         <Spacer />
@@ -76,7 +76,15 @@ export default function InvoiceComponent({
               Actions
             </MenuButton>
             <MenuList>
-              {invoice?.status == "draft" ? <MenuItem>Edit</MenuItem> : null}
+              {invoice?.status == "draft" ? (
+                <MenuItem
+                  onClick={() =>
+                    router.push("/invoices/[id]", "/invoices/" + invoice?.id)
+                  }
+                >
+                  Edit
+                </MenuItem>
+              ) : null}
               <MenuItem href={invoice?.invoice_pdf} key="download">
                 Download
               </MenuItem>
@@ -96,6 +104,7 @@ export default function InvoiceComponent({
                             title: "Sent!",
                             status: "success",
                           });
+                          router.reload();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}

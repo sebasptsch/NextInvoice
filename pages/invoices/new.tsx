@@ -29,15 +29,7 @@ import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
 
-export default function NewInvoiceModal({
-  isOpen,
-  onClose,
-  customerId,
-}: {
-  isOpen: any;
-  onClose: any;
-  customerId?: string;
-}) {
+export default function NewInvoice() {
   // Hooks
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const { handleSubmit, errors, register, formState, watch } = useForm();
@@ -89,7 +81,7 @@ export default function NewInvoiceModal({
             <Select
               name="customer"
               ref={register({ required: "This is required" })}
-              defaultValue={customerId}
+              defaultValue={router.query.customer}
             >
               {customers.map((customer) => (
                 <option key={customer.id} value={customer.id}>
@@ -137,9 +129,6 @@ export default function NewInvoiceModal({
           <FormLabel>Description</FormLabel>
           <Textarea ref={register} name="description" />
         </FormControl>
-        <Button mr={3} onClick={onClose}>
-          Close
-        </Button>
         <Button type="submit" colorScheme="blue">
           Generate
         </Button>

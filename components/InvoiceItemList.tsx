@@ -22,41 +22,30 @@ import { Router, useRouter } from "next/router";
 import Stripe from "stripe";
 import InvoiceLineItemComponent from "./InvoiceLineItem";
 
-export default function InvoiceItemList({
-  invoice,
-}: {
-  invoice: Stripe.Invoice;
-}) {
+export default function InvoiceItemList({ invoice }: { invoice }) {
   // Hooks
-  const invoiceLineItems: Array<Stripe.InvoiceLineItem> = invoice.lines.data;
+  const invoiceLineItems: Array<Stripe.InvoiceLineItem> = invoice.lines?.data;
   const router = useRouter();
 
   return (
     <>
       <Flex marginBottom={"1em"}>
         <Center>
-          <Heading size="md">Invoice Items</Heading>
+          <Heading size="lg">Invoice Items</Heading>
         </Center>
 
         <Spacer />
-
-        <IconButton
-          aria-label="Add Invoice Item"
-          onClick={() =>
-            router.push(
-              `/invoiceitems/new`,
-              `/invoiceitems/new?customer=${invoice.customer}`
-            )
-          }
-          icon={<AddIcon />}
-        />
       </Flex>
 
       <Divider marginBottom={2} />
 
-      {invoiceLineItems.length != 0 ? (
-        invoiceLineItems.map((lineitem) => (
-          <InvoiceLineItemComponent lineitem={lineitem} key={lineitem.id} />
+      {invoiceLineItems?.length != 0 ? (
+        invoiceLineItems?.map((lineitem) => (
+          <InvoiceLineItemComponent
+            lineitem={lineitem}
+            key={lineitem.id}
+            disabled={invoice.status !== "draft"}
+          />
         ))
       ) : (
         <Text>No items in invoice here.</Text>

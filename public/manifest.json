@@ -3,7 +3,7 @@
     "short_name": "Juli Invoicing",
     "icons": [
         {
-            "src": "/icon-192.png",
+            "src": "/icons/icon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },

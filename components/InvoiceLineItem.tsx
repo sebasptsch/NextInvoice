@@ -22,8 +22,10 @@ import ErrorHandler from "./ErrorHandler";
 
 export default function InvoiceLineItemComponent({
   lineitem,
+  disabled,
 }: {
   lineitem: Stripe.InvoiceLineItem;
+  disabled: boolean;
 }): JSX.Element {
   // Hooks
   const toast = useToast();
@@ -37,7 +39,14 @@ export default function InvoiceLineItemComponent({
       key={lineitem?.id}
     >
       <Flex>
-        <Center>{lineitem.price.nickname}</Center>
+        <Center>
+          <NextChakraLink
+            href={`/invoiceitems/${lineitem.invoice_item}`}
+            as={`/invoiceitems/${lineitem.invoice_item}`}
+          >
+            {lineitem.price.nickname}
+          </NextChakraLink>
+        </Center>
         <Spacer />
         <Center>
           ${lineitem.price.unit_amount / 100}
@@ -47,11 +56,25 @@ export default function InvoiceLineItemComponent({
               size={"sm"}
               rightIcon={<ChevronDownIcon />}
               marginLeft="1em"
+              disabled={disabled}
             >
               Actions
             </MenuButton>
             <MenuList>
-              <MenuItem>Send</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  axios
+                    .delete(`/api/invoiceitems/${lineitem.invoice_item}`)
+                    .then(() => {
+                      toast({ title: "Success" });
+                      router.reload();
+                    })
+                    .catch((error) => ErrorHandler(error, toast));
+                }}
+              >
+                Delete
+              </MenuItem>
+              <MenuItem>Modify</MenuItem>
             </MenuList>
           </Menu>
         </Center>

@@ -25,14 +25,16 @@ import Head from "next/head";
 import { NextChakraLinkBox } from "../../../components/NextChakraLinkBox";
 import ErrorHandler from "../../../components/ErrorHandler";
 import InvoiceItemList from "../../../components/InvoiceItemList";
+import { useRouter } from "next/router";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   // Hooks
   const toast = useToast();
+  const router = useRouter();
   return (
     <Layout>
       <Head>
-        <title>View Invoice</title>
+        <title>View Invoice {invoice.number}</title>
       </Head>
       <Flex>
         <Heading size="xl" p={1}>
@@ -44,7 +46,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Center>
       </Flex>
       <Box>
-        <Button href={invoice?.invoice_pdf} m={2}>
+        <Button onClick={() => router.push(invoice.invoice_pdf)} m={2}>
           Download Invoice
         </Button>
         <Button
@@ -59,6 +61,17 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Button>
         <Button m={2} as={"a"} href={invoice?.hosted_invoice_url}>
           Payment Page
+        </Button>
+        <Button
+          disabled={invoice.status !== "draft"}
+          onClick={() => {
+            axios.delete(`/api/invoices/${invoice.id}`).then(() => {
+              toast({ title: "Success" });
+              router.push(`/invoices`, `/invoices`);
+            });
+          }}
+        >
+          Delete
         </Button>
       </Box>
       <Divider m="1em 0 1em 0" />
