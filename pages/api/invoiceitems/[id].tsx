@@ -17,19 +17,19 @@ export default async function handler(req, res) {
     await stripe.invoiceItems
       .retrieve(req.query.id)
       .then((value) => res.status(200).json(value))
-      .catch((error) => res.status(500).json(error));
+      .catch((error) => res.status(error.statusCode).json(error));
   }
   if (req.method === "POST") {
     await stripe.invoiceItems
       .update(req.query.id, req.body)
       .then((value) => res.status(200).json(value))
-      .catch((error) => res.status(500).json(error));
+      .catch((error) => res.status(error.statusCode).json(error));
   }
 
   if (req.method === "DELETE") {
     await stripe.invoiceItems
       .del(req.query.id)
       .then((value) => res.status(200).json(value))
-      .catch((error) => res.status(500).json(error));
+      .catch((error) => res.status(error.statusCode).json(error));
   }
 }

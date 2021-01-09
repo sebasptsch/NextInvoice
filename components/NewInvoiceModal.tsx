@@ -10,8 +10,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Spinner,
+  Textarea,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -31,9 +37,11 @@ export default function NewInvoiceModal({
   customerId?: string;
 }) {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
-  const { handleSubmit, errors, register, formState } = useForm();
+  const { handleSubmit, errors, register, formState, watch } = useForm();
+  const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
+
   useEffect(() => {
     axios
       .get(`/api/customers`)
@@ -50,10 +58,18 @@ export default function NewInvoiceModal({
   }, []);
 
   const handleData = (values) => {
-    const { customer } = values;
+    let { customer, collection_method, days_until_due, description } = values;
+    console.log(days_until_due);
+    if (collection_method !== "send_invoice") {
+      days_until_due = undefined;
+    }
+    console.log(customer, collection_method, days_until_due, description);
     axios
       .post(`/api/invoices`, {
         customer,
+        collection_method,
+        days_until_due,
+        description,
       })
       .then((response) =>
         router.push(`/invoices/[id]`, `/invoices/${response.data.id}`)
@@ -73,12 +89,12 @@ export default function NewInvoiceModal({
         <ModalOverlay />
         <ModalContent>
           <form onSubmit={handleSubmit(handleData)}>
-            <ModalHeader>Create Invoice</ModalHeader>
+            <ModalHeader>Generate Invoice</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <FormControl isInvalid={errors.customer}>
                 <FormLabel htmlFor="customer">
-                  For which customer do you want to create an invoice?
+                  For which customer do you want to generate an invoice?
                 </FormLabel>
                 {customers.length > 0 ? (
                   <Select
@@ -96,6 +112,50 @@ export default function NewInvoiceModal({
 
                 <FormErrorMessage>{errors.customer?.message}</FormErrorMessage>
               </FormControl>
+              <FormControl>
+                <FormLabel>Collection Method</FormLabel>
+                <Select
+                  defaultValue={"send_invoice"}
+                  name="collection_method"
+                  ref={register}
+                  onChange={(e) => {
+                    let chargePrev;
+                    if (e.target.value !== chargePrev) {
+                      setDUDDisabled(e.target.value === "charge_automatically");
+                      chargePrev = e.target.value;
+                    }
+                  }}
+                >
+                  <option
+                    value="charge_automatically"
+                    key="charge_automatically"
+                  >
+                    Charge Automatically
+                  </option>
+                  <option value="send_invoice" key="send_invoice">
+                    Send Invoice
+                  </option>
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Days until due</FormLabel>
+                <NumberInput isDisabled={DUDDisabled}>
+                  <NumberInputField
+                    defaultValue={30}
+                    ref={register}
+                    name="days_until_due"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Description</FormLabel>
+                <Textarea ref={register} name="description" />
+              </FormControl>
             </ModalBody>
 
             <ModalFooter>
@@ -103,7 +163,7 @@ export default function NewInvoiceModal({
                 Close
               </Button>
               <Button type="submit" colorScheme="blue">
-                Create
+                Generate
               </Button>
             </ModalFooter>
           </form>
