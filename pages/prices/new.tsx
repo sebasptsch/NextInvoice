@@ -41,20 +41,26 @@ export default function PriceView() {
   const [products, setProducts] = useState<Array<Stripe.Product>>([]);
 
   // Component Functions
+  let prevProduct;
   const format = (val) => `$` + val;
   const parse = (val) => val.replace(/^\$/, "");
+  useEffect(() => {
+    axios.get(`/api/products`).then((response) => {
+      console.log(response.data.data);
+      setProducts(response.data.data);
+    });
+  }, []);
   function submitHandler(values) {
     const { nickname, unit_amount, product, active } = values;
-    useEffect(() => {
-      axios.get(`/api/products`).then((response) => {
-        setProducts(response.data.data);
-      });
-    }, []);
     axios({
       method: "POST",
       url: `/api/prices`,
       data: {
-        nickname,
+        nickname:
+          products.find((productobj) => productobj.id === product).name +
+          " - " +
+          nickname,
+
         unit_amount: parse(unit_amount) * 100,
         active,
         currency: "AUD",

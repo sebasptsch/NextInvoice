@@ -88,6 +88,16 @@ export default function CustomerComponent({
               >
                 Delete
               </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  router.push(
+                    `/invoiceitems/new?customer=${customer.id}`,
+                    `/invoiceitems/new?customer=${customer.id}`
+                  )
+                }
+              >
+                Add item to invoice
+              </MenuItem>
             </MenuList>
           </Menu>
         </Center>

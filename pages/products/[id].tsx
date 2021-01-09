@@ -226,13 +226,7 @@ export default function Products({
                                   router.reload();
                                 }
                               })
-                              .catch((error) => {
-                                toast({
-                                  title: error.response.data.type,
-                                  status: "error",
-                                  description: error.response.data.raw.message,
-                                });
-                              });
+                              .catch((error) => ErrorHandler(error, toast));
                           }}
                         >
                           {price.active ? "Disable Price" : "Enable Price"}

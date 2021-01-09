@@ -26,6 +26,7 @@ import InvoiceList from "../../../components/InvoiceList";
 import Head from "next/head";
 import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useRouter } from "next/router";
+import InvoiceItemList from "../../../components/InvoiceItemList";
 
 export default function CustomerPage({
   customer,

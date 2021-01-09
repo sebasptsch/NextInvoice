@@ -17,7 +17,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ErrorHandler from "./ErrorHandler";
 import InvoiceComponent from "./Invoice";
-import NewInvoiceModal from "./NewInvoiceModal";
+import NewInvoicePage from "../pages/invoices/new";
+import { Router, useRouter } from "next/router";
 
 export default function InvoiceList({ customer }: { customer?: string }) {
   // Hooks
@@ -26,6 +27,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
   const [loading, isLoading] = useState(false);
   const [value, setValue] = useState("open");
   const toast = useToast();
+  const router = useRouter();
   useEffect(() => {
     isLoading(true);
     setInvoices([]);
@@ -57,13 +59,8 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
         <IconButton
           aria-label="Add Invoice"
-          onClick={onOpen}
+          onClick={() => router.push(`/invoices/new`, `/invoices/new`)}
           icon={<AddIcon />}
-        />
-        <NewInvoiceModal
-          isOpen={isOpen}
-          onClose={onClose}
-          customerId={customer}
         />
       </Flex>
 
