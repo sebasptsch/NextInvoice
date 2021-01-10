@@ -71,3 +71,4 @@ Using stripe we can manage the customers, the products, the pricing and the invo
 ## Notes
 
 Customer Based Student Signup?
+With a form that the customer enters rather than Julie having to select the day and the time.
