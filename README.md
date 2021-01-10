@@ -1,34 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Purpose
 
-## Getting Started
+This project was created for my IB ITGS IA to be submitted in February 2021.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Components
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project was created using NEXTJS and Chakra-UI.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+NEXTJS allowed me to use the Stripe API on the clientside without complications that would come with oauth and creating a seperate API. It uses a combination of Static Page Generation and Server Side Rendered Pages to make sure that whenever a user accesses a new page the data is always up-to-date. 
+Another reason to use nextjs is it's integration with Vercel (it's creator company) who offer CD and hosting with an emphasis on "serverless" code and lambda functions. Using this functionality you can create custom api routes that don't require a seperately hosted service. (Also allows for login and sessions in order to protect api routes).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Chakra-UI had several features that made it applicable to the project, chief among them being it's compatability with React and **Dark Mode**. The final reason is it's responsive design which made it easy to create pages for both mobile and desktop without changing the code overly much. 
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## The Requirements
 
-## Learn More
+The client is an art teacher who is moving from teaching in a school environment to teaching private art lessons to students at her studio. 
 
-To learn more about Next.js, take a look at the following resources:
+### The Problem
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Previously the client noted almost all their information on pieces of paper and got the customers to bill themselves by calculating how much they owed based on rates emailed to them and then, after that sending that amount to a specified bank account.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### The solution
 
-## Deploy on Vercel
+Using stripe we can manage the customers, the products, the pricing and the invoicing. As well as providing these different services stripe also offers hosted invoices which allow the customer to use several different payment methods. It also allows for reminder emails and emailed reciepts/invoices.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Todo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [x] Find out if the IB allows server-side code
+
+### Layout and Other Functionality
+
+- [x] Add Navigation
+- [x] Add login?
+
+### Enrollment
+
+- [ ] Define Students
+- [ ] Find a way to batch-invoice customers
+
+### Invoices
+
+- [x] Get Invoices
+- [x] See products inside invoice and totals
+- [x] Send Reminder Email
+- [x] Create Invoices
+- [x] Sort Invoices
+- [x] Unpaid
+- [x] By Customer
+
+### Customers
+
+- [x] List Customers
+- [x] List Related Invoices
+- [x] Create Customers
+- [x] Operations on Customers
+
+### Products
+
+- [x] Get Products
+- [x] Create Products
+- [x] Modify Products
+- [x] Operations on Products
+- [x] Sort Prices by Product
+
+### Other
+
+- [x] Buy domain?
+- [x] Connect domain email to stripe
+
+## Notes
+
+Customer Based Student Signup?
