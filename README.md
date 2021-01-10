@@ -1,3 +1,5 @@
+# Overview
+
 ## Purpose
 
 This project was created for my IB ITGS IA to be submitted in February 2021.
@@ -12,33 +14,39 @@ Another reason to use nextjs is it's integration with Vercel (it's creator compa
 
 Chakra-UI had several features that made it applicable to the project, chief among them being it's compatability with React and **Dark Mode**. The final reason is it's responsive design which made it easy to create pages for both mobile and desktop without changing the code overly much. 
 
-## The Requirements
+# Getting Started
+
+1. Install yarn from [here](https://classic.yarnpkg.com/en/docs/install) 
+2. Run `yarn dev` and open http://localhost:3000
+3. Edit the code with VSCode
+
+# Project Requirements
 
 The client is an art teacher who is moving from teaching in a school environment to teaching private art lessons to students at her studio. 
 
-### The Problem
+## The Problem
 
 Previously the client noted almost all their information on pieces of paper and got the customers to bill themselves by calculating how much they owed based on rates emailed to them and then, after that sending that amount to a specified bank account.
 
-### The solution
+## The solution
 
 Using stripe we can manage the customers, the products, the pricing and the invoicing. As well as providing these different services stripe also offers hosted invoices which allow the customer to use several different payment methods. It also allows for reminder emails and emailed reciepts/invoices.
 
-## Todo
+# Todo
 
 - [x] Find out if the IB allows server-side code
 
-### Layout and Other Functionality
+## Layout and Other Functionality
 
 - [x] Add Navigation
 - [x] Add login?
 
-### Enrollment
+## Enrollment
 
 - [ ] Define Students
 - [ ] Find a way to batch-invoice customers
 
-### Invoices
+## Invoices
 
 - [x] Get Invoices
 - [x] See products inside invoice and totals
@@ -48,14 +56,14 @@ Using stripe we can manage the customers, the products, the pricing and the invo
 - [x] Unpaid
 - [x] By Customer
 
-### Customers
+## Customers
 
 - [x] List Customers
 - [x] List Related Invoices
 - [x] Create Customers
 - [x] Operations on Customers
 
-### Products
+## Products
 
 - [x] Get Products
 - [x] Create Products
@@ -63,12 +71,12 @@ Using stripe we can manage the customers, the products, the pricing and the invo
 - [x] Operations on Products
 - [x] Sort Prices by Product
 
-### Other
+## Other
 
 - [x] Buy domain?
 - [x] Connect domain email to stripe
 
-## Notes
+# Notes
 
 Customer Based Student Signup?
 With a form that the customer enters rather than Julie having to select the day and the time.
