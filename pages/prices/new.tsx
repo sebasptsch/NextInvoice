@@ -46,7 +46,6 @@ export default function PriceView() {
   const parse = (val) => val.replace(/^\$/, "");
   useEffect(() => {
     axios.get(`/api/products`).then((response) => {
-      console.log(response.data.data);
       setProducts(response.data.data);
     });
   }, []);

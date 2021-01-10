@@ -72,7 +72,6 @@ export default function NewInvoiceItem() {
           <FormLabel htmlFor="customer">
             Which Customer do you want to add an invoice item to?
           </FormLabel>
-          {console.log(router.query.customer)}
           {customers.length > 0 ? (
             <Select
               name="customer"

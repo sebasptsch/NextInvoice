@@ -1,18 +1,23 @@
 # Todo
 
-- [ ] Find out if the IB allows server-side code
+- [x] Find out if the IB allows server-side code
 
 ## Layout and Other Functionality
 
 - [x] Add Navigation
 - [x] Add login?
 
+## Enrollment
+
+- [ ] Define Students
+- [ ] Find a way to batch-invoice customers
+
 ## Invoices
 
 - [x] Get Invoices
 - [x] See products inside invoice and totals
 - [x] Send Reminder Email
-- [ ] Create Invoices
+- [x] Create Invoices
 - [x] Sort Invoices
 - [x] Unpaid
 - [x] By Customer
@@ -22,15 +27,15 @@
 - [x] List Customers
 - [x] List Related Invoices
 - [x] Create Customers
-- [ ] Operations on Customers
+- [x] Operations on Customers
 
 ## Products
 
 - [x] Get Products
-- [ ] Create Products
-- [ ] Modify Products
-- [ ] Operations on Products
-- [ ] Sort Prices by Product
+- [x] Create Products
+- [x] Modify Products
+- [x] Operations on Products
+- [x] Sort Prices by Product
 
 ## Other
 
