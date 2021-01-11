@@ -20,13 +20,16 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 import InvoiceList from "../../../components/InvoiceList";
 import Head from "next/head";
 import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useRouter } from "next/router";
-import InvoiceItemList from "../../../components/InvoiceItemList";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ErrorHandler from "../../../components/ErrorHandler";
 
 export default function CustomerPage({
   customer,
@@ -34,7 +37,17 @@ export default function CustomerPage({
   customer: Stripe.Customer;
 }) {
   // Hooks
+  const toast = useToast();
   const router = useRouter();
+  const [prices, setPrices] = useState<Array<Stripe.Price>>([]);
+  useEffect(() => {
+    axios
+      .get(`/api/prices`)
+      .then((response) => {
+        setPrices(response.data.data);
+      })
+      .catch((error) => ErrorHandler(error, toast));
+  }, []);
 
   return (
     <Layout>
@@ -92,7 +105,16 @@ export default function CustomerPage({
             Classes
           </Heading>
           <Divider marginBottom={2} />
-          <Text>{customer.description}</Text>
+          <Text>
+            {JSON.parse(customer.metadata.classes)?.map((customerclass) => (
+              <Badge>
+                {
+                  prices?.find((price) => price.id === customerclass.priceid)
+                    ?.nickname
+                }
+              </Badge>
+            ))}
+          </Text>
         </Box>
         <Box m={1} w="100%">
           <Heading marginTop="1em" marginBottom="0.5em" size="lg">
@@ -108,6 +130,7 @@ export default function CustomerPage({
           </Text>
         </Box>
       </Flex>
+      <br />
       <InvoiceList customer={customer.id} />
     </Layout>
   );

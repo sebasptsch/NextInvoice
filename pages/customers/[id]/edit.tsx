@@ -56,7 +56,7 @@ export default function CustomerCreation({
     axios.get(`/api/prices`).then((response) => {
       setPrices(response.data.data);
     });
-  });
+  }, []);
 
   // Component Functions
   function onSubmit(values) {
