@@ -94,31 +94,36 @@ export default function CustomerPage({
           <StatHelpText></StatHelpText>
         </Stat>
       </StatGroup>
-      <br />
-      <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-        Description
-      </Heading>
-      <Divider marginBottom={2} />
-      <Text>{customer.description}</Text>
-      <br />
+      {customer.description || customer.description?.length > 0 ? (
+        <>
+          <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+            Description
+          </Heading>
+          <Divider marginBottom={2} />
+          <Text>{customer.description}</Text>
+          <br />
+        </>
+      ) : null}
 
-      <Box m={1} w="100%">
+      <Box w="100%">
         <Heading marginTop="1em" marginBottom="0.5em" size="lg">
           Classes
         </Heading>
         <Divider marginBottom={2} />
         <UnorderedList>
-          {JSON.parse(customer.metadata.classes)?.map((customerclass) => (
-            <ListItem key={customerclass.priceid}>
-              {
-                prices?.find((price) => price.id === customerclass.priceid)
-                  ?.nickname
-              }
-            </ListItem>
-          ))}
+          {JSON.parse(customer.metadata.classes)?.map((customerclass) => {
+            const matched = prices?.find(
+              (price) => price.id === customerclass.priceid
+            );
+            return (
+              <ListItem key={customerclass.priceid}>
+                {customerclass?.amount + "x " + matched?.nickname}
+              </ListItem>
+            );
+          })}
         </UnorderedList>
       </Box>
-      <Box m={1} w="100%">
+      <Box w="100%">
         <Heading marginTop="1em" marginBottom="0.5em" size="lg">
           Students
         </Heading>

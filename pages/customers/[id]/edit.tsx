@@ -189,10 +189,6 @@ export default function CustomerCreation({
             ?.filter((price) => price.active)
             ?.map((price, index) => {
               let classes = JSON.parse(customer.metadata.classes);
-
-              const classAmount = +classes.find(
-                (classobject) => classobject.priceid === price.id
-              )?.amount;
               return (
                 <Box
                   borderRadius="10px"
@@ -208,7 +204,13 @@ export default function CustomerCreation({
                     ref={register}
                   />
                   <Flex>
-                    <NumberInput defaultValue={classAmount}>
+                    <NumberInput
+                      defaultValue={
+                        +classes.find(
+                          (classobject) => classobject.priceid === price.id
+                        )?.amount
+                      }
+                    >
                       <NumberInputField
                         ref={register()}
                         name={`classes[${index}].amount`}
