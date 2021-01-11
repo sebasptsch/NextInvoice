@@ -5,16 +5,23 @@ import {
   InputRightElement,
   Textarea,
   useToast,
-} from "@chakra-ui/react";
-import Layout from "../../components/Layout";
-import { useForm } from "react-hook-form";
-import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
   Button,
+  Box,
+  Flex,
+  Spacer,
+  Text,
 } from "@chakra-ui/react";
+import Layout from "../../components/Layout";
+import { useForm } from "react-hook-form";
 
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -49,6 +56,7 @@ export default function CustomerCreation() {
 
   // Hooks
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
+  const [prices, setPrices] = useState<Array<Stripe.Price>>();
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
@@ -57,15 +65,26 @@ export default function CustomerCreation() {
   useEffect(() => {
     axios
       .get(`/api/customers`)
-      .then((response) => setCustomers(response.data.data));
+      .then((response) => setCustomers(response.data.data))
+      .catch((error) => ErrorHandler(error, toast));
+    axios
+      .get(`/api/prices`)
+      .then((response) => setPrices(response.data.data))
+      .catch((error) => ErrorHandler(error, toast));
   }, []);
 
   // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students } = values;
+    let { classes } = values;
     students = students.split(",").map((el) => el.trim());
-    const metadata = { students: JSON.stringify(students) };
+    classes = classes.filter((classitem) => classitem.amount > 0);
+    // console.log(classes);
+    const metadata = {
+      students: JSON.stringify(students),
+      classes: JSON.stringify(classes),
+    };
     axios
       .post("/api/customers", {
         email,
@@ -119,9 +138,7 @@ export default function CustomerCreation() {
 
         <FormControl isInvalid={errors.phone}>
           <FormLabel htmlFor="phone">Phone</FormLabel>
-
           <Input name="phone" placeholder="phone" type="phone" ref={register} />
-
           <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
         </FormControl>
 
@@ -145,6 +162,41 @@ export default function CustomerCreation() {
             })}
           />
           <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Classes</FormLabel>
+          {prices
+            ?.filter((price) => price.active)
+            ?.map((price, index) => (
+              <Box
+                borderRadius="10px"
+                borderWidth="1px"
+                key={price.id}
+                m={4}
+                p={2}
+              >
+                <Input
+                  type="hidden"
+                  value={price.id}
+                  name={`classes[${index}].priceid`}
+                  ref={register}
+                />
+                <Flex>
+                  <NumberInput defaultValue={0}>
+                    <NumberInputField
+                      ref={register()}
+                      name={`classes[${index}].amount`}
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <Spacer />
+                  <Text>{price.nickname}</Text>
+                </Flex>
+              </Box>
+            ))}
         </FormControl>
         <Button
           mt={4}

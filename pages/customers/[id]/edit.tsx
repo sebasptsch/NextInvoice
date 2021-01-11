@@ -8,6 +8,15 @@ import {
   FormControl,
   Input,
   Button,
+  Box,
+  Flex,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Spacer,
+  Text,
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useForm } from "react-hook-form";
@@ -19,6 +28,7 @@ import "yup-phone";
 import Stripe from "stripe";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
+import { useEffect, useState } from "react";
 
 export default function CustomerCreation({
   customer,
@@ -37,17 +47,28 @@ export default function CustomerCreation({
 
   // Hooks
   const router = useRouter();
+  const [prices, setPrices] = useState<Array<Stripe.Price>>();
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
+  useEffect(() => {
+    axios.get(`/api/prices`).then((response) => {
+      setPrices(response.data.data);
+    });
+  });
 
   // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
-    let { students } = values;
+    let { students, classes } = values;
     students = students.split(",").map((el) => el.trim());
-    const metadata = { students: JSON.stringify(students) };
+    classes = classes.filter((classitem) => classitem.amount > 0);
+    const metadata = {
+      students: JSON.stringify(students),
+      classes: JSON.stringify(classes),
+    };
+
     axios({
       url: `/api/customers/${router.query.id}`,
       method: "POST",
@@ -161,6 +182,48 @@ export default function CustomerCreation({
             })}
           />
           <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Classes</FormLabel>
+          {prices
+            ?.filter((price) => price.active)
+            ?.map((price, index) => {
+              let classes = JSON.parse(customer.metadata.classes);
+
+              const classAmount = +classes.find(
+                (classobject) => classobject.priceid === price.id
+              )?.amount;
+              return (
+                <Box
+                  borderRadius="10px"
+                  borderWidth="1px"
+                  key={price.id}
+                  m={4}
+                  p={2}
+                >
+                  <Input
+                    type="hidden"
+                    value={price.id}
+                    name={`classes[${index}].priceid`}
+                    ref={register}
+                  />
+                  <Flex>
+                    <NumberInput defaultValue={classAmount}>
+                      <NumberInputField
+                        ref={register()}
+                        name={`classes[${index}].amount`}
+                      />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <Spacer />
+                    <Text>{price.nickname}</Text>
+                  </Flex>
+                </Box>
+              );
+            })}
         </FormControl>
         <Button mt={4} isLoading={formState.isSubmitting} type="submit">
           Save

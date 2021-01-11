@@ -64,7 +64,7 @@ export default function NewInvoiceItem({
         quantity,
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         // router.push(`/customer/[id]`, `/customers/${response.data.customer}`);
         router.reload();
         toast({ title: "Success" });
