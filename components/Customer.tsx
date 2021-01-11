@@ -91,12 +91,22 @@ export default function CustomerComponent({
               <MenuItem
                 onClick={() =>
                   router.push(
-                    `/invoices/new?=${customer.id}`,
-                    `/invoices/new?=${customer.id}`
+                    `/invoices/new?customer=${customer.id}`,
+                    `/invoices/new?customer=${customer.id}`
                   )
                 }
               >
                 Create Invoice
+              </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  router.push(
+                    `/ivoiceitems/new?customer=${customer.id}`,
+                    `/ivoiceitems/new?customer=${customer.id}`
+                  )
+                }
+              >
+                Add Invoice Item
               </MenuItem>
             </MenuList>
           </Menu>

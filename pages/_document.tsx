@@ -31,25 +31,25 @@ class MyDocument extends Document {
           <link
             rel="apple-touch-icon"
             sizes="512x512"
-            href="/public/icons/apple-icon"
+            href="/icons/apple-icon"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="192x192"
-            href="/public/icons/icon-192.png"
+            href="/icons/icon-192.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="384x384"
-            href="/public/icons/icon-384.png"
+            href="/icons/icon-384.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="512x512"
-            href="/public/icons/icon-512.png"
+            href="/icons/icon-512.png"
           />
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/icons/favicon.ico" />

@@ -11,6 +11,7 @@ import {
   Flex,
   Heading,
   Link,
+  ListItem,
   Select,
   Spacer,
   Spinner,
@@ -20,6 +21,7 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  UnorderedList,
   useToast,
 } from "@chakra-ui/react";
 
@@ -99,37 +101,35 @@ export default function CustomerPage({
       <Divider marginBottom={2} />
       <Text>{customer.description}</Text>
       <br />
-      <Flex>
-        <Box m={1} w="100%">
-          <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-            Classes
-          </Heading>
-          <Divider marginBottom={2} />
-          <Text>
-            {JSON.parse(customer.metadata.classes)?.map((customerclass) => (
-              <Badge>
-                {
-                  prices?.find((price) => price.id === customerclass.priceid)
-                    ?.nickname
-                }
-              </Badge>
-            ))}
-          </Text>
-        </Box>
-        <Box m={1} w="100%">
-          <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-            Students
-          </Heading>
-          <Divider marginBottom={2} />
-          <Text>
-            {JSON.parse(customer.metadata?.students).map((value) => (
-              <Badge m={1} key={value}>
-                {value}
-              </Badge>
-            ))}
-          </Text>
-        </Box>
-      </Flex>
+
+      <Box m={1} w="100%">
+        <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+          Classes
+        </Heading>
+        <Divider marginBottom={2} />
+        <UnorderedList>
+          {JSON.parse(customer.metadata.classes)?.map((customerclass) => (
+            <ListItem key={customerclass.priceid}>
+              {
+                prices?.find((price) => price.id === customerclass.priceid)
+                  ?.nickname
+              }
+            </ListItem>
+          ))}
+        </UnorderedList>
+      </Box>
+      <Box m={1} w="100%">
+        <Heading marginTop="1em" marginBottom="0.5em" size="lg">
+          Students
+        </Heading>
+        <Divider marginBottom={2} />
+        <UnorderedList>
+          {JSON.parse(customer.metadata?.students).map((value) => (
+            <ListItem key={value}>{value}</ListItem>
+          ))}
+        </UnorderedList>
+      </Box>
+
       <br />
       <InvoiceList customer={customer.id} />
     </Layout>
