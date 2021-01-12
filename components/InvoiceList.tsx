@@ -65,9 +65,6 @@ export default function InvoiceList({ customer }: { customer?: string }) {
         <StatHelpText></StatHelpText>
         <StatNumber>
           ${invoices?.reduce((a, b) => a + b.amount_due, 0) / 100}
-          {console.log(
-            invoices?.reduce((a, b) => a + parseInt(b.amount_due), 0)
-          )}
         </StatNumber>
       </Stat>
 

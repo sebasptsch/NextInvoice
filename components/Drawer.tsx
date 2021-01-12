@@ -15,10 +15,10 @@ import {
   Spacer,
   Flex,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { NextChakraLink } from "./NextChakraLink";
 
 export default function DrawerNavigation() {
   // Hooks
@@ -48,36 +48,20 @@ export default function DrawerNavigation() {
               </Button>
               <br />
               <br />
-              <Link
-                passHref
-                href="/invoices"
-                children={<ChakraLink>Invoices</ChakraLink>}
-              />
+              <NextChakraLink href="/">Dashboard</NextChakraLink>
               <br />
-              <Link
-                passHref
-                href="/customers"
-                children={<ChakraLink>Customers</ChakraLink>}
-              />
+              <NextChakraLink href="/invoices">Invoices</NextChakraLink>
               <br />
-              <Link
-                passHref
-                href="/products"
-                children={<ChakraLink>Products</ChakraLink>}
-              />
+              <NextChakraLink href="/customers">Customers</NextChakraLink>
+              <br />
+              <NextChakraLink href="/products">Products</NextChakraLink>
             </DrawerBody>
 
             <DrawerFooter>
-              <Link
-                passHref
-                href="https://dashboard.stripe.com"
-                children={
-                  <ChakraLink isExternal>
-                    Products
-                    <ExternalLinkIcon mx="2px" />
-                  </ChakraLink>
-                }
-              />
+              <NextChakraLink href="https://dashboard.stripe.com">
+                Advanced
+                <ExternalLinkIcon mx="2px" />
+              </NextChakraLink>
             </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
