@@ -36,7 +36,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
   return (
     <Layout>
       <Head>
-        <title>View Invoice {invoice.number}</title>
+        <title>View Invoice {invoice?.number}</title>
       </Head>
       <Flex>
         <Heading size="xl" p={1}>
@@ -48,33 +48,144 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Center>
       </Flex>
       <Box>
-        <Button onClick={() => router.push(invoice.invoice_pdf)} m={2}>
-          Download Invoice
+        <Button
+          onClick={() =>
+            router.push("/invoices/[id]", "/invoices/" + invoice?.id)
+          }
+          hidden={invoice.status !== "draft"}
+        >
+          Edit
         </Button>
         <Button
-          m={2}
+          key="download"
+          onClick={() => {
+            router.push(invoice?.invoice_pdf);
+          }}
+          hideen={invoice.status === "draft"}
+        >
+          Download
+        </Button>
+
+        <>
+          <Button
+            href={invoice.hosted_invoice_url}
+            key="webpage"
+            hidden={invoice.status !== "open"}
+          >
+            Checkout Page
+          </Button>
+          <Button
+            key="send"
+            hidden={invoice.status !== "open" || "draft"}
+            onClick={() => {
+              axios
+                .post(`/api/invoices/${invoice?.id}/send`)
+                .then((response) => {
+                  toast({
+                    title: "Sent!",
+                    status: "success",
+                  });
+                  router.reload();
+                })
+                .catch((error) => ErrorHandler(error, toast));
+            }}
+          >
+            Send
+          </Button>
+          <Button
+            key="Void"
+            hidden={invoice.status !== "open"}
+            onClick={() => {
+              axios
+                .post(`/api/invoices/${invoice?.id}/void`)
+                .then((response) => {
+                  toast({
+                    title: "Success",
+                    status: "success",
+                  });
+                  router.reload();
+                })
+                .catch((error) => ErrorHandler(error, toast));
+            }}
+          >
+            Void
+          </Button>
+          <Button
+            key="mark_uncollectible"
+            hidden={invoice.status !== "open"}
+            onClick={() => {
+              axios
+                .post(`/api/invoices/${invoice?.id}/mark_uncollectible`)
+                .then((response) => {
+                  toast({
+                    title: "Success",
+
+                    status: "success",
+                  });
+                  router.reload();
+                })
+                .catch((error) => ErrorHandler(error, toast));
+            }}
+          >
+            Mark Uncollectible
+          </Button>
+        </>
+
+        <Button
+          key="pay"
+          hidden={invoice.status === "paid"}
           onClick={() => {
             axios
-              .post(`/api/invoices/${invoice?.id}/send`)
+              .post(`/api/invoices/${invoice?.id}/pay`)
+              .then((response) => {
+                toast({
+                  title: "Success",
+
+                  status: "success",
+                });
+                router.reload();
+              })
               .catch((error) => ErrorHandler(error, toast));
           }}
         >
-          Re-send Email
+          Pay
         </Button>
-        <Button m={2} as={"a"} href={invoice?.hosted_invoice_url}>
-          Payment Page
-        </Button>
+
         <Button
-          m={2}
-          disabled={invoice.status !== "draft"}
+          hidden={invoice.status !== "draft"}
+          key="Delete"
           onClick={() => {
-            axios.delete(`/api/invoices/${invoice.id}`).then(() => {
-              toast({ title: "Success" });
-              router.push(`/invoices`, `/invoices`);
-            });
+            axios
+              .delete(`/api/invoices/${invoice?.id}`)
+              .then((response) => {
+                toast({
+                  title: "Success",
+                  status: "success",
+                });
+                router.reload();
+              })
+              .catch((error) => ErrorHandler(error, toast));
           }}
         >
           Delete
+        </Button>
+        <Button
+          key="finalize"
+          hidden={invoice.status !== "draft"}
+          onClick={() => {
+            axios
+              .post(`/api/invoices/${invoice.id}/finalize`)
+              .then((response) => {
+                toast({
+                  title: "Success",
+                  status: "success",
+                });
+                router.reload();
+              })
+              .catch((error) => ErrorHandler(error, toast));
+          }}
+        >
+          Finalize
         </Button>
       </Box>
       <Divider m="1em 0 1em 0" />

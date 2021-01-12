@@ -76,84 +76,74 @@ export default function InvoiceComponent({
               Actions
             </MenuButton>
             <MenuList>
-              {invoice?.status == "draft" ? (
-                <MenuItem
-                  onClick={() =>
-                    router.push("/invoices/[id]", "/invoices/" + invoice?.id)
-                  }
-                >
-                  Edit
-                </MenuItem>
-              ) : null}
-              <MenuItem href={invoice?.invoice_pdf} key="download">
+              <MenuItem
+                onClick={() =>
+                  router.push("/invoices/[id]", "/invoices/" + invoice?.id)
+                }
+                hidden={invoice.status !== "draft"}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem
+                key="download"
+                onClick={() => {
+                  router.push(invoice?.invoice_pdf);
+                }}
+                hideen={invoice.status === "draft"}
+              >
                 Download
               </MenuItem>
 
-              {invoice.status === "open" ? (
-                <>
-                  <MenuItem href={invoice.hosted_invoice_url} key="webpage">
-                    Checkout Page
-                  </MenuItem>
-                  <MenuItem
-                    key="send"
-                    onClick={() => {
-                      axios
-                        .post(`/api/invoices/${invoice?.id}/send`)
-                        .then((response) => {
-                          toast({
-                            title: "Sent!",
-                            status: "success",
-                          });
-                          router.reload();
-                        })
-                        .catch((error) => ErrorHandler(error, toast));
-                    }}
-                  >
-                    Send
-                  </MenuItem>
-                  <MenuItem
-                    key="Void"
-                    onClick={() => {
-                      axios
-                        .post(`/api/invoices/${invoice?.id}/void`)
-                        .then((response) => {
-                          toast({
-                            title: "Success",
-                            status: "success",
-                          });
-                          router.reload();
-                        })
-                        .catch((error) => ErrorHandler(error, toast));
-                    }}
-                  >
-                    Void
-                  </MenuItem>
-                  <MenuItem
-                    key="mark_uncollectible"
-                    onClick={() => {
-                      axios
-                        .post(`/api/invoices/${invoice?.id}/mark_uncollectible`)
-                        .then((response) => {
-                          toast({
-                            title: "Success",
-
-                            status: "success",
-                          });
-                          router.reload();
-                        })
-                        .catch((error) => ErrorHandler(error, toast));
-                    }}
-                  >
-                    Mark Uncollectible
-                  </MenuItem>
-                </>
-              ) : null}
-              {invoice.status !== "paid" ? (
+              <>
                 <MenuItem
-                  key="pay"
+                  href={invoice.hosted_invoice_url}
+                  key="webpage"
+                  hidden={invoice.status !== "open"}
+                >
+                  Checkout Page
+                </MenuItem>
+                <MenuItem
+                  key="send"
+                  hidden={invoice.status !== "open" || "draft"}
                   onClick={() => {
                     axios
-                      .post(`/api/invoices/${invoice?.id}/pay`)
+                      .post(`/api/invoices/${invoice?.id}/send`)
+                      .then((response) => {
+                        toast({
+                          title: "Sent!",
+                          status: "success",
+                        });
+                        router.reload();
+                      })
+                      .catch((error) => ErrorHandler(error, toast));
+                  }}
+                >
+                  Send
+                </MenuItem>
+                <MenuItem
+                  key="Void"
+                  hidden={invoice.status !== "open"}
+                  onClick={() => {
+                    axios
+                      .post(`/api/invoices/${invoice?.id}/void`)
+                      .then((response) => {
+                        toast({
+                          title: "Success",
+                          status: "success",
+                        });
+                        router.reload();
+                      })
+                      .catch((error) => ErrorHandler(error, toast));
+                  }}
+                >
+                  Void
+                </MenuItem>
+                <MenuItem
+                  key="mark_uncollectible"
+                  hidden={invoice.status !== "open"}
+                  onClick={() => {
+                    axios
+                      .post(`/api/invoices/${invoice?.id}/mark_uncollectible`)
                       .then((response) => {
                         toast({
                           title: "Success",
@@ -165,47 +155,66 @@ export default function InvoiceComponent({
                       .catch((error) => ErrorHandler(error, toast));
                   }}
                 >
-                  Pay
+                  Mark Uncollectible
                 </MenuItem>
-              ) : null}
-              {invoice?.status == "draft" ? (
-                <>
-                  <MenuItem
-                    key="Delete"
-                    onClick={() => {
-                      axios
-                        .delete(`/api/invoices/${invoice?.id}`)
-                        .then((response) => {
-                          toast({
-                            title: "Success",
-                            status: "success",
-                          });
-                          router.reload();
-                        })
-                        .catch((error) => ErrorHandler(error, toast));
-                    }}
-                  >
-                    Delete
-                  </MenuItem>
-                  <MenuItem
-                    key="finalize"
-                    onClick={() => {
-                      axios
-                        .post(`/api/invoices/${invoice.id}/finalize`)
-                        .then((response) => {
-                          toast({
-                            title: "Success",
-                            status: "success",
-                          });
-                          router.reload();
-                        })
-                        .catch((error) => ErrorHandler(error, toast));
-                    }}
-                  >
-                    Finalize
-                  </MenuItem>
-                </>
-              ) : null}
+              </>
+
+              <MenuItem
+                key="pay"
+                hidden={invoice.status === "paid"}
+                onClick={() => {
+                  axios
+                    .post(`/api/invoices/${invoice?.id}/pay`)
+                    .then((response) => {
+                      toast({
+                        title: "Success",
+
+                        status: "success",
+                      });
+                      router.reload();
+                    })
+                    .catch((error) => ErrorHandler(error, toast));
+                }}
+              >
+                Pay
+              </MenuItem>
+
+              <MenuItem
+                hidden={invoice.status !== "draft"}
+                key="Delete"
+                onClick={() => {
+                  axios
+                    .delete(`/api/invoices/${invoice?.id}`)
+                    .then((response) => {
+                      toast({
+                        title: "Success",
+                        status: "success",
+                      });
+                      router.reload();
+                    })
+                    .catch((error) => ErrorHandler(error, toast));
+                }}
+              >
+                Delete
+              </MenuItem>
+              <MenuItem
+                key="finalize"
+                hidden={invoice.status !== "draft"}
+                onClick={() => {
+                  axios
+                    .post(`/api/invoices/${invoice.id}/finalize`)
+                    .then((response) => {
+                      toast({
+                        title: "Success",
+                        status: "success",
+                      });
+                      router.reload();
+                    })
+                    .catch((error) => ErrorHandler(error, toast));
+                }}
+              >
+                Finalize
+              </MenuItem>
             </MenuList>
           </Menu>
         </Center>
