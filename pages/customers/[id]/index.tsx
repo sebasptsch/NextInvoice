@@ -112,12 +112,12 @@ export default function CustomerPage({
         <Divider marginBottom={2} />
         <UnorderedList>
           {JSON.parse(customer.metadata.classes)?.map((customerclass) => {
-            const matched = prices?.find(
-              (price) => price.id === customerclass.priceid
-            );
             return (
               <ListItem key={customerclass.priceid}>
-                {customerclass?.amount + "x " + matched?.nickname}
+                {customerclass?.amount +
+                  "x " +
+                  prices?.find((price) => price.id === customerclass.priceid)
+                    ?.nickname}
               </ListItem>
             );
           })}

@@ -17,17 +17,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ErrorHandler from "./ErrorHandler";
 import InvoiceComponent from "./Invoice";
-import NewInvoicePage from "../pages/invoices/new";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 export default function InvoiceList({ customer }: { customer?: string }) {
   // Hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [invoices, setInvoices] = useState([]);
   const [loading, isLoading] = useState(false);
-  const [value, setValue] = useState("open");
-  const toast = useToast();
   const router = useRouter();
+  const [value, setValue] = useState(router.query.status || "open");
+  const toast = useToast();
+
   useEffect(() => {
     isLoading(true);
     setInvoices([]);
