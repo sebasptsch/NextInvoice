@@ -55,6 +55,11 @@ export default function DrawerNavigation() {
               <NextChakraLink href="/customers">Customers</NextChakraLink>
               <br />
               <NextChakraLink href="/products">Products</NextChakraLink>
+              <br />
+              <NextChakraLink href="https://dashboard.stripe.com/reports">
+                Reports
+                <ExternalLinkIcon mx="2px" />
+              </NextChakraLink>
             </DrawerBody>
 
             <DrawerFooter>

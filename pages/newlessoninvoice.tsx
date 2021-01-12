@@ -45,7 +45,7 @@ export default function LessonInvoice() {
   }, []);
 
   function onSubmit(values) {
-    let { collection_method, days_until_due } = values;
+    let { collection_method, days_until_due, weeks_in_term } = values;
     if (collection_method !== "send_invoice") {
       days_until_due = undefined;
     }
@@ -62,7 +62,7 @@ export default function LessonInvoice() {
               .post(`/api/invoiceitems`, {
                 customer: customer.id,
                 price: artclass.priceid,
-                quantity: artclass.amount,
+                quantity: artclass.amount * weeks_in_term,
               })
               .catch((error) => ErrorHandler(error, toast))
         )
@@ -126,6 +126,16 @@ export default function LessonInvoice() {
           <FormLabel>Days until due</FormLabel>
           <NumberInput isDisabled={DUDDisabled} defaultValue={30}>
             <NumberInputField ref={register()} name="days_until_due" />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Weeks in current term</FormLabel>
+          <NumberInput defaultValue={10}>
+            <NumberInputField ref={register()} name="weeks_in_term" />
             <NumberInputStepper>
               <NumberIncrementStepper />
               <NumberDecrementStepper />
