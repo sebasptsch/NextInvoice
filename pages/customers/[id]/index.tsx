@@ -10,6 +10,7 @@ import {
   Divider,
   Flex,
   Heading,
+  IconButton,
   Link,
   ListItem,
   Select,
@@ -32,6 +33,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ErrorHandler from "../../../components/ErrorHandler";
+import { AddIcon, EditIcon } from "@chakra-ui/icons";
+import BalanceModal from "../../../components/BalanceModal";
 
 export default function CustomerPage({
   customer,
@@ -83,7 +86,9 @@ export default function CustomerPage({
       <StatGroup>
         <Stat>
           <StatLabel>Balance</StatLabel>
-          <StatNumber>${customer.balance / 100}</StatNumber>
+          <StatNumber>
+            ${-customer.balance / 100} <BalanceModal customer={customer} />
+          </StatNumber>
           <StatHelpText></StatHelpText>
         </Stat>
         <Stat>
