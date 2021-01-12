@@ -52,6 +52,10 @@ export default function DrawerNavigation() {
               <br />
               <NextChakraLink href="/invoices">Invoices</NextChakraLink>
               <br />
+              <NextChakraLink ml={4} href="/newlessoninvoice">
+                Invoice for Lessons
+              </NextChakraLink>
+              <br />
               <NextChakraLink href="/customers">Customers</NextChakraLink>
               <br />
               <NextChakraLink href="/products">Products</NextChakraLink>
