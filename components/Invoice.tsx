@@ -119,7 +119,6 @@ export default function InvoiceComponent({
                         .then((response) => {
                           toast({
                             title: "Success",
-
                             status: "success",
                           });
                           router.reload();
@@ -130,7 +129,7 @@ export default function InvoiceComponent({
                     Void
                   </MenuItem>
                   <MenuItem
-                    key="Void"
+                    key="mark_uncollectible"
                     onClick={() => {
                       axios
                         .post(`/api/invoices/${invoice?.id}/mark_uncollectible`)
