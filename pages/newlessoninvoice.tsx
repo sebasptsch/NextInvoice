@@ -3,10 +3,19 @@ import {
   Button,
   Checkbox,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Progress,
+  Select,
   Spacer,
   Stack,
+  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -21,6 +30,7 @@ import Layout from "../components/Layout";
 export default function LessonInvoice() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
   const [progress, setProgress] = useState<number>(0);
+  const [DUDDisabled, setDUDDisabled] = useState(false);
   const router = useRouter();
   const toast = useToast();
   const { handleSubmit, errors, register, formState } = useForm();
@@ -34,6 +44,11 @@ export default function LessonInvoice() {
   }, []);
 
   function onSubmit(values) {
+    let { collection_method, days_until_due } = values;
+    if (collection_method !== "send_invoice") {
+      days_until_due = undefined;
+    }
+
     const filteredcustomers = values.checkedcustomers?.filter(
       (customer) => customer.checked
     );
@@ -61,6 +76,8 @@ export default function LessonInvoice() {
             axios
               .post(`/api/invoices`, {
                 customer: parsedCustomer.id,
+                collection_method,
+                days_until_due,
               })
               .then(() => {
                 setProgress((index + 1) / filteredcustomers?.length);
@@ -77,29 +94,65 @@ export default function LessonInvoice() {
       <Heading>Customers to be billed for classes</Heading>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box borderWidth="1px" borderRadius="10px">
-          <Stack spacing={2}>
-            {customers?.map((customer, index) => (
-              <div key={customer.id}>
-                <Checkbox
-                  key={customer.id}
-                  name={`checkedcustomers[${index}].checked`}
-                  ref={register}
-                  m={4}
-                  defaultChecked={true}
-                >
-                  {customer.name}
-                </Checkbox>
-                <input
-                  type="hidden"
-                  ref={register}
-                  name={`checkedcustomers[${index}].customer`}
-                  value={JSON.stringify(customer)}
-                />
-              </div>
-            ))}
-          </Stack>
-        </Box>
+        <FormControl>
+          <FormLabel>Collection Method</FormLabel>
+          <Select
+            defaultValue={"send_invoice"}
+            name="collection_method"
+            ref={register}
+            onChange={(e) => {
+              let chargePrev;
+              if (e.target.value !== chargePrev) {
+                setDUDDisabled(e.target.value === "charge_automatically");
+                chargePrev = e.target.value;
+              }
+            }}
+          >
+            <option value="charge_automatically" key="charge_automatically">
+              Charge Automatically
+            </option>
+            <option value="send_invoice" key="send_invoice">
+              Send Invoice
+            </option>
+          </Select>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Days until due</FormLabel>
+          <NumberInput isDisabled={DUDDisabled} defaultValue={30}>
+            <NumberInputField ref={register()} name="days_until_due" />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Customers</FormLabel>
+          <Box borderWidth="1px" borderRadius="10px">
+            <Stack spacing={2}>
+              {customers?.map((customer, index) => (
+                <div key={customer.id}>
+                  <Checkbox
+                    key={customer.id}
+                    name={`checkedcustomers[${index}].checked`}
+                    ref={register}
+                    m={4}
+                    defaultChecked={true}
+                  >
+                    {customer.name}
+                  </Checkbox>
+                  <input
+                    type="hidden"
+                    ref={register}
+                    name={`checkedcustomers[${index}].customer`}
+                    value={JSON.stringify(customer)}
+                  />
+                </div>
+              ))}
+            </Stack>
+          </Box>
+        </FormControl>
         <br />
         <Progress value={progress * 100} />
         <Button
