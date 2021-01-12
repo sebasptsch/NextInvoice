@@ -23,10 +23,8 @@ import ErrorHandler from "./ErrorHandler";
 
 export default function InvoiceLineItemComponent({
   lineitem,
-  disabled,
 }: {
   lineitem: Stripe.InvoiceLineItem;
-  disabled: boolean;
 }): JSX.Element {
   // Hooks
   const toast = useToast();
@@ -55,7 +53,6 @@ export default function InvoiceLineItemComponent({
               size={"sm"}
               rightIcon={<ChevronDownIcon />}
               marginLeft="1em"
-              disabled={disabled}
             >
               Actions
             </MenuButton>
@@ -73,7 +70,13 @@ export default function InvoiceLineItemComponent({
               >
                 Delete
               </MenuItem>
-              <MenuItem>Modify</MenuItem>
+              <MenuItem
+                onClick={() =>
+                  router.push(`/invoiceitems/${lineitem.invoice_item}`)
+                }
+              >
+                Modify
+              </MenuItem>
             </MenuList>
           </Menu>
         </Center>

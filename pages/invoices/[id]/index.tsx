@@ -76,7 +76,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           </Button>
           <Button
             key="send"
-            hidden={invoice.status !== "open" || "draft"}
+            hidden={invoice.status !== ("open" || "draft")}
             onClick={() => {
               axios
                 .post(`/api/invoices/${invoice?.id}/send`)

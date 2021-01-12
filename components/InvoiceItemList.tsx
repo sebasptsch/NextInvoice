@@ -41,11 +41,7 @@ export default function InvoiceItemList({ invoice }: { invoice }) {
 
       {invoiceLineItems?.length != 0 ? (
         invoiceLineItems?.map((lineitem) => (
-          <InvoiceLineItemComponent
-            lineitem={lineitem}
-            key={lineitem.id}
-            disabled={invoice.status !== "draft"}
-          />
+          <InvoiceLineItemComponent lineitem={lineitem} key={lineitem.id} />
         ))
       ) : (
         <Text>No items in invoice here.</Text>

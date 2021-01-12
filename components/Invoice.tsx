@@ -104,7 +104,7 @@ export default function InvoiceComponent({
                 </MenuItem>
                 <MenuItem
                   key="send"
-                  hidden={invoice.status !== "open" || "draft"}
+                  hidden={invoice.status !== ("open" || "draft")}
                   onClick={() => {
                     axios
                       .post(`/api/invoices/${invoice?.id}/send`)
