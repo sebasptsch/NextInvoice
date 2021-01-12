@@ -129,7 +129,8 @@ export default function LessonInvoice() {
         </FormControl>
         <FormControl>
           <FormLabel>Customers</FormLabel>
-          <Box borderWidth="1px" borderRadius="10px">
+          <Box borderWidth="1px" borderRadius="10px" overflow="hidden">
+            <Progress value={progress * 100} />
             <Stack spacing={2}>
               {customers?.map((customer, index) => (
                 <div key={customer.id}>
@@ -154,7 +155,7 @@ export default function LessonInvoice() {
           </Box>
         </FormControl>
         <br />
-        <Progress value={progress * 100} />
+
         <Button
           type="submit"
           textAlign="center"
