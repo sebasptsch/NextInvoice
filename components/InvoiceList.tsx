@@ -9,6 +9,11 @@ import {
   Select,
   SkeletonText,
   Spacer,
+  Stat,
+  StatGroup,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
   Text,
   useDisclosure,
   useToast,
@@ -53,6 +58,20 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
   return (
     <>
+      <Stat textAlign="center">
+        <StatLabel textTransform="capitalize">
+          Total Amount in {value} invoices
+        </StatLabel>
+        <StatHelpText></StatHelpText>
+        <StatNumber>
+          ${invoices?.reduce((a, b) => a + b.amount_due, 0) / 100}
+          {console.log(
+            invoices?.reduce((a, b) => a + parseInt(b.amount_due), 0)
+          )}
+        </StatNumber>
+      </Stat>
+
+      <br />
       <Flex>
         <Heading size="lg">Invoices</Heading>
         <Spacer />

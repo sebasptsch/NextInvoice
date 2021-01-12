@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { urlObjectKeys } from "next/dist/next-server/lib/utils";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -57,11 +58,13 @@ export default function LessonInvoice() {
       return Promise.all(
         parsedClasses.map(
           async (artclass) =>
-            await axios.post(`/api/invoiceitems`, {
-              customer: customer.id,
-              price: artclass.priceid,
-              quantity: artclass.amount,
-            })
+            await axios
+              .post(`/api/invoiceitems`, {
+                customer: customer.id,
+                price: artclass.priceid,
+                quantity: artclass.amount,
+              })
+              .catch((error) => ErrorHandler(error, toast))
         )
       );
     }
@@ -83,7 +86,8 @@ export default function LessonInvoice() {
                 setProgress((index + 1) / filteredcustomers?.length);
                 // console.log((index + 1) / filteredcustomers?.length);
                 resolve();
-              });
+              })
+              .catch((error) => ErrorHandler(error, toast));
           })
         );
       })
@@ -91,6 +95,7 @@ export default function LessonInvoice() {
   }
   return (
     <Layout>
+      <Head>Customers to be billed for classes</Head>
       <Heading>Customers to be billed for classes</Heading>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
