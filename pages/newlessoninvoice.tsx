@@ -95,7 +95,9 @@ export default function LessonInvoice() {
   }
   return (
     <Layout>
-      <Head>Customers to be billed for classes</Head>
+      <Head>
+        <title>Customers to be billed for classes</title>
+      </Head>
       <Heading>Customers to be billed for classes</Heading>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
