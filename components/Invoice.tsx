@@ -89,7 +89,7 @@ export default function InvoiceComponent({
                 onClick={() => {
                   router.push(invoice?.invoice_pdf);
                 }}
-                hideen={invoice.status === "draft"}
+                hidden={invoice.status === "draft"}
               >
                 Download
               </MenuItem>

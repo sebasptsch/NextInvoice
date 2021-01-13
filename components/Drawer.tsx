@@ -14,23 +14,37 @@ import {
   useColorMode,
   Spacer,
   Flex,
+  IconButton,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import {
+  ExternalLinkIcon,
+  HamburgerIcon,
+  MoonIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 import { NextChakraLink } from "./NextChakraLink";
+import { useRouter } from "next/router";
 
 export default function DrawerNavigation() {
   // Hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const { colorMode, toggleColorMode } = useColorMode();
+  const session = useSession();
+  const router = useRouter();
 
   return (
     <>
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Navigation
-      </Button>
+      <IconButton
+        aria-label="Menu"
+        ref={btnRef}
+        onClick={onOpen}
+        icon={<HamburgerIcon />}
+        variant="outline"
+      />
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -43,9 +57,33 @@ export default function DrawerNavigation() {
             <DrawerHeader>Navigate</DrawerHeader>
 
             <DrawerBody>
-              <Button onClick={toggleColorMode}>
-                Toggle {colorMode === "light" ? "Dark" : "Light"}
-              </Button>
+              <ButtonGroup>
+                <IconButton
+                  aria-label="change theme"
+                  onClick={toggleColorMode}
+                  icon={colorMode === "light" ? <SunIcon /> : <MoonIcon />}
+                />
+                {session ? (
+                  <Button
+                    as="button"
+                    onClick={() => {
+                      router.push("/api/auth/signout", "/api/auth/signout");
+                    }}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    as="button"
+                    onClick={() => {
+                      router.push("/api/auth/signin", "/api/auth/signin");
+                    }}
+                  >
+                    SignIn
+                  </Button>
+                )}
+              </ButtonGroup>
+
               <br />
               <br />
               <NextChakraLink href="/">Dashboard</NextChakraLink>

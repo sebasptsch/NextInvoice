@@ -4,6 +4,7 @@ import {
   Center,
   Container,
   Flex,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,6 +22,7 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { Router, useRouter } from "next/router";
 import Head from "next/head";
 import { useState } from "react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export default function Layout({ children }: { children: any }) {
   // Hooks
@@ -49,25 +51,13 @@ export default function Layout({ children }: { children: any }) {
     <>
       <Box p="1em" w="100%">
         <Flex>
-          {session ? (
-            <Button
-              as="button"
-              onClick={() => {
-                router.push("/api/auth/signout", "/api/auth/signout");
-              }}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              as="button"
-              onClick={() => {
-                router.push("/api/auth/signin", "/api/auth/signin");
-              }}
-            >
-              SignIn
-            </Button>
-          )}
+          <IconButton
+            aria-label="back"
+            icon={<ArrowBackIcon />}
+            onClick={() => {
+              router.back();
+            }}
+          />
           <Spacer />
           <DrawerNavigation />
         </Flex>
