@@ -164,7 +164,7 @@ export default function CustomerCreation() {
           <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
         </FormControl>
         <FormControl>
-          <FormLabel>Classes</FormLabel>
+          <FormLabel>Classes per Week</FormLabel>
           {prices
             ?.filter((price) => price.active)
             ?.map((price, index) => (

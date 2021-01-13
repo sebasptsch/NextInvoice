@@ -98,7 +98,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         <Button
           m={2}
           key="Void"
-          hidden={invoice.status !== "open"}
+          hidden={invoice.status !== ("open" || "uncollectible")}
           onClick={() => {
             axios
               .post(`/api/invoices/${invoice?.id}/void`)
