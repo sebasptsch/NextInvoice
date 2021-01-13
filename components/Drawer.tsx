@@ -28,23 +28,15 @@ import {
 import { NextChakraLink } from "./NextChakraLink";
 import { useRouter } from "next/router";
 
-export default function DrawerNavigation() {
+export default function DrawerNavigation({ isOpen, onClose, btnRef }) {
   // Hooks
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
+
   const { colorMode, toggleColorMode } = useColorMode();
   const session = useSession();
   const router = useRouter();
 
   return (
     <>
-      <IconButton
-        aria-label="Menu"
-        ref={btnRef}
-        onClick={onOpen}
-        icon={<HamburgerIcon />}
-        variant="outline"
-      />
       <Drawer
         isOpen={isOpen}
         placement="right"
