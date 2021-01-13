@@ -63,7 +63,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           onClick={() => {
             router.push(invoice?.invoice_pdf);
           }}
-          hideen={invoice.status === "draft"}
+          hidden={invoice.status === "draft"}
         >
           Download
         </Button>
