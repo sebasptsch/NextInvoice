@@ -21,7 +21,10 @@ export default async function handler(req, res) {
   if (req.method == "GET") {
     await stripe.invoices
       .list(req.query)
-      .then((value) => res.status(200).json(value))
+      .then((value) => {
+        console.log(req.query.status, value);
+        res.status(200).json(value);
+      })
       .catch((error) => res.status(error.statusCode).json(error));
   }
 }
