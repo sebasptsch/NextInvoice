@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { csrfToken } from "next-auth/client";
 import Layout from "../../components/Layout";
 import {
@@ -15,6 +15,8 @@ import {
   FormControl,
   useToast,
   FormErrorMessage,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -23,6 +25,8 @@ export default function SignIn({ csrfToken }) {
   const router = useRouter();
   const { email, error } = router.query;
   const { colorMode, toggleColorMode } = useColorMode();
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
   // Dev
   const toast = useToast();
   let errorMessage;
@@ -75,11 +79,23 @@ export default function SignIn({ csrfToken }) {
           <Input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <FormControl mt="4" isInvalid={errorMessage}>
             <FormLabel>Username</FormLabel>
-            <Input name="username" type="text" />
+            <Input name="username" type="text" placeholder="Enter username" />
           </FormControl>
           <FormControl mt="4" isInvalid={errorMessage}>
             <FormLabel>Password</FormLabel>
-            <Input name="password" type="password" />
+            <InputGroup>
+              <Input
+                name="password"
+                type={show ? "text" : "password"}
+                placeholder="Enter password"
+                pr="4.5rem"
+              />
+              <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={handleClick}>
+                  {show ? "Hide" : "Show"}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
           </FormControl>
 
           <Button mt="4" type="submit">
