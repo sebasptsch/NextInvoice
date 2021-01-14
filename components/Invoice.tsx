@@ -164,7 +164,9 @@ export default function InvoiceComponent({
                 hidden={invoice.status === "paid"}
                 onClick={() => {
                   axios
-                    .post(`/api/invoices/${invoice?.id}/pay`)
+                    .post(`/api/invoices/${invoice?.id}/pay`, {
+                      paid_out_of_band: true
+                    })
                     .then((response) => {
                       toast({
                         title: "Success",
@@ -176,7 +178,7 @@ export default function InvoiceComponent({
                     .catch((error) => ErrorHandler(error, toast));
                 }}
               >
-                Pay
+                Pay (Out of Hand)
               </MenuItem>
 
               <MenuItem
