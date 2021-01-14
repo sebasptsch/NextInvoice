@@ -101,8 +101,8 @@ export default function CustomerComponent({
               <MenuItem
                 onClick={() =>
                   router.push(
-                    `/ivoiceitems/new?customer=${customer.id}`,
-                    `/ivoiceitems/new?customer=${customer.id}`
+                    `/invoiceitems/new?customer=${customer.id}`,
+                    `/invoiceitems/new?customer=${customer.id}`
                   )
                 }
               >

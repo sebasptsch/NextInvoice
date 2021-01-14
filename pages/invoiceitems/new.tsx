@@ -3,22 +3,12 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   Select,
-  Spinner,
-  Textarea,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -34,7 +24,6 @@ export default function NewInvoiceItem() {
   const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
   const [prices, setPrices] = useState<Array<Stripe.Price>>([]);
   const { handleSubmit, errors, register, formState, watch } = useForm();
-  const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
   useEffect(() => {
@@ -55,7 +44,8 @@ export default function NewInvoiceItem() {
   // Component Functions
   const handleData = (values) => {
     let { customer, price, quantity } = values;
-    axios
+
+    return axios
       .post(`/api/invoiceitems`, {
         customer,
         price,
@@ -87,7 +77,8 @@ export default function NewInvoiceItem() {
           ) : null}
           <FormErrorMessage>{errors.customer?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={errors.price}>
+        <FormControl></FormControl>
+        <FormControl isInvalid={errors.price} isDisabled={false}>
           <FormLabel htmlFor="price">
             Which Price / Product Would you like to add?
           </FormLabel>
@@ -118,8 +109,8 @@ export default function NewInvoiceItem() {
             </NumberInputStepper>
           </NumberInput>
         </FormControl>
-
-        <Button type="submit" colorScheme="blue">
+        <br />
+        <Button type="submit" w="100%" isLoading={formState.isSubmitting}>
           Add
         </Button>
       </form>

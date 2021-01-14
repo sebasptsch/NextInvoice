@@ -20,13 +20,13 @@ import {
   ButtonGroup,
   Stack,
 } from "@chakra-ui/react";
-import Layout from "../../../components/Layout";
+import Layout from "../../components/Layout";
 import Stripe from "stripe";
 import axios from "axios";
 import Head from "next/head";
-import { NextChakraLinkBox } from "../../../components/NextChakraLinkBox";
-import ErrorHandler from "../../../components/ErrorHandler";
-import InvoiceItemList from "../../../components/InvoiceItemList";
+import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
+import ErrorHandler from "../../components/ErrorHandler";
+import InvoiceItemList from "../../components/InvoiceItemList";
 import { useRouter } from "next/router";
 
 export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {

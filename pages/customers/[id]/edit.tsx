@@ -69,7 +69,7 @@ export default function CustomerCreation({
       classes: JSON.stringify(classes),
     };
 
-    axios({
+    return axios({
       url: `/api/customers/${router.query.id}`,
       method: "POST",
       data: {

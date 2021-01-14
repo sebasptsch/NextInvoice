@@ -32,8 +32,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import ErrorHandler from "../../../components/ErrorHandler";
-import Layout from "../../../components/Layout";
+import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import Head from "next/head";
 
 export default function NewInvoiceItem({
@@ -58,7 +58,7 @@ export default function NewInvoiceItem({
   // Component Functions
   const handleData = (values) => {
     let { price, quantity } = values;
-    axios
+    return axios
       .post(`/api/invoiceitems/${invoiceItem.id}`, {
         price,
         quantity,

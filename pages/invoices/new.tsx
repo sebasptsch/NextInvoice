@@ -42,13 +42,7 @@ export default function NewInvoice() {
       .then((response) => {
         setCustomers(response.data.data);
       })
-      .catch((error) =>
-        toast({
-          title: error.response.data.type,
-          status: "error",
-          description: error.response.data.raw.message,
-        })
-      );
+      .catch((error) => ErrorHandler(error, toast));
   }, []);
 
   // Component Functions
@@ -57,7 +51,7 @@ export default function NewInvoice() {
     if (collection_method !== "send_invoice") {
       days_until_due = undefined;
     }
-    axios
+    return axios
       .post(`/api/invoices`, {
         customer,
         collection_method,
@@ -129,7 +123,11 @@ export default function NewInvoice() {
           <FormLabel>Description</FormLabel>
           <Textarea ref={register} name="description" />
         </FormControl>
-        <Button type="submit" colorScheme="blue">
+        <Button
+          type="submit"
+          colorScheme="blue"
+          isLoading={formState.isSubmitting}
+        >
           Generate
         </Button>
       </form>

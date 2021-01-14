@@ -55,7 +55,7 @@ export default function Products({
   // Component Functions
   const submitHandler = (values) => {
     const { active, name, description } = values;
-    axios({
+    return axios({
       method: "POST",
       url: `/api/products/${product.id}`,
       data: {
@@ -105,7 +105,12 @@ export default function Products({
         <br />
         <Table variant="simple">
           <TableCaption>
-            <Button w="100%" textAlign="center" type="submit">
+            <Button
+              w="100%"
+              textAlign="center"
+              type="submit"
+              isLoading={formState.isSubmitting}
+            >
               Save
             </Button>
           </TableCaption>

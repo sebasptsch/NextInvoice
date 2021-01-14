@@ -85,7 +85,7 @@ export default function CustomerCreation() {
       students: JSON.stringify(students),
       classes: JSON.stringify(classes),
     };
-    axios
+    return axios
       .post("/api/customers", {
         email,
         description,

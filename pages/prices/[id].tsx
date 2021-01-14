@@ -19,11 +19,11 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import Layout from "../../../components/Layout";
+import Layout from "../../components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import ErrorHandler from "../../../components/ErrorHandler";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function PriceView({ price }: { price: Stripe.Price }) {
   // Hooks
@@ -34,7 +34,7 @@ export default function PriceView({ price }: { price: Stripe.Price }) {
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
-    axios({
+    return axios({
       method: "POST",
       url: `/api/prices/${price.id}`,
       data: {

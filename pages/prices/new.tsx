@@ -51,7 +51,7 @@ export default function PriceView() {
   }, []);
   function submitHandler(values) {
     const { nickname, unit_amount, product, active } = values;
-    axios({
+    return axios({
       method: "POST",
       url: `/api/prices`,
       data: {
