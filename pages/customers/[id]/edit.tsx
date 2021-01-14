@@ -104,7 +104,7 @@ export default function CustomerCreation({
       <Divider marginBottom={2} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isInvalid={errors.name}>
-          <FormLabel htmlFor="name">First name</FormLabel>
+          <FormLabel htmlFor="name">Customer Name</FormLabel>
 
           <Input
             name="name"

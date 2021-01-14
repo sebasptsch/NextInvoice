@@ -47,11 +47,11 @@ export default function CustomerCreation() {
     description: yup.string(),
     phone: yup
       .string()
-      .phone()
-      .test("phone-test", "This phone is already in use", (value) => {
-        return !customers.some((customer) => customer.phone === value);
-      }),
-    name: yup.string().required(),
+      .phone(),
+      // .test("phone-test", "This phone is already in use", (value) => {
+      //   return !customers.some((customer) => customer.phone === value);
+      // }),
+    name: yup.string(),
   });
 
   // Hooks
@@ -117,7 +117,7 @@ export default function CustomerCreation() {
         <FormControl isInvalid={errors.name}>
           <FormLabel htmlFor="name">First name</FormLabel>
 
-          <Input name="name" placeholder="name" isRequired ref={register} />
+          <Input name="name" placeholder="name" ref={register} />
 
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>

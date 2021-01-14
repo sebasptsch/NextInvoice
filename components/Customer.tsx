@@ -42,7 +42,7 @@ export default function CustomerComponent({
             href="/customers/[id]"
             as={`/customers/${customer.id}`}
           >
-            {customer?.name}
+            {customer?.email}
           </NextChakraLink>
         </Center>
         <Spacer />
@@ -102,6 +102,7 @@ export default function CustomerComponent({
           </Menu>
         </Center>
       </Flex>
+      {JSON.parse(customer.metadata.students).map(student => <Badge m={1}>{student}</Badge>)}
     </Box>
   );
 }

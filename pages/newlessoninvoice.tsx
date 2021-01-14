@@ -158,7 +158,7 @@ export default function LessonInvoice() {
                     m={4}
                     defaultChecked={true}
                   >
-                    {customer.name}
+                    {customer.email}
                   </Checkbox>
                   <input
                     type="hidden"
