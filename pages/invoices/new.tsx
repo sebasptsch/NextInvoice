@@ -3,12 +3,18 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   IconButton,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -24,6 +30,7 @@ import {
   Select,
   Spacer,
   Spinner,
+  Stack,
   Textarea,
   useDisclosure,
   useToast,
@@ -96,7 +103,7 @@ export default function NewInvoice() {
           .then((response) => {
             // console.log((index + 1) / filteredcustomers?.length);
             resolve();
-            router.push(`/inoices/${response.data.id}`);
+            router.push(`/invoices/${response.data.id}`);
           })
           .catch((error) => ErrorHandler(error, toast));
       })
@@ -110,67 +117,99 @@ export default function NewInvoice() {
 
   return (
     <Layout>
-      <Select
-        name="customer"
-        defaultValue={router.query.customer}
-        onChange={(e) => setCustomer(e.target.value)}
-        value={customer}
-      >
-        {customers.map((customer) => (
-          <option key={customer.id} value={customer.id}>
-            {customer.name}
-          </option>
-        ))}
-      </Select>
+      <FormControl>
+        <FormLabel>Select a customer</FormLabel>
+        <Select
+          name="customer"
+          defaultValue={router.query.customer}
+          onChange={(e) => setCustomer(e.target.value)}
+          value={customer}
+        >
+          {customers.map((customer) => (
+            <option key={customer.id} value={customer.id}>
+              {customer.name}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
+
       <form onSubmit={handleSubmit(handleLineData)}>
-        {invoiceItems.map((item, index) => (
-          <Box m={4} borderWidth="1px" borderRadius="10px" p={2}>
-            <Flex>
-              <Badge>{item.quantity}</Badge>
-              {item.price.nickname}
-              <Spacer />
-              <IconButton
-                aria-label="delete row"
-                icon={<DeleteIcon />}
-                onClick={() => {
-                  // if (invoiceItems.length === 1) {
-                  //   setInvoiceItems([]);
-                  // } else {
-                  setInvoiceItems(
-                    invoiceItems
-                      .slice(0, index)
-                      .concat(
-                        invoiceItems.slice(index + 1, invoiceItems.length)
-                      )
-                  );
-                  // }
-                }}
-              />
-            </Flex>
-          </Box>
-        ))}
-        <Flex>
-          <NumberInput defaultValue={"1"} width={100}>
-            <NumberInputField ref={register()} name="invoiceitem.quantity" />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-          <Select ref={register} name={`invoiceitem.price`}>
-            {prices.map((price) => (
-              <option value={JSON.stringify(price)} key={price.id}>
-                {price.nickname}
-              </option>
+        <FormControl>
+          <FormLabel>Invoice items</FormLabel>
+          <Stack spacing={5} borderRadius="10px" borderWidth="1px" p={1}>
+            {invoiceItems.map((item, index) => (
+              <Box
+                borderWidth="1px"
+                borderRadius="10px"
+                p="0.5em"
+                // m="1em"
+                // key={item?.id}
+              >
+                <Flex>
+                  <Center>
+                    <Badge marginRight={2} colorScheme="blue">
+                      {item.quantity}
+                    </Badge>
+                    {" " + item.price.nickname?.toString()}
+                  </Center>
+                  <Spacer />
+                  <Center>${item.price.unit_amount / 100}</Center>
+                  <IconButton
+                    aria-label="delete row"
+                    icon={<DeleteIcon />}
+                    onClick={() => {
+                      setInvoiceItems(
+                        invoiceItems
+                          .slice(0, index)
+                          .concat(
+                            invoiceItems.slice(index + 1, invoiceItems.length)
+                          )
+                      );
+                    }}
+                  />
+                </Flex>
+              </Box>
             ))}
-          </Select>
-          <IconButton
-            aria-label="add invoice item"
-            icon={<AddIcon />}
-            type="submit"
-          />
-        </Flex>
+          </Stack>
+        </FormControl>
+        <br />
+        <Box borderWidth="1px" borderRadius="0.375rem">
+          <Flex>
+            <NumberInput defaultValue={"1"} width={100} borderWidth={0}>
+              <NumberInputField
+                ref={register()}
+                name="invoiceitem.quantity"
+                borderWidth={0}
+              />
+              <NumberInputStepper></NumberInputStepper>
+            </NumberInput>
+
+            <Select
+              ref={register}
+              name={`invoiceitem.price`}
+              // as={Input}
+              borderWidth={0}
+              textAlign="center"
+            >
+              {prices
+                .filter((price) => price.active)
+                .map((price) => (
+                  <option value={JSON.stringify(price)} key={price.id}>
+                    {price.nickname}
+                  </option>
+                ))}
+            </Select>
+
+            <IconButton
+              aria-label="add invoice item"
+              icon={<AddIcon />}
+              type="submit"
+              variant="ghost"
+            />
+          </Flex>
+        </Box>
       </form>
+      <br />
       <form onSubmit={handleSubmit(handleInvoiceData)}>
         <FormControl>
           <FormLabel>Collection Method</FormLabel>
