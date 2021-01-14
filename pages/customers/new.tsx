@@ -46,8 +46,8 @@ export default function CustomerCreation() {
       }),
     description: yup.string(),
     phone: yup
-      .string()
-      .phone(),
+      .string(),
+      // .phone(),
       // .test("phone-test", "This phone is already in use", (value) => {
       //   return !customers.some((customer) => customer.phone === value);
       // }),
