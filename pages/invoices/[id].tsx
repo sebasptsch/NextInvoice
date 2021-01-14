@@ -136,25 +136,26 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Button>
 
         <Button
-          m={2}
-          key="pay"
-          hidden={invoice.status === "paid"}
-          onClick={() => {
-            axios
-              .post(`/api/invoices/${invoice?.id}/pay`)
-              .then((response) => {
-                toast({
-                  title: "Success",
+                key="pay"
+                hidden={invoice.status === "paid"}
+                onClick={() => {
+                  axios
+                    .post(`/api/invoices/${invoice?.id}/pay`, {
+                      paid_out_of_band: true
+                    })
+                    .then((response) => {
+                      toast({
+                        title: "Success",
 
-                  status: "success",
-                });
-                router.reload();
-              })
-              .catch((error) => ErrorHandler(error, toast));
-          }}
-        >
-          Pay
-        </Button>
+                        status: "success",
+                      });
+                      router.reload();
+                    })
+                    .catch((error) => ErrorHandler(error, toast));
+                }}
+              >
+                Pay (Out of Hand)
+              </Button>
 
         <Button
           m={2}

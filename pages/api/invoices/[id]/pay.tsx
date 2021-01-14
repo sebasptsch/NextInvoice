@@ -12,21 +12,8 @@ export default async function handler(req, res) {
     });
   }
   if (req.method === "POST") {
-    const {
-      forgive,
-      off_session,
-      paid_out_of_band,
-      payment_method,
-      source,
-    } = req.query;
     await stripe.invoices
-      .pay(req.query.id, {
-        forgive,
-        off_session,
-        paid_out_of_band,
-        payment_method,
-        source,
-      })
+      .pay(req.query.id, req.body)
       .then((value) => res.status(200).json(value))
       .catch((error) => res.status(error.statusCode).json(error));
   }
