@@ -40,7 +40,7 @@ export default function CustomerCreation({
     email: yup.string().email().required(),
 
     description: yup.string(),
-    phone: yup.string().phone(),
+    phone: yup.string(),
 
     name: yup.string().required(),
   });
