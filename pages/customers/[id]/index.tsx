@@ -59,10 +59,10 @@ export default function CustomerPage({
       <Head>
         <title>View Customer</title>
       </Head>
-      <Heading href={`mailto: ${customer.email}`}>{customer.email}</Heading>
-      <NextChakraLink color="gray.500" >
+      <Heading as="a" href={`mailto: ${customer.email}`}>{customer.email}</Heading>
+      <Text color="gray.500" >
         {customer?.name}
-      </NextChakraLink>
+      </Text>
       <br />
       <NextChakraLink color="gray.500" href={`tel: ${customer.phone}`}>
         {customer?.phone}

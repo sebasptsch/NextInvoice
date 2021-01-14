@@ -156,7 +156,7 @@ export default function LessonInvoice() {
                     name={`checkedcustomers[${index}].checked`}
                     ref={register}
                     m={4}
-                    defaultChecked={true}
+                    defaultChecked={JSON.parse(customer.metadata.classes).length > 0}
                   >
                     {customer.email}
                   </Checkbox>
