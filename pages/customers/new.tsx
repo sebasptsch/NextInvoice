@@ -84,7 +84,6 @@ export default function CustomerCreation() {
           toast({
             title: "Success",
             status: "success",
-            description: "Redirecting...",
           });
           router.push(`/customers/[id]`, `/customers/${res.data.customer.id}`);
         }

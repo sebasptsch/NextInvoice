@@ -67,7 +67,6 @@ export default function PriceView(props) {
           toast({
             title: "Success",
             status: "success",
-            // description: "Redirecting...",
           });
           //   router.push(`/customers/${res.data.id}`);
           router.reload();

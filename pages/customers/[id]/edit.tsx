@@ -109,7 +109,6 @@ export default function CustomerCreation(props) {
           toast({
             title: "Success",
             status: "success",
-            description: "Redirecting...",
           });
           mutate();
         }
