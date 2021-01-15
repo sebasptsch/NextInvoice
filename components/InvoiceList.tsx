@@ -38,7 +38,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
   const router = useRouter();
   const [value, setValue] = useState(router.query.status || "open");
   const { data: invoices, mutate } = useSWR(
-    `/api/invoices?status=${value}&customer=${customer}&limit=100`,
+    `/api/invoices?status=${value}&customer=${customer}`,
     listFetcher
   );
   const toast = useToast();
