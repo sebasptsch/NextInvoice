@@ -15,19 +15,16 @@ import {
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { Router, useRouter } from "next/router";
-import Stripe from "stripe";
 import ErrorHandler from "./ErrorHandler";
 import { NextChakraLink } from "./NextChakraLink";
 
-export default function CustomerComponent({
-  customer,
-}: {
-  customer: Stripe.Customer;
-}): JSX.Element {
+export default function CustomerComponent({ customer }: { customer: any }) {
   // Hooks
   const toast = useToast();
   const router = useRouter();
-  const { name }: {name: any} = customer
+  const students = customer.metadata.students
+    ? JSON.parse(customer.metadata.students)
+    : [];
   return (
     <Box
       borderWidth="1px"
@@ -40,9 +37,9 @@ export default function CustomerComponent({
         <Center>
           <NextChakraLink
             href="/customers/[id]"
-            as={`/customers/${customer.id}`}
+            as={`/customers/${customer?.id}`}
           >
-            {customer.name?.length > 0 ? customer?.name : customer?.email}
+            {customer?.name?.length > 0 ? customer?.name : customer?.email}
           </NextChakraLink>
         </Center>
         <Spacer />
@@ -62,7 +59,7 @@ export default function CustomerComponent({
                 onClick={() =>
                   router.push(
                     `/customers/[id]/edit`,
-                    `/customers/${customer.id}/edit`
+                    `/customers/${customer?.id}/edit`
                   )
                 }
               >
@@ -91,8 +88,8 @@ export default function CustomerComponent({
               <MenuItem
                 onClick={() =>
                   router.push(
-                    `/invoices/new?customer=${customer.id}`,
-                    `/invoices/new?customer=${customer.id}`
+                    `/invoices/new?customer=${customer?.id}`,
+                    `/invoices/new?customer=${customer?.id}`
                   )
                 }
               >
@@ -102,7 +99,9 @@ export default function CustomerComponent({
           </Menu>
         </Center>
       </Flex>
-      {JSON.parse(customer.metadata.students).map(student => <Badge m={1}>{student}</Badge>)}
+      {students?.map((student) => (
+        <Badge m={1}>{student}</Badge>
+      ))}
     </Box>
   );
 }

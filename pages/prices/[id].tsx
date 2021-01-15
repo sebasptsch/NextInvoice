@@ -16,6 +16,7 @@ import {
   Button,
   Input,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
@@ -24,13 +25,14 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
+import { usePrice } from "../../helpers/helpers";
 
-export default function PriceView({ price }: { price: Stripe.Price }) {
+export default function PriceView() {
   // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-
+  const { price, isError, isLoading } = usePrice(router.query.id);
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
@@ -54,6 +56,10 @@ export default function PriceView({ price }: { price: Stripe.Price }) {
         }
       })
       .catch((error) => ErrorHandler(error, toast));
+  }
+
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
@@ -129,16 +135,4 @@ export default function PriceView({ price }: { price: Stripe.Price }) {
       </form>
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const price = await stripe.prices.retrieve(params.id);
-  return {
-    props: {
-      price,
-    },
-  };
 }

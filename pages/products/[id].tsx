@@ -17,6 +17,7 @@ import {
   MenuList,
   Select,
   Spacer,
+  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -31,6 +32,7 @@ import {
   Th,
   Thead,
   Tr,
+  useProps,
   useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -39,18 +41,15 @@ import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
+import { usePrices, useProduct } from "../../helpers/helpers";
 
-export default function Products({
-  product,
-  prices,
-}: {
-  product: Stripe.Product;
-  prices: Array<Stripe.Price>;
-}) {
+export default function Products() {
   // Hooks
-  const { handleSubmit, errors, register, formState } = useForm();
-  const toast = useToast();
   const router = useRouter();
+  const { handleSubmit, errors, register, formState } = useForm();
+  const { product, isLoading } = useProduct(router.query.id);
+  const { prices } = usePrices();
+  const toast = useToast();
 
   // Component Functions
   const submitHandler = (values) => {
@@ -75,13 +74,16 @@ export default function Products({
       })
       .catch((error) => ErrorHandler(error, toast));
   };
+
+  if (isLoading) return <Spinner />;
+
   return (
     <Layout>
       <Head>
         <title>View Product</title>
       </Head>
       <form onSubmit={handleSubmit(submitHandler)}>
-        <Heading>{product.name}</Heading>
+        <Heading>{product?.name}</Heading>
 
         <br />
         <Divider />
@@ -90,14 +92,14 @@ export default function Products({
           <Stat>
             <StatLabel>Created</StatLabel>
             <StatNumber>
-              {new Date(product.created * 1000).toLocaleDateString()}
+              {new Date(product?.created * 1000).toLocaleDateString()}
             </StatNumber>
             <StatHelpText></StatHelpText>
           </Stat>
           <Stat>
             <StatLabel>Last Updated</StatLabel>
             <StatNumber>
-              {new Date(product.updated * 1000).toLocaleDateString()}
+              {new Date(product?.updated * 1000).toLocaleDateString()}
             </StatNumber>
             <StatHelpText></StatHelpText>
           </Stat>
@@ -125,7 +127,7 @@ export default function Products({
               <Td>Active</Td>
               <Td>
                 <Select
-                  defaultValue={product.active.toString()}
+                  defaultValue={product?.active.toString()}
                   ref={register()}
                   name="active"
                 >
@@ -140,7 +142,7 @@ export default function Products({
                 <Input
                   name="name"
                   ref={register()}
-                  defaultValue={product.name}
+                  defaultValue={product?.name}
                 />
               </Td>
             </Tr>
@@ -148,7 +150,7 @@ export default function Products({
               <Td>Description</Td>
               <Td>
                 <Textarea
-                  defaultValue={product.description}
+                  defaultValue={product?.description}
                   name="description"
                   ref={register()}
                 />
@@ -167,7 +169,7 @@ export default function Products({
               onClick={() => {
                 router.push(
                   `/prices/new/?product=[id]`,
-                  `/prices/new/?product=${product.id}`
+                  `/prices/new/?product=${product?.id}`
                 );
               }}
             >
@@ -178,8 +180,8 @@ export default function Products({
 
         <Divider marginBottom={2} />
         {prices
-          .sort((price) => (price.active ? -1 : 1))
-          .map((price) => {
+          ?.sort((price) => (price.active ? -1 : 1))
+          ?.map((price) => {
             return (
               <Box
                 mt={4}
@@ -243,23 +245,9 @@ export default function Products({
               </Box>
             );
           })}
-        {prices.length == 0 && <Text>No Items here</Text>}
+        {prices?.length == 0 && <Text>No Items here</Text>}
         <br />
       </form>
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const product = await stripe.products.retrieve(params.id);
-  const prices = await stripe.prices.list({ product: params.id });
-  return {
-    props: {
-      product: product,
-      prices: prices.data,
-    },
-  };
 }

@@ -33,6 +33,7 @@ import Stripe from "stripe";
 import { CheckIcon } from "@chakra-ui/icons";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
+import { useCustomers, usePrices } from "../../helpers/helpers";
 
 export default function CustomerCreation() {
   // Validation Schema for Form
@@ -54,27 +55,13 @@ export default function CustomerCreation() {
   });
 
   // Hooks
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
-  const [prices, setPrices] = useState<Array<Stripe.Price>>();
+  const { customers } = useCustomers();
+  const { prices } = usePrices();
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
   const router = useRouter();
-  useEffect(() => {
-    axios
-      .get(`/api/customers`, {
-        params: {
-          limit: 100,
-        },
-      })
-      .then((response) => setCustomers(response.data.data))
-      .catch((error) => ErrorHandler(error, toast));
-    axios
-      .get(`/api/prices`)
-      .then((response) => setPrices(response.data.data))
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
 
   // Component Functions
   function onSubmit(values) {

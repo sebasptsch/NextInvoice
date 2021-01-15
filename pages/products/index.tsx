@@ -29,27 +29,19 @@ import { useRouter } from "next/router";
 import ProductComponent from "../../components/Product";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
+import { useProducts } from "../../helpers/helpers";
 
 export default function Products() {
   // Hooks
   const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("");
-  const [products, setProducts] = useState<Array<Stripe.Product>>([]);
-  const [productsLoading, setProductsLoading] = useState(true);
-  useEffect(() => {
-    setProductsLoading(true);
-    setProducts([]);
-    axios({ url: `/api/products`, method: "GET", params: {limit: 100} })
-      .then((products) => {
-        setProductsLoading(false);
-        setProducts(products.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
+  const { products, isLoading } = useProducts();
 
   // Component Functions
   const handleChange = (event) => setValue(event.target.value);
+
+  if (isLoading) return <Spinner />;
 
   return (
     <Layout>
@@ -74,7 +66,7 @@ export default function Products() {
       <br />
       <Divider />
       <br />
-      {productsLoading ? (
+      {isLoading ? (
         <Box borderWidth="1px" borderRadius="10px" p="1em" m="1em">
           <SkeletonText h="52px" />
         </Box>

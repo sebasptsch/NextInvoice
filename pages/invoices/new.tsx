@@ -93,7 +93,10 @@ export default function NewInvoice() {
         })
       );
     }
-
+    const tax_rates =
+      process.env.NODE_ENV === "production"
+        ? { default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"] }
+        : null;
     return new Promise<void>((resolve) =>
       addItems().then(() => {
         axios
@@ -102,7 +105,7 @@ export default function NewInvoice() {
             collection_method,
             days_until_due,
             auto_advance: true,
-            default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"],
+            ...tax_rates,
           })
           .then((response) => {
             // console.log((index + 1) / filteredcustomers?.length);

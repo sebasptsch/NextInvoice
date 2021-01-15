@@ -165,7 +165,7 @@ export default function InvoiceComponent({
                 onClick={() => {
                   axios
                     .post(`/api/invoices/${invoice?.id}/pay`, {
-                      paid_out_of_band: true
+                      paid_out_of_band: true,
                     })
                     .then((response) => {
                       toast({

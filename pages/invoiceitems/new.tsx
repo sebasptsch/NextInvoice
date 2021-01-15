@@ -18,28 +18,16 @@ import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
+import { useCustomers, usePrices } from "../../helpers/helpers";
 
 export default function NewInvoiceItem() {
   // Hooks
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
-  const [prices, setPrices] = useState<Array<Stripe.Price>>([]);
+  // const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
+  const { customers } = useCustomers();
+  const { prices } = usePrices();
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const toast = useToast();
   const router = useRouter();
-  useEffect(() => {
-    axios
-      .get(`/api/customers`, { params: { limit: 100 } })
-      .then((response) => {
-        setCustomers(response.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-    axios
-      .get(`/api/prices`)
-      .then((response) => {
-        setPrices(response.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
 
   // Component Functions
   const handleData = (values) => {
@@ -62,15 +50,15 @@ export default function NewInvoiceItem() {
           <FormLabel htmlFor="customer">
             Which Customer do you want to add an invoice item to?
           </FormLabel>
-          {customers.length > 0 ? (
+          {customers?.length > 0 ? (
             <Select
               name="customer"
               defaultValue={router.query.customer}
               ref={register}
             >
-              {customers.map((customer) => (
+              {customers?.map((customer) => (
                 <option key={customer.id} value={customer.id}>
-                  {customer.email}
+                  {customer.name?.length > 0 ? customer?.name : customer?.email}
                 </option>
               ))}
             </Select>
@@ -82,15 +70,15 @@ export default function NewInvoiceItem() {
           <FormLabel htmlFor="price">
             Which Price / Product Would you like to add?
           </FormLabel>
-          {prices.length > 0 ? (
+          {prices?.length > 0 ? (
             <Select
               name="price"
               ref={register({ required: "This is required" })}
               defaultValue={router.query.price}
             >
               {prices
-                .filter((price) => price.active)
-                .map((price) => (
+                ?.filter((price) => price.active)
+                ?.map((price) => (
                   <option key={price.id} value={price.id}>
                     {price.nickname}
                   </option>

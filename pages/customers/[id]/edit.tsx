@@ -18,6 +18,7 @@ import {
   Spacer,
   Text,
   Badge,
+  Spinner,
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useForm } from "react-hook-form";
@@ -30,12 +31,11 @@ import Stripe from "stripe";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
 import { useEffect, useState } from "react";
+import { POINT_CONVERSION_COMPRESSED } from "constants";
+import { fetcher, useCustomer, usePrices } from "../../../helpers/helpers";
+import useSWR from "swr";
 
-export default function CustomerCreation({
-  customer,
-}: {
-  customer: Stripe.Customer;
-}) {
+export default function CustomerCreation(props) {
   // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -48,16 +48,13 @@ export default function CustomerCreation({
 
   // Hooks
   const router = useRouter();
-  const [prices, setPrices] = useState<Array<Stripe.Price>>();
+  const { customer, isLoading } = useCustomer(router.query.id);
+  const { prices } = usePrices();
+
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
-  useEffect(() => {
-    axios.get(`/api/prices`).then((response) => {
-      setPrices(response.data.data);
-    });
-  }, []);
 
   // Component Functions
   function onSubmit(values) {
@@ -94,6 +91,8 @@ export default function CustomerCreation({
       .catch((error) => ErrorHandler(error, toast));
   }
 
+  if (isLoading || router.query.id) return <Spinner />;
+
   return (
     <Layout>
       <Head>
@@ -111,7 +110,7 @@ export default function CustomerCreation({
             name="name"
             placeholder="name"
             ref={register}
-            defaultValue={customer?.name}
+            defaultValue={customer?.data?.name}
           />
 
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -126,7 +125,7 @@ export default function CustomerCreation({
             isRequired
             type="email"
             ref={register}
-            defaultValue={customer?.email}
+            defaultValue={customer?.data?.email}
           />
 
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
@@ -154,7 +153,7 @@ export default function CustomerCreation({
             placeholder="phone"
             type="phone"
             ref={register}
-            defaultValue={customer?.phone}
+            defaultValue={customer?.data?.phone}
           />
 
           <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
@@ -166,7 +165,7 @@ export default function CustomerCreation({
             name="description"
             placeholder="description"
             ref={register}
-            defaultValue={customer?.description}
+            defaultValue={customer?.data?.description}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
@@ -175,7 +174,7 @@ export default function CustomerCreation({
           <Input
             name="students"
             placeholder="Enter student names seperated by a comma (,)"
-            defaultValue={JSON.parse(customer.metadata.students).join(",")}
+            defaultValue={JSON.parse(customer?.metadata.students).join(",")}
             ref={register({
               required: "This is required",
               validate: (value) => value.split(",").length > 0,
@@ -185,10 +184,10 @@ export default function CustomerCreation({
         </FormControl>
         <FormControl>
           <FormLabel>Classes</FormLabel>
-          {prices
-            ?.sort(price => (price.active ? -1 : 1))
+          {prices?.data
+            ?.sort((price) => (price.active ? -1 : 1))
             ?.map((price, index) => {
-              let classes = JSON.parse(customer.metadata.classes);
+              let classes = JSON.parse(customer?.metadata.classes);
               return (
                 <Box
                   borderRadius="10px"
@@ -222,9 +221,12 @@ export default function CustomerCreation({
                       </NumberInputStepper>
                     </NumberInput>
                     <Spacer />
-                    <Text><Badge colorScheme={price.active ? "green" : "red"}>
-                      {price.active ? "Enabled" : "Disabled"}
-                    </Badge>{price.nickname}</Text>
+                    <Text>
+                      <Badge colorScheme={price.active ? "green" : "red"}>
+                        {price.active ? "Enabled" : "Disabled"}
+                      </Badge>
+                      {price.nickname}
+                    </Text>
                   </Flex>
                 </Box>
               );
@@ -234,18 +236,6 @@ export default function CustomerCreation({
           Save
         </Button>
       </form>
-    </Layout >
+    </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const customer = await stripe.customers.retrieve(params.id);
-  return {
-    props: {
-      customer,
-    },
-  };
 }
