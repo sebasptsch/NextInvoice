@@ -192,7 +192,7 @@ export default function InvoicePage(props) {
                   title: "Success",
                   status: "success",
                 });
-                mutate();
+                router.push(`/invoices`);
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
