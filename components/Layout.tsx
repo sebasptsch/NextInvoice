@@ -4,6 +4,7 @@ import {
   Center,
   Container,
   Flex,
+  Heading,
   IconButton,
   Modal,
   ModalBody,
@@ -63,6 +64,11 @@ export default function Layout({ children }: { children: any }) {
             }}
             disabled={!session}
           />
+          <Spacer />
+          <Center>
+            <Heading size={"md"}>Imagination & Creation Art</Heading>
+          </Center>
+
           <Spacer />
           <IconButton
             aria-label="Menu"
