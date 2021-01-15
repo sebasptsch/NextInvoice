@@ -72,7 +72,7 @@ export default function NewInvoice(props) {
   const { data: prices } = useSWR(`/api/prices`, listFetcher, {
     initialData: props.prices,
   });
-  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
+  const { data: customers } = useSWR(`/api/customers?limit=100`, listFetcher, {
     initialData: props.customers,
   });
   const [customer, setCustomer] = useState(customers[0].id);

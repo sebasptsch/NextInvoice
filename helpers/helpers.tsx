@@ -11,7 +11,7 @@ export const fetcher = (url) =>
     });
 export const listFetcher = (url) =>
   axios
-    .get(url)
+    .get(url, { params: { limit: 100 } })
     .then((res) => res.data.data)
     .catch((error) => {
       throw error;

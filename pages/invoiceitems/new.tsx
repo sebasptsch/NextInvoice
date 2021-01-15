@@ -20,15 +20,19 @@ import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
 import { listFetcher } from "../../helpers/helpers";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
 export async function getServerSideProps() {
-  const customers = await listFetcher(`/api/customers`);
-  const prices = await listFetcher(`/api/prices`);
+  const customers = await stripe.customers.list({ limit: 100 });
+
+  const prices = await stripe.prices.list();
 
   return {
     props: {
-      customers,
-      prices,
+      customers: customers.data,
+      prices: prices.data,
     },
   };
 }
@@ -37,7 +41,7 @@ export default function NewInvoiceItem(props) {
   const { data: prices } = useSWR(`/api/prices`, listFetcher, {
     initialData: props.prices,
   });
-  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
+  const { data: customers } = useSWR(`/api/customers?limit=100`, listFetcher, {
     initialData: props.customers,
   });
   const { handleSubmit, errors, register, formState, watch } = useForm();
