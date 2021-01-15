@@ -37,7 +37,11 @@ export default function LessonInvoice() {
   const { handleSubmit, errors, register, formState } = useForm();
   useEffect(() => {
     axios
-      .get(`/api/customers`)
+      .get(`/api/customers`, {
+        params: {
+          limit: 100,
+        },
+      })
       .then((response) => {
         setCustomers(response.data.data);
       })
@@ -82,7 +86,7 @@ export default function LessonInvoice() {
                 collection_method,
                 days_until_due,
                 auto_advance: true,
-                default_tax_rates: ['txr_1I9gWSIK06OmoiJke5vnXGgL']
+                default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"],
               })
               .then(() => {
                 setProgress((index + 1) / filteredcustomers?.length);
@@ -158,9 +162,13 @@ export default function LessonInvoice() {
                     name={`checkedcustomers[${index}].checked`}
                     ref={register}
                     m={4}
-                    defaultChecked={JSON.parse(customer.metadata.classes).length > 0}
+                    defaultChecked={
+                      JSON.parse(customer.metadata.classes).length > 0
+                    }
                   >
-                    {customer.email}
+                    {customer.name?.length > 0
+                      ? customer?.name
+                      : customer?.email}
                   </Checkbox>
                   <input
                     type="hidden"

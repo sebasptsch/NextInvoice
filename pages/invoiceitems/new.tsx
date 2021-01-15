@@ -28,7 +28,7 @@ export default function NewInvoiceItem() {
   const router = useRouter();
   useEffect(() => {
     axios
-      .get(`/api/customers`)
+      .get(`/api/customers`, { params: { limit: 100 } })
       .then((response) => {
         setCustomers(response.data.data);
       })

@@ -45,12 +45,11 @@ export default function CustomerCreation() {
         return !customers.some((customer) => customer.email === value);
       }),
     description: yup.string(),
-    phone: yup
-      .string(),
-      // .phone(),
-      // .test("phone-test", "This phone is already in use", (value) => {
-      //   return !customers.some((customer) => customer.phone === value);
-      // }),
+    phone: yup.string(),
+    // .phone(),
+    // .test("phone-test", "This phone is already in use", (value) => {
+    //   return !customers.some((customer) => customer.phone === value);
+    // }),
     name: yup.string(),
   });
 
@@ -64,7 +63,11 @@ export default function CustomerCreation() {
   const router = useRouter();
   useEffect(() => {
     axios
-      .get(`/api/customers`)
+      .get(`/api/customers`, {
+        params: {
+          limit: 100,
+        },
+      })
       .then((response) => setCustomers(response.data.data))
       .catch((error) => ErrorHandler(error, toast));
     axios

@@ -56,7 +56,9 @@ export default function NewInvoice() {
   const [prices, setPrices] = useState([]);
   useEffect(() => {
     axios
-      .get(`/api/customers`)
+      .get(`/api/customers`, {
+        params: { limit: 100 },
+      })
       .then((response) => {
         setCustomers(response.data.data);
         if (!customer) {
@@ -100,7 +102,7 @@ export default function NewInvoice() {
             collection_method,
             days_until_due,
             auto_advance: true,
-                default_tax_rates: ['txr_1I9gWSIK06OmoiJke5vnXGgL']
+            default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"],
           })
           .then((response) => {
             // console.log((index + 1) / filteredcustomers?.length);
