@@ -32,7 +32,7 @@ export default function Customers() {
   useEffect(() => {
     setCustomersLoading(true);
     setCustomers([]);
-    axios({ url: `/api/customers`, method: "GET", params: {limit: 100} })
+    axios({ url: `/api/customers`, method: "GET", params: { limit: 100 } })
       .then((customers) => {
         setCustomersLoading(false);
         setCustomers(customers.data.data);
@@ -67,9 +67,15 @@ export default function Customers() {
       <Divider />
 
       {customers
-        .filter((customer) =>
-          customer.email?.toLowerCase().includes(value.toLowerCase()
-        ) || customer.name?.toLowerCase().includes(value.toLocaleLowerCase()))
+        .filter(
+          (customer) =>
+            customer.email?.toLowerCase().includes(value.toLowerCase()) ||
+            customer.name?.toLowerCase().includes(value.toLowerCase()) ||
+            JSON.parse(customer.metadata.students).some((student) => {
+              const studentName = student.toLowerCase();
+              return studentName.includes(value.toLowerCase());
+            })
+        )
         .map((customer) => (
           <CustomerComponent customer={customer} key={customer.id} />
         ))}
