@@ -40,7 +40,7 @@ export default function Products() {
   useEffect(() => {
     setProductsLoading(true);
     setProducts([]);
-    axios({ url: `/api/products`, method: "GET" })
+    axios({ url: `/api/products`, method: "GET", params: {limit: 100} })
       .then((products) => {
         setProductsLoading(false);
         setProducts(products.data.data);

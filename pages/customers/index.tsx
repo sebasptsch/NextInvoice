@@ -32,7 +32,7 @@ export default function Customers() {
   useEffect(() => {
     setCustomersLoading(true);
     setCustomers([]);
-    axios({ url: `/api/customers`, method: "GET" })
+    axios({ url: `/api/customers`, method: "GET", params: {limit: 100} })
       .then((customers) => {
         setCustomersLoading(false);
         setCustomers(customers.data.data);
