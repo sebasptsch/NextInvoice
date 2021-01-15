@@ -26,10 +26,10 @@ const options: InitOptions = {
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
         if (
-          credentials.username ===
-            (process.env.USER_USERNAME || process.env.ADMIN_USERNAME) &&
-          credentials.password ===
-            (process.env.USER_PASSWORD || process.env.ADMIN_PASSWORD)
+          credentials.username === process.env.USER_USERNAME ||
+          (credentials.username === process.env.ADMIN_USERNAME &&
+            credentials.password === process.env.USER_PASSWORD) ||
+          credentials.password === process.env.ADMIN_PASSWORD
         ) {
           const user = { id: 1, name: "Admin" };
           return Promise.resolve(user);
