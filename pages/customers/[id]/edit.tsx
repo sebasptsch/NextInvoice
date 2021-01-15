@@ -109,7 +109,6 @@ export default function CustomerCreation({
           <Input
             name="name"
             placeholder="name"
-            isRequired
             ref={register}
             defaultValue={customer?.name}
           />
