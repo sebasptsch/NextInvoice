@@ -31,11 +31,11 @@ import Stripe from "stripe";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
 import { useEffect, useState } from "react";
-import { POINT_CONVERSION_COMPRESSED } from "constants";
 import { fetcher, useCustomer, usePrices } from "../../../helpers/helpers";
 import useSWR from "swr";
+import Products from "../../products/new";
 
-export default function CustomerCreation(props) {
+export default function CustomerCreation() {
   // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -48,6 +48,7 @@ export default function CustomerCreation(props) {
 
   // Hooks
   const router = useRouter();
+  if (!router.query.id) return null;
   const { customer, isLoading } = useCustomer(router.query.id);
   const { prices } = usePrices();
 
@@ -174,7 +175,9 @@ export default function CustomerCreation(props) {
           <Input
             name="students"
             placeholder="Enter student names seperated by a comma (,)"
-            defaultValue={JSON.parse(customer?.metadata.students).join(",")}
+            defaultValue={JSON.parse(
+              customer?.metadata?.students ? customer?.metadata.students : null
+            ).join(",")}
             ref={register({
               required: "This is required",
               validate: (value) => value.split(",").length > 0,
@@ -187,7 +190,9 @@ export default function CustomerCreation(props) {
           {prices?.data
             ?.sort((price) => (price.active ? -1 : 1))
             ?.map((price, index) => {
-              let classes = JSON.parse(customer?.metadata.classes);
+              let classes = JSON.parse(
+                customer?.metadata?.classes ? customer?.metadata.classes : null
+              );
               return (
                 <Box
                   borderRadius="10px"
@@ -238,4 +243,17 @@ export default function CustomerCreation(props) {
       </form>
     </Layout>
   );
+}
+
+export async function getStaticProps(context) {
+  const { id } = context.params;
+  const customer = await fetcher(`/api/customers/${id}`);
+  const prices = await fetcher(`/api/prices`);
+
+  return {
+    props: {
+      prices: prices.data,
+      customer,
+    },
+  };
 }

@@ -37,10 +37,11 @@ import { useCustomer, usePrices } from "../../../helpers/helpers";
 export default function CustomerPage() {
   // Hooks
   const router = useRouter();
+  if (!router.query.id) return null;
   const { customer, isLoading } = useCustomer(router.query.id);
   const { prices } = usePrices();
 
-  if (isLoading || !router.query.id) return <Spinner />;
+  if (isLoading) return <Spinner />;
   return (
     <Layout>
       <Head>

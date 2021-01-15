@@ -34,6 +34,7 @@ import useSWR from "swr";
 
 export default function InvoicePage() {
   const router = useRouter();
+  if (!router.query.id) return null;
   const { invoice, isLoading, isError, mutate } = useInvoice(router.query.id);
   // Hooks
   const toast = useToast();

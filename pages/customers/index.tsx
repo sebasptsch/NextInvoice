@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Divider,
   Flex,
@@ -18,6 +19,7 @@ import { useCustomers } from "../../helpers/helpers";
 
 export default function Customers() {
   const router = useRouter();
+
   const [value, setValue] = useState("");
   const { customers, isLoading } = useCustomers();
   const handleChange = (event) => setValue(event.target.value);
@@ -57,7 +59,9 @@ export default function Customers() {
             })
         )
         ?.map((customer) => (
-          <CustomerComponent customer={customer} key={customer.id} />
+          <Box key={customer.id}>
+            <CustomerComponent customer={customer} />
+          </Box>
         ))}
     </Layout>
   );

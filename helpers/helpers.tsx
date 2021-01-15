@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import Stripe from "stripe";
 import useSWR from "swr";
 
 export const fetcher = (url) =>

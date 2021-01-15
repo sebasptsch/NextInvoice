@@ -42,6 +42,7 @@ export default function NewInvoiceItem() {
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const toast = useToast();
   const router = useRouter();
+  if (!router.query.id) return null;
   const { prices } = usePrices();
   const { invoiceItem, isLoading, isError, mutate } = useInvoiceItem(
     router.query.id

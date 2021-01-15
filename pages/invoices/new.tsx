@@ -43,35 +43,20 @@ import Stripe from "stripe";
 import { array } from "yup/lib/locale";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
+import { useCustomers, usePrices } from "../../helpers/helpers";
 
 export default function NewInvoice() {
   // Hooks
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
+
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  if (!router.query.id) return null;
+  const { customers }: { customers: Array<Stripe.Customer> } = useCustomers();
+  const { prices }: { prices: Array<Stripe.Price> } = usePrices();
+  const [customer, setCustomer] = useState(customers[0].id);
   const [invoiceItems, setInvoiceItems] = useState<Array<any>>([]);
-  const [customer, setCustomer] = useState<string>();
-  const [prices, setPrices] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`/api/customers`, {
-        params: { limit: 100 },
-      })
-      .then((response) => {
-        setCustomers(response.data.data);
-        if (!customer) {
-          setCustomer(response.data.data[0].id);
-        }
-      })
-      .catch((error) => ErrorHandler(error, toast));
-    axios
-      .get(`/api/prices`)
-      .then((response) => setPrices(response.data.data))
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
-
   // Component Functions
   const handleInvoiceData = (values) => {
     let { collection_method, days_until_due, description } = values;

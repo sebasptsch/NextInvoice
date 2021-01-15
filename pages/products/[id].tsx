@@ -46,6 +46,7 @@ import { usePrices, useProduct } from "../../helpers/helpers";
 export default function Products() {
   // Hooks
   const router = useRouter();
+  if (!router.query.id) return null;
   const { handleSubmit, errors, register, formState } = useForm();
   const { product, isLoading } = useProduct(router.query.id);
   const { prices } = usePrices();

@@ -33,7 +33,6 @@ import { useProducts } from "../../helpers/helpers";
 
 export default function Products() {
   // Hooks
-  const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("");
   const { products, isLoading } = useProducts();

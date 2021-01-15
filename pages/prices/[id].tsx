@@ -32,6 +32,7 @@ export default function PriceView() {
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
+  if (!router.query.id) return null;
   const { price, isError, isLoading } = usePrice(router.query.id);
   // Component Functions
   function submitHandler(values) {
