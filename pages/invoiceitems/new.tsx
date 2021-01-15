@@ -41,7 +41,7 @@ export default function NewInvoiceItem(props) {
   const { data: prices } = useSWR(`/api/prices`, listFetcher, {
     initialData: props.prices,
   });
-  const { data: customers } = useSWR(`/api/customers?limit=100`, listFetcher, {
+  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
     initialData: props.customers,
   });
   const { handleSubmit, errors, register, formState, watch } = useForm();

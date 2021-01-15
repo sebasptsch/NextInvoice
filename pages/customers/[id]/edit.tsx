@@ -194,7 +194,7 @@ export default function CustomerCreation(props) {
         </FormControl>
         <FormControl>
           <FormLabel>Classes</FormLabel>
-          {prices?.data
+          {prices
             ?.sort((price) => (price.active ? -1 : 1))
             ?.map((price, index) => {
               let classes = JSON.parse(
