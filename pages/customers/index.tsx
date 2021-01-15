@@ -69,7 +69,7 @@ export default function Customers() {
       {customers
         .filter((customer) =>
           customer.email?.toLowerCase().includes(value.toLowerCase()
-        ))
+        ) || customer.name?.toLowerCase().includes(value.toLocaleLowerCase()))
         .map((customer) => (
           <CustomerComponent customer={customer} key={customer.id} />
         ))}

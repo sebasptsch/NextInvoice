@@ -42,7 +42,7 @@ export default function CustomerComponent({
             href="/customers/[id]"
             as={`/customers/${customer.id}`}
           >
-            {customer?.email}
+            {customer.name.length() > 0 ? customer.name : customer?.email}
           </NextChakraLink>
         </Center>
         <Spacer />
