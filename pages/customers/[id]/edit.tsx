@@ -18,6 +18,7 @@ import {
   Spacer,
   Text,
   Badge,
+  Spinner,
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useForm } from "react-hook-form";
@@ -26,16 +27,34 @@ import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "yup-phone";
-import Stripe from "stripe";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
-import { useEffect, useState } from "react";
+import {
+  listFetcher,
+  fetcher,
+  useCustomer,
+  usePrices,
+} from "../../../helpers/helpers";
+import useSWR from "swr";
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
-export default function CustomerCreation({
-  customer,
-}: {
-  customer: Stripe.Customer;
-}) {
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const customer = await stripe.customers.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customer,
+    },
+  };
+}
+
+export default function CustomerCreation(props) {
   // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -48,23 +67,27 @@ export default function CustomerCreation({
 
   // Hooks
   const router = useRouter();
-  const [prices, setPrices] = useState<Array<Stripe.Price>>();
+  // const { prices } = usePrices();
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customer, mutate } = useSWR(
+    `/api/customers/${router.query.id}`,
+    fetcher,
+    { initialData: props.customer }
+  );
+
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
   });
   const toast = useToast();
-  useEffect(() => {
-    axios.get(`/api/prices`).then((response) => {
-      setPrices(response.data.data);
-    });
-  }, []);
 
   // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students, classes } = values;
-    students = students.split(",").map((el) => el.trim());
-    classes = classes.filter((classitem) => classitem.amount > 0);
+    students = students?.split(",")?.map((el) => el.trim());
+    classes = classes?.filter((classitem) => classitem.amount > 0);
     const metadata = {
       students: JSON.stringify(students),
       classes: JSON.stringify(classes),
@@ -86,9 +109,8 @@ export default function CustomerCreation({
           toast({
             title: "Success",
             status: "success",
-            description: "Redirecting...",
           });
-          router.push(`/customers/[id]`, `/customers/${res.data.id}`);
+          mutate();
         }
       })
       .catch((error) => ErrorHandler(error, toast));
@@ -131,21 +153,6 @@ export default function CustomerCreation({
 
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
-
-        {/* <FormControl isInvalid={errors.phone}>
-            <FormLabel htmlFor="phone">Address</FormLabel>
-            <Input
-              name="address"
-              isRequired
-              placeholder="address"
-              type="address"
-              ref={register({ required: "Required." })}
-            />
-            <FormErrorMessage>
-              {errors.address && errors.address.message}
-            </FormErrorMessage>
-          </FormControl> */}
-
         <FormControl isInvalid={errors.phone}>
           <FormLabel htmlFor="phone">Phone</FormLabel>
 
@@ -175,7 +182,9 @@ export default function CustomerCreation({
           <Input
             name="students"
             placeholder="Enter student names seperated by a comma (,)"
-            defaultValue={JSON.parse(customer.metadata.students).join(",")}
+            defaultValue={JSON.parse(
+              customer?.metadata?.students ? customer?.metadata.students : null
+            ).join(",")}
             ref={register({
               required: "This is required",
               validate: (value) => value.split(",").length > 0,
@@ -185,10 +194,12 @@ export default function CustomerCreation({
         </FormControl>
         <FormControl>
           <FormLabel>Classes</FormLabel>
-          {prices
-            ?.sort(price => (price.active ? -1 : 1))
+          {prices?.data
+            ?.sort((price) => (price.active ? -1 : 1))
             ?.map((price, index) => {
-              let classes = JSON.parse(customer.metadata.classes);
+              let classes = JSON.parse(
+                customer?.metadata?.classes ? customer?.metadata.classes : null
+              );
               return (
                 <Box
                   borderRadius="10px"
@@ -222,9 +233,12 @@ export default function CustomerCreation({
                       </NumberInputStepper>
                     </NumberInput>
                     <Spacer />
-                    <Text><Badge colorScheme={price.active ? "green" : "red"}>
-                      {price.active ? "Enabled" : "Disabled"}
-                    </Badge>{price.nickname}</Text>
+                    <Text>
+                      <Badge colorScheme={price.active ? "green" : "red"}>
+                        {price.active ? "Enabled" : "Disabled"}
+                      </Badge>
+                      {price.nickname}
+                    </Text>
                   </Flex>
                 </Box>
               );
@@ -234,18 +248,6 @@ export default function CustomerCreation({
           Save
         </Button>
       </form>
-    </Layout >
+    </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const customer = await stripe.customers.retrieve(params.id);
-  return {
-    props: {
-      customer,
-    },
-  };
 }

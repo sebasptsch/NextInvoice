@@ -31,24 +31,35 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
+import { listFetcher, useProducts } from "../../helpers/helpers";
+import useSWR from "swr";
 
-export default function PriceView() {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps() {
+  const products = await stripe.products.list();
+  return {
+    props: {
+      products: products.data,
+    },
+  };
+}
+
+export default function PriceView(props) {
   // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("0");
-  const [products, setProducts] = useState<Array<Stripe.Product>>([]);
-
+  const { data: products } = useSWR(`/api/products`, listFetcher, {
+    initialData: props.products,
+  });
   // Component Functions
   let prevProduct;
   const format = (val) => `$` + val;
   const parse = (val) => val.replace(/^\$/, "");
-  useEffect(() => {
-    axios.get(`/api/products`).then((response) => {
-      setProducts(response.data.data);
-    });
-  }, []);
   function submitHandler(values) {
     const { nickname, unit_amount, product, active } = values;
     return axios({
@@ -56,7 +67,7 @@ export default function PriceView() {
       url: `/api/prices`,
       data: {
         nickname:
-          products.find((productobj) => productobj.id === product).name +
+          products?.find((productobj) => productobj.id === product).name +
           " - " +
           nickname,
 
@@ -137,7 +148,7 @@ export default function PriceView() {
                   name="product"
                   defaultValue={router.query?.product}
                 >
-                  {products.map((product) => (
+                  {products?.map((product) => (
                     <option value={product.id} key={product.id}>
                       {product.name}
                     </option>

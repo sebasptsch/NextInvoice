@@ -40,38 +40,43 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
+import useSWR from "swr";
 import { array } from "yup/lib/locale";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
+import { listFetcher } from "../../helpers/helpers";
 
-export default function NewInvoice() {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps() {
+  const customers = await stripe.customers.list({ limit: 100 });
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customers: customers.data,
+    },
+  };
+}
+
+export default function NewInvoice(props) {
   // Hooks
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
+
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customers } = useSWR(`/api/customers?limit=100`, listFetcher, {
+    initialData: props.customers,
+  });
+  const [customer, setCustomer] = useState(customers[0].id);
   const [invoiceItems, setInvoiceItems] = useState<Array<any>>([]);
-  const [customer, setCustomer] = useState<string>();
-  const [prices, setPrices] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`/api/customers`, {
-        params: { limit: 100 },
-      })
-      .then((response) => {
-        setCustomers(response.data.data);
-        if (!customer) {
-          setCustomer(response.data.data[0].id);
-        }
-      })
-      .catch((error) => ErrorHandler(error, toast));
-    axios
-      .get(`/api/prices`)
-      .then((response) => setPrices(response.data.data))
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
-
   // Component Functions
   const handleInvoiceData = (values) => {
     let { collection_method, days_until_due, description } = values;
@@ -93,7 +98,10 @@ export default function NewInvoice() {
         })
       );
     }
-
+    const tax_rates =
+      process.env.NODE_ENV === "production"
+        ? { default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"] }
+        : null;
     return new Promise<void>((resolve) =>
       addItems().then(() => {
         axios
@@ -102,7 +110,7 @@ export default function NewInvoice() {
             collection_method,
             days_until_due,
             auto_advance: true,
-            default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"],
+            ...tax_rates,
           })
           .then((response) => {
             // console.log((index + 1) / filteredcustomers?.length);

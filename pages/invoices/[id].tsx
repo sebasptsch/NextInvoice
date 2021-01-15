@@ -19,6 +19,7 @@ import {
   LinkBox,
   ButtonGroup,
   Stack,
+  Spinner,
 } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
 import Stripe from "stripe";
@@ -28,11 +29,32 @@ import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
 import { useRouter } from "next/router";
+import { fetcher, listFetcher, useInvoice } from "../../helpers/helpers";
+import useSWR from "swr";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
-export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const invoice = await stripe.invoices.retrieve(id);
+  return {
+    props: {
+      invoice,
+    },
+  };
+}
+
+export default function InvoicePage(props) {
+  const router = useRouter();
+  const { data: invoice, mutate } = useSWR(
+    `/api/invoices/${router.query.id}`,
+    fetcher,
+    { initialData: props.invoice }
+  );
   // Hooks
   const toast = useToast();
-  const router = useRouter();
+
   return (
     <Layout>
       <Head>
@@ -40,7 +62,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
       </Head>
       <Flex>
         <Heading size="xl" p={1}>
-          ${invoice?.amount_due / 100} <Badge>{invoice?.status}</Badge>
+          ${invoice.amount_due / 100} <Badge>{invoice.status}</Badge>
         </Heading>
         <Spacer />
         <Center>
@@ -61,7 +83,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           m={2}
           key="download"
           onClick={() => {
-            router.push(invoice?.invoice_pdf);
+            router.push(invoice.invoice_pdf);
           }}
           hidden={invoice.status === "draft"}
         >
@@ -88,7 +110,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
                   title: "Sent!",
                   status: "success",
                 });
-                router.reload();
+                mutate();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -101,13 +123,13 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           hidden={invoice.status !== ("open" || "uncollectible")}
           onClick={() => {
             axios
-              .post(`/api/invoices/${invoice?.id}/void`)
+              .post(`/api/invoices/${invoice.id}/void`)
               .then((response) => {
                 toast({
                   title: "Success",
                   status: "success",
                 });
-                router.reload();
+                mutate();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -127,7 +149,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
 
                   status: "success",
                 });
-                router.reload();
+                mutate();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -136,26 +158,27 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         </Button>
 
         <Button
-                key="pay"
-                hidden={invoice.status === "paid"}
-                onClick={() => {
-                  axios
-                    .post(`/api/invoices/${invoice?.id}/pay`, {
-                      paid_out_of_band: true
-                    })
-                    .then((response) => {
-                      toast({
-                        title: "Success",
+          key="pay"
+          m={2}
+          hidden={invoice.status === "paid"}
+          onClick={() => {
+            axios
+              .post(`/api/invoices/${invoice.id}/pay`, {
+                paid_out_of_band: true,
+              })
+              .then((response) => {
+                toast({
+                  title: "Success",
 
-                        status: "success",
-                      });
-                      router.reload();
-                    })
-                    .catch((error) => ErrorHandler(error, toast));
-                }}
-              >
-                Pay (Out of Hand)
-              </Button>
+                  status: "success",
+                });
+                mutate();
+              })
+              .catch((error) => ErrorHandler(error, toast));
+          }}
+        >
+          Pay (Out of Hand)
+        </Button>
 
         <Button
           m={2}
@@ -163,13 +186,13 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
           key="Delete"
           onClick={() => {
             axios
-              .delete(`/api/invoices/${invoice?.id}`)
+              .delete(`/api/invoices/${invoice.id}`)
               .then((response) => {
                 toast({
                   title: "Success",
                   status: "success",
                 });
-                router.reload();
+                mutate();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -188,7 +211,7 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
                   title: "Success",
                   status: "success",
                 });
-                router.reload();
+                mutate();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -221,11 +244,11 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
         <Tbody>
           <Tr>
             <Td>Amount</Td>
-            <Td>${invoice?.amount_due / 100}</Td>
+            <Td>${invoice.amount_due / 100}</Td>
           </Tr>
           <Tr>
             <Td>Status</Td>
-            <Td>{invoice?.status}</Td>
+            <Td>{invoice.status}</Td>
           </Tr>
         </Tbody>
       </Table>
@@ -234,17 +257,4 @@ export default function InvoicePage({ invoice }: { invoice: Stripe.Invoice }) {
       <InvoiceItemList invoice={invoice} />
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const invoice = await stripe.invoices.retrieve(params.id);
-
-  return {
-    props: {
-      invoice,
-    },
-  };
 }

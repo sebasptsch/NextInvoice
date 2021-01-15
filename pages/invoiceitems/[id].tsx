@@ -35,46 +35,64 @@ import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
 import Head from "next/head";
+import { fetcher, listFetcher, useInvoiceItem } from "../../helpers/helpers";
+import useSWR from "swr";
 
-export default function NewInvoiceItem({
-  invoiceItem,
-}: {
-  invoiceItem: Stripe.InvoiceItem;
-}) {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const invoiceItem = await stripe.invoiceItems.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      invoiceItem,
+    },
+  };
+}
+
+export default function NewInvoiceItem(props) {
   // Hooks
-  const [prices, setPrices] = useState<Array<Stripe.Price>>([]);
-  const { handleSubmit, errors, register, formState, watch } = useForm();
+  const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  useEffect(() => {
-    axios
-      .get(`/api/prices`)
-      .then((response) => {
-        setPrices(response.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: invoiceItem, mutate } = useSWR(
+    `/api/invoiceitems/${router.query.id}`,
+    fetcher,
+    {
+      initialData: props.invoiceItem,
+    }
+  );
 
   // Component Functions
   const handleData = (values) => {
     let { price, quantity } = values;
     return axios
-      .post(`/api/invoiceitems/${invoiceItem.id}`, {
+      .post(`/api/invoiceitems/${router.query.id}`, {
         price,
         quantity,
       })
       .then((response) => {
         // console.log(response.data);
         // router.push(`/customer/[id]`, `/customers/${response.data.customer}`);
-        router.reload();
         toast({ title: "Success" });
+        mutate();
       })
       .catch((error) => ErrorHandler(error, toast));
   };
 
   return (
     <Layout>
-      <Head>Edit Invoice Item</Head>
+      <Head>
+        <title>Edit Invoice Item</title>
+      </Head>
       <Heading>Edit Invoice Item</Heading>
       <br />
       <Divider />
@@ -82,15 +100,15 @@ export default function NewInvoiceItem({
       <form onSubmit={handleSubmit(handleData)}>
         <FormControl isInvalid={errors.price}>
           <FormLabel htmlFor="customer">What price should it use?</FormLabel>
-          {prices.length > 0 ? (
+          {prices?.length > 0 ? (
             <Select
               name="price"
               ref={register({ required: "This is required" })}
               defaultValue={invoiceItem.price.id}
             >
               {prices
-                .filter((price) => price.active)
-                .map((price) => (
+                ?.filter((price) => price.active)
+                ?.map((price) => (
                   <option key={price.id} value={price.id}>
                     {price.nickname}
                   </option>
@@ -120,16 +138,4 @@ export default function NewInvoiceItem({
       </form>
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const invoiceItem = await stripe.invoiceItems.retrieve(params.id);
-  return {
-    props: {
-      invoiceItem,
-    },
-  };
 }

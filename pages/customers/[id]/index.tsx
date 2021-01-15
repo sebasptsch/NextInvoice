@@ -30,41 +30,50 @@ import InvoiceList from "../../../components/InvoiceList";
 import Head from "next/head";
 import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import ErrorHandler from "../../../components/ErrorHandler";
-import { AddIcon, EditIcon } from "@chakra-ui/icons";
 import BalanceModal from "../../../components/BalanceModal";
 
-export default function CustomerPage({
-  customer,
-}: {
-  customer: Stripe.Customer;
-}) {
+import { fetcher, listFetcher } from "../../../helpers/helpers";
+import useSWR from "swr";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const customer = await stripe.customers.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customer,
+    },
+  };
+}
+
+export default function CustomerPage(props) {
   // Hooks
-  const toast = useToast();
   const router = useRouter();
-  const [prices, setPrices] = useState<Array<Stripe.Price>>([]);
-  useEffect(() => {
-    axios
-      .get(`/api/prices`)
-      .then((response) => {
-        setPrices(response.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customer } = useSWR(
+    `/api/customers/${router.query.id}`,
+    fetcher,
+    { initialData: props.customer }
+  );
 
   return (
     <Layout>
       <Head>
         <title>View Customer</title>
       </Head>
-      <Heading as="a" href={`mailto: ${customer.email}`}>{customer.email}</Heading>
-      <Text color="gray.500" >
-        {customer?.name}
-      </Text>
+      <Heading as="a" href={`mailto: ${customer?.email}`}>
+        {customer?.email}
+      </Heading>
+      <Text color="gray.500">{customer?.name}</Text>
       <br />
-      <NextChakraLink color="gray.500" href={`tel: ${customer.phone}`}>
+      <NextChakraLink color="gray.500" href={`tel: ${customer?.phone}`}>
         {customer?.phone}
       </NextChakraLink>
       <br />
@@ -74,38 +83,38 @@ export default function CustomerPage({
           onClick={() =>
             router.push(
               `/customers/[id]/edit`,
-              `/customers/${customer.id}/edit`
+              `/customers/${customer?.id}/edit`
             )
           }
         >
           Edit
         </Button>
-        <Button>Delete</Button>
+        {/* <Button>Delete</Button> */}
       </ButtonGroup>
       <br />
       <StatGroup>
         <Stat>
           <StatLabel>Balance</StatLabel>
           <StatNumber>
-            ${-customer.balance / 100} <BalanceModal customer={customer} />
+            ${-customer?.balance / 100} <BalanceModal customer={customer} />
           </StatNumber>
           <StatHelpText></StatHelpText>
         </Stat>
         <Stat>
           <StatLabel>Customer Since</StatLabel>
           <StatNumber>
-            {new Date(customer.created * 1000).toDateString()}
+            {new Date(customer?.created * 1000).toDateString()}
           </StatNumber>
           <StatHelpText></StatHelpText>
         </Stat>
       </StatGroup>
-      {customer.description || customer.description?.length > 0 ? (
+      {customer?.description || customer?.description?.length > 0 ? (
         <>
           <Heading marginTop="1em" marginBottom="0.5em" size="lg">
             Description
           </Heading>
           <Divider marginBottom={2} />
-          <Text>{customer.description}</Text>
+          <Text>{customer?.description}</Text>
           <br />
         </>
       ) : null}
@@ -116,16 +125,19 @@ export default function CustomerPage({
         </Heading>
         <Divider marginBottom={2} />
         <UnorderedList>
-          {JSON.parse(customer.metadata.classes)?.map((customerclass) => {
-            return (
-              <ListItem key={customerclass.priceid}>
-                {customerclass?.amount +
-                  "x " +
-                  prices?.find((price) => price.id === customerclass.priceid)
-                    ?.nickname}
-              </ListItem>
-            );
-          })}
+          {customer?.metadata?.classes
+            ? JSON.parse(customer?.metadata.classes)?.map((customerclass) => {
+                return (
+                  <ListItem key={customerclass.priceid}>
+                    {customerclass?.amount +
+                      "x " +
+                      prices?.find(
+                        (price) => price.id === customerclass.priceid
+                      )?.nickname}
+                  </ListItem>
+                );
+              })
+            : null}
         </UnorderedList>
       </Box>
       <Box w="100%">
@@ -134,26 +146,16 @@ export default function CustomerPage({
         </Heading>
         <Divider marginBottom={2} />
         <UnorderedList>
-          {JSON.parse(customer.metadata?.students).map((value) => (
-            <ListItem key={value}>{value}</ListItem>
-          ))}
+          {customer?.metadata.students
+            ? JSON.parse(customer?.metadata?.students).map((value) => (
+                <ListItem key={value}>{value}</ListItem>
+              ))
+            : null}
         </UnorderedList>
       </Box>
 
       <br />
-      <InvoiceList customer={customer.id} />
+      <InvoiceList customer={customer?.id} />
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const customer = await stripe.customers.retrieve(params.id);
-  return {
-    props: {
-      customer,
-    },
-  };
 }

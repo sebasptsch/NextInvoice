@@ -1,5 +1,6 @@
 import {
   Heading,
+  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -11,15 +12,28 @@ import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Stripe from "stripe";
+import useSWR from "swr";
 import ErrorHandler from "../components/ErrorHandler";
 import Layout from "../components/Layout";
+import { listFetcher, useInvoices } from "../helpers/helpers";
 
-export default function Dashboard({
-  invoices,
-}: {
-  invoices: Array<Stripe.Invoice>;
-}) {
-  const toast = useToast();
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps() {
+  const invoices = await stripe.invoices.list({ limit: 100, status: "open" });
+  return {
+    props: {
+      invoices: invoices.data,
+    },
+  };
+}
+
+export default function Dashboard(props) {
+  const { data: invoices } = useSWR(`/api/invoices?status=open`, listFetcher, {
+    initialData: props.invoices,
+  });
   return (
     <Layout>
       <Head>
@@ -44,16 +58,4 @@ export default function Dashboard({
       <br />
     </Layout>
   );
-}
-
-export async function getServerSideProps({ params }) {
-  const stripe = new Stripe(process.env.STRIPE_KEY, {
-    apiVersion: "2020-08-27",
-  });
-  const invoices = await stripe.invoices.list({ status: "open" });
-  return {
-    props: {
-      invoices: invoices.data,
-    },
-  };
 }

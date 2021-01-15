@@ -27,26 +27,15 @@ import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../components/ErrorHandler";
 import Layout from "../components/Layout";
+import { useCustomers } from "../helpers/helpers";
 
 export default function LessonInvoice() {
-  const [customers, setCustomers] = useState<Array<Stripe.Customer>>();
   const [progress, setProgress] = useState<number>(0);
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const router = useRouter();
   const toast = useToast();
   const { handleSubmit, errors, register, formState } = useForm();
-  useEffect(() => {
-    axios
-      .get(`/api/customers`, {
-        params: {
-          limit: 100,
-        },
-      })
-      .then((response) => {
-        setCustomers(response.data.data);
-      })
-      .catch((error) => ErrorHandler(error, toast));
-  }, []);
+  const { customers } = useCustomers();
 
   function onSubmit(values) {
     let { collection_method, days_until_due, weeks_in_term } = values;
