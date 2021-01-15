@@ -27,15 +27,34 @@ import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "yup-phone";
-import Stripe from "stripe";
 import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
-import { useEffect, useState } from "react";
-import { fetcher, useCustomer, usePrices } from "../../../helpers/helpers";
+import {
+  listFetcher,
+  fetcher,
+  useCustomer,
+  usePrices,
+} from "../../../helpers/helpers";
 import useSWR from "swr";
-import Products from "../../products/new";
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
-export default function CustomerCreation() {
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const customer = await stripe.customers.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customer,
+    },
+  };
+}
+
+export default function CustomerCreation(props) {
   // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -48,9 +67,15 @@ export default function CustomerCreation() {
 
   // Hooks
   const router = useRouter();
-  if (!router.query.id) return null;
-  const { customer, isLoading } = useCustomer(router.query.id);
-  const { prices } = usePrices();
+  // const { prices } = usePrices();
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customer, mutate } = useSWR(
+    `/api/customers/${router.query.id}`,
+    fetcher,
+    { initialData: props.customer }
+  );
 
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
@@ -61,8 +86,8 @@ export default function CustomerCreation() {
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students, classes } = values;
-    students = students.split(",").map((el) => el.trim());
-    classes = classes.filter((classitem) => classitem.amount > 0);
+    students = students?.split(",")?.map((el) => el.trim());
+    classes = classes?.filter((classitem) => classitem.amount > 0);
     const metadata = {
       students: JSON.stringify(students),
       classes: JSON.stringify(classes),
@@ -86,13 +111,11 @@ export default function CustomerCreation() {
             status: "success",
             description: "Redirecting...",
           });
-          router.push(`/customers/[id]`, `/customers/${res.data.id}`);
+          mutate();
         }
       })
       .catch((error) => ErrorHandler(error, toast));
   }
-
-  if (isLoading) return <Spinner />;
 
   return (
     <Layout>
@@ -111,7 +134,7 @@ export default function CustomerCreation() {
             name="name"
             placeholder="name"
             ref={register}
-            defaultValue={customer?.data?.name}
+            defaultValue={customer?.name}
           />
 
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -126,26 +149,11 @@ export default function CustomerCreation() {
             isRequired
             type="email"
             ref={register}
-            defaultValue={customer?.data?.email}
+            defaultValue={customer?.email}
           />
 
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
-
-        {/* <FormControl isInvalid={errors.phone}>
-            <FormLabel htmlFor="phone">Address</FormLabel>
-            <Input
-              name="address"
-              isRequired
-              placeholder="address"
-              type="address"
-              ref={register({ required: "Required." })}
-            />
-            <FormErrorMessage>
-              {errors.address && errors.address.message}
-            </FormErrorMessage>
-          </FormControl> */}
-
         <FormControl isInvalid={errors.phone}>
           <FormLabel htmlFor="phone">Phone</FormLabel>
 
@@ -154,7 +162,7 @@ export default function CustomerCreation() {
             placeholder="phone"
             type="phone"
             ref={register}
-            defaultValue={customer?.data?.phone}
+            defaultValue={customer?.phone}
           />
 
           <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
@@ -166,7 +174,7 @@ export default function CustomerCreation() {
             name="description"
             placeholder="description"
             ref={register}
-            defaultValue={customer?.data?.description}
+            defaultValue={customer?.description}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
@@ -243,17 +251,4 @@ export default function CustomerCreation() {
       </form>
     </Layout>
   );
-}
-
-export async function getStaticProps(context) {
-  const { id } = context.params;
-  const customer = await fetcher(`/api/customers/${id}`);
-  const prices = await fetcher(`/api/prices`);
-
-  return {
-    props: {
-      prices: prices.data,
-      customer,
-    },
-  };
 }

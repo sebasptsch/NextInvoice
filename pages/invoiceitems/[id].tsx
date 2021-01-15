@@ -35,18 +35,42 @@ import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
 import Head from "next/head";
-import { useInvoiceItem, usePrices } from "../../helpers/helpers";
+import { fetcher, listFetcher, useInvoiceItem } from "../../helpers/helpers";
+import useSWR from "swr";
 
-export default function NewInvoiceItem() {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const invoiceItem = await stripe.invoiceItems.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      invoiceItem,
+    },
+  };
+}
+
+export default function NewInvoiceItem(props) {
   // Hooks
-  const { handleSubmit, errors, register, formState, watch } = useForm();
+  const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  if (!router.query.id) return null;
-  const { prices } = usePrices();
-  const { invoiceItem, isLoading, isError, mutate } = useInvoiceItem(
-    router.query.id
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: invoiceItem, mutate } = useSWR(
+    `/api/invoiceitems/${router.query.id}`,
+    fetcher,
+    {
+      initialData: props.invoiceItem,
+    }
   );
+
   // Component Functions
   const handleData = (values) => {
     let { price, quantity } = values;
@@ -63,10 +87,6 @@ export default function NewInvoiceItem() {
       })
       .catch((error) => ErrorHandler(error, toast));
   };
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   return (
     <Layout>
@@ -87,8 +107,8 @@ export default function NewInvoiceItem() {
               defaultValue={invoiceItem.price.id}
             >
               {prices
-                .filter((price) => price.active)
-                .map((price) => (
+                ?.filter((price) => price.active)
+                ?.map((price) => (
                   <option key={price.id} value={price.id}>
                     {price.nickname}
                   </option>

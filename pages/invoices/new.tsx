@@ -40,21 +40,41 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
+import useSWR from "swr";
 import { array } from "yup/lib/locale";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
-import { useCustomers, usePrices } from "../../helpers/helpers";
+import { listFetcher } from "../../helpers/helpers";
 
-export default function NewInvoice() {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps() {
+  const customers = await stripe.customers.list({ limit: 100 });
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customers: customers.data,
+    },
+  };
+}
+
+export default function NewInvoice(props) {
   // Hooks
 
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
-  if (!router.query.id) return null;
-  const { customers }: { customers: Array<Stripe.Customer> } = useCustomers();
-  const { prices }: { prices: Array<Stripe.Price> } = usePrices();
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
+    initialData: props.customers,
+  });
   const [customer, setCustomer] = useState(customers[0].id);
   const [invoiceItems, setInvoiceItems] = useState<Array<any>>([]);
   // Component Functions

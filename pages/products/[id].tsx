@@ -41,15 +41,41 @@ import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
-import { usePrices, useProduct } from "../../helpers/helpers";
+import {
+  fetcher,
+  listFetcher,
+  usePrices,
+  useProduct,
+} from "../../helpers/helpers";
+import useSWR from "swr";
 
-export default function Products() {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const product = await stripe.products.retrieve(id);
+  const prices = await stripe.prices.list();
+  return {
+    props: {
+      product,
+      prices: prices.data,
+    },
+  };
+}
+
+export default function Products(props) {
   // Hooks
   const router = useRouter();
-  if (!router.query.id) return null;
+
   const { handleSubmit, errors, register, formState } = useForm();
-  const { product, isLoading } = useProduct(router.query.id);
-  const { prices } = usePrices();
+  const { data: product } = useSWR(`/api/prices`, fetcher, {
+    initialData: props.product,
+  });
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
   const toast = useToast();
 
   // Component Functions
@@ -75,8 +101,6 @@ export default function Products() {
       })
       .catch((error) => ErrorHandler(error, toast));
   };
-
-  if (isLoading) return <Spinner />;
 
   return (
     <Layout>

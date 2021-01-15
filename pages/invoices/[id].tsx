@@ -29,19 +29,32 @@ import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
 import { useRouter } from "next/router";
-import { fetcher, useInvoice } from "../../helpers/helpers";
+import { fetcher, listFetcher, useInvoice } from "../../helpers/helpers";
 import useSWR from "swr";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
-export default function InvoicePage() {
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const invoice = await stripe.invoices.retrieve(id);
+  return {
+    props: {
+      invoice,
+    },
+  };
+}
+
+export default function InvoicePage(props) {
   const router = useRouter();
-  if (!router.query.id) return null;
-  const { invoice, isLoading, isError, mutate } = useInvoice(router.query.id);
+  const { data: invoice, mutate } = useSWR(
+    `/api/invoices/${router.query.id}`,
+    fetcher,
+    { initialData: props.invoice }
+  );
   // Hooks
   const toast = useToast();
 
-  if (isLoading) {
-    return <Spinner />;
-  }
   return (
     <Layout>
       <Head>

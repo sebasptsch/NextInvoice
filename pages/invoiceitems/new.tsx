@@ -12,35 +12,48 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
+import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
-import { useCustomers, usePrices } from "../../helpers/helpers";
+import { listFetcher } from "../../helpers/helpers";
 
-export default function NewInvoiceItem() {
-  // Hooks
-  // const [customers, setCustomers] = useState<Array<Stripe.Customer>>([]);
-  const { customers } = useCustomers();
-  const { prices } = usePrices();
+export async function getServerSideProps() {
+  const customers = await listFetcher(`/api/customers`);
+  const prices = await listFetcher(`/api/prices`);
+
+  return {
+    props: {
+      customers,
+      prices,
+    },
+  };
+}
+
+export default function NewInvoiceItem(props) {
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
+    initialData: props.customers,
+  });
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const toast = useToast();
   const router = useRouter();
-  if (!router.query.id) return null;
 
   // Component Functions
   const handleData = (values) => {
     let { customer, price, quantity } = values;
-
     return axios
       .post(`/api/invoiceitems`, {
         customer,
         price,
         quantity,
       })
-      .then((response) => router.back())
+      .then((response) => router.push(`/invoiceitems/${response.data.id}`))
       .catch((error) => ErrorHandler(error, toast));
   };
 
@@ -71,21 +84,21 @@ export default function NewInvoiceItem() {
           <FormLabel htmlFor="price">
             Which Price / Product Would you like to add?
           </FormLabel>
-          {prices?.length > 0 ? (
-            <Select
-              name="price"
-              ref={register({ required: "This is required" })}
-              defaultValue={router.query.price}
-            >
-              {prices
-                ?.filter((price) => price.active)
-                ?.map((price) => (
-                  <option key={price.id} value={price.id}>
-                    {price.nickname}
-                  </option>
-                ))}
-            </Select>
-          ) : null}
+
+          <Select
+            name="price"
+            ref={register({ required: "This is required" })}
+            defaultValue={router.query.price}
+          >
+            {prices
+              ?.filter((price) => price.active)
+              ?.map((price) => (
+                <option key={price.id} value={price.id}>
+                  {price.nickname}
+                </option>
+              ))}
+          </Select>
+
           <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
         </FormControl>
         <FormControl>

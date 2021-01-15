@@ -47,10 +47,6 @@ export default function CustomerCreation() {
       }),
     description: yup.string(),
     phone: yup.string(),
-    // .phone(),
-    // .test("phone-test", "This phone is already in use", (value) => {
-    //   return !customers.some((customer) => customer.phone === value);
-    // }),
     name: yup.string(),
   });
 
@@ -106,15 +102,12 @@ export default function CustomerCreation() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isInvalid={errors.name}>
           <FormLabel htmlFor="name">First name</FormLabel>
-
           <Input name="name" placeholder="name" ref={register} />
-
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
-
           <Input
             name="email"
             placeholder="email"
@@ -122,7 +115,6 @@ export default function CustomerCreation() {
             type="email"
             ref={register}
           />
-
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
 
@@ -141,6 +133,7 @@ export default function CustomerCreation() {
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
+
         <FormControl isInvalid={errors.students}>
           <FormLabel>Children</FormLabel>
           <Input

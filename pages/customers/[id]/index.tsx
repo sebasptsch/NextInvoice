@@ -32,16 +32,37 @@ import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useRouter } from "next/router";
 import BalanceModal from "../../../components/BalanceModal";
 
-import { useCustomer, usePrices } from "../../../helpers/helpers";
+import { fetcher, listFetcher } from "../../../helpers/helpers";
+import useSWR from "swr";
+const stripe = new Stripe(process.env.STRIPE_KEY, {
+  apiVersion: "2020-08-27",
+});
 
-export default function CustomerPage() {
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const customer = await stripe.customers.retrieve(id);
+  const prices = await stripe.prices.list();
+
+  return {
+    props: {
+      prices: prices.data,
+      customer,
+    },
+  };
+}
+
+export default function CustomerPage(props) {
   // Hooks
   const router = useRouter();
-  if (!router.query.id) return null;
-  const { customer, isLoading } = useCustomer(router.query.id);
-  const { prices } = usePrices();
+  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+    initialData: props.prices,
+  });
+  const { data: customer } = useSWR(
+    `/api/customers/${router.query.id}`,
+    fetcher,
+    { initialData: props.customer }
+  );
 
-  if (isLoading) return <Spinner />;
   return (
     <Layout>
       <Head>
@@ -68,7 +89,7 @@ export default function CustomerPage() {
         >
           Edit
         </Button>
-        <Button>Delete</Button>
+        {/* <Button>Delete</Button> */}
       </ButtonGroup>
       <br />
       <StatGroup>

@@ -9,6 +9,13 @@ export const fetcher = (url) =>
     .catch((error) => {
       throw error;
     });
+export const listFetcher = (url) =>
+  axios
+    .get(url)
+    .then((res) => res.data.data)
+    .catch((error) => {
+      throw error;
+    });
 
 const fetchWithStatus = (url, value) =>
   axios
