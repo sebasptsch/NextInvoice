@@ -1,5 +1,6 @@
 import {
   Heading,
+  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -13,13 +14,11 @@ import { useEffect, useState } from "react";
 import Stripe from "stripe";
 import ErrorHandler from "../components/ErrorHandler";
 import Layout from "../components/Layout";
+import { useInvoices } from "../helpers/helpers";
 
-export default function Dashboard({
-  invoices,
-}: {
-  invoices: Array<Stripe.Invoice>;
-}) {
-  const toast = useToast();
+export default function Dashboard() {
+  const { invoices, isLoading } = useInvoices("open");
+  if (isLoading) return <Spinner />;
   return (
     <Layout>
       <Head>
