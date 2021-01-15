@@ -91,7 +91,7 @@ export default function CustomerCreation(props) {
       .catch((error) => ErrorHandler(error, toast));
   }
 
-  if (isLoading || router.query.id) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
   return (
     <Layout>
