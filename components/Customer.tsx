@@ -27,7 +27,7 @@ export default function CustomerComponent({
   // Hooks
   const toast = useToast();
   const router = useRouter();
-
+  const { name }: {name: any} = customer
   return (
     <Box
       borderWidth="1px"
@@ -42,7 +42,7 @@ export default function CustomerComponent({
             href="/customers/[id]"
             as={`/customers/${customer.id}`}
           >
-            {customer.name.length() > 0 ? customer.name : customer?.email}
+            {name.length() > 0 ? customer?.name : customer?.email}
           </NextChakraLink>
         </Center>
         <Spacer />

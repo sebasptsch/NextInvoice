@@ -81,6 +81,8 @@ export default function LessonInvoice() {
                 customer: parsedCustomer.id,
                 collection_method,
                 days_until_due,
+                auto_advance: true,
+                default_tax_rates: ['txr_1I9gWSIK06OmoiJke5vnXGgL']
               })
               .then(() => {
                 setProgress((index + 1) / filteredcustomers?.length);

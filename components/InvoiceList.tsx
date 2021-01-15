@@ -42,6 +42,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
       params: {
         status: value,
         customer,
+        limit: 100,
       },
     })
       .then((response) => {
