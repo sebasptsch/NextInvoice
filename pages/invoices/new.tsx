@@ -131,7 +131,7 @@ export default function NewInvoice() {
         >
           {customers.map((customer) => (
             <option key={customer.id} value={customer.id}>
-              {customer.email}
+              {customer.name?.length > 0 ? customer?.name : customer?.email}
             </option>
           ))}
         </Select>
