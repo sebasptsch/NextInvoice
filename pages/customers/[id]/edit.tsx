@@ -42,7 +42,7 @@ export default function CustomerCreation({
     description: yup.string(),
     phone: yup.string(),
 
-    name: yup.string().required(),
+    name: yup.string(),
   });
 
   // Hooks
