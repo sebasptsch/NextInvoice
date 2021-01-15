@@ -31,7 +31,6 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
-import InvoiceComponent from "../../components/Invoice";
 import { useRouter } from "next/router";
 import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useInvoices } from "../../helpers/helpers";

@@ -26,7 +26,6 @@ import Stripe from "stripe";
 import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
-import ProductComponent from "../../components/Product";
 import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 import { useProducts } from "../../helpers/helpers";

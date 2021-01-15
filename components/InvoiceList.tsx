@@ -27,7 +27,6 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ErrorHandler from "./ErrorHandler";
-import InvoiceComponent from "./Invoice";
 import { useRouter } from "next/router";
 import { listFetcher, useInvoices } from "../helpers/helpers";
 import useSWR from "swr";

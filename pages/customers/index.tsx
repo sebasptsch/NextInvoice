@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Layout from "../../components/Layout";
-import CustomerComponent from "../../components/Customer";
 import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import Head from "next/head";

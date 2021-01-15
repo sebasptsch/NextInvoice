@@ -13,10 +13,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import ErrorHandler from "./ErrorHandler";
-import InvoiceComponent from "./Invoice";
+
 import NewInvoicePage from "../pages/invoices/new";
 import { Router, useRouter } from "next/router";
 import Stripe from "stripe";
