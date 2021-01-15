@@ -31,10 +31,10 @@ const fetchWithStatus = (url, value) =>
     });
 
 export function useCustomers() {
-  const { data, error, mutate } = useSWR([`/api/customers`], fetcher);
+  const { data, error, mutate } = useSWR([`/api/customers`], listFetcher);
   return {
     mutate,
-    customers: data?.data,
+    customers: data,
     isLoading: !error && !data,
     isError: error,
   };
@@ -51,10 +51,10 @@ export function useCustomer(id) {
 }
 
 export function usePrices() {
-  const { data, error, mutate } = useSWR([`/api/prices`], fetcher);
+  const { data, error, mutate } = useSWR([`/api/prices`], listFetcher);
   return {
     mutate,
-    prices: data?.data,
+    prices: data,
     isLoading: !error && !data,
     isError: error,
   };
@@ -100,10 +100,10 @@ export function useInvoice(id, params?) {
 }
 
 export function useProducts() {
-  const { data, error, mutate } = useSWR([`/api/products`], fetcher);
+  const { data, error, mutate } = useSWR([`/api/products`], listFetcher);
   return {
     mutate,
-    products: data?.data,
+    products: data,
     isLoading: !error && !data,
     isError: error,
   };
@@ -122,10 +122,10 @@ export function useProduct(id, params?) {
 }
 
 export function useInvoiceItems() {
-  const { data, error, mutate } = useSWR([`/api/invoiceitems`], fetcher);
+  const { data, error, mutate } = useSWR([`/api/invoiceitems`], listFetcher);
   return {
     mutate,
-    invoiceItems: data?.data,
+    invoiceItems: data,
     isLoading: !error && !data,
     isError: error,
   };
