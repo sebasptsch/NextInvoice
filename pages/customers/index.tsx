@@ -12,6 +12,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  SkeletonText,
   Spacer,
   Spinner,
   useToast,
@@ -55,7 +56,17 @@ export default function Customers() {
       </Center>
       <br />
       <Divider />
-
+      {isLoading ? (
+        <Box
+          borderWidth="1px"
+          borderRadius="10px"
+          p="1em"
+          m="1em"
+          height="82px"
+        >
+          <SkeletonText height="100%" />
+        </Box>
+      ) : null}
       {customers
         ?.filter(
           (customer) =>
