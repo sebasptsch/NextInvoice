@@ -17,6 +17,7 @@ import {
   NumberDecrementStepper,
   Spacer,
   Text,
+  Badge,
 } from "@chakra-ui/react";
 import Layout from "../../../components/Layout";
 import { useForm } from "react-hook-form";
@@ -185,7 +186,7 @@ export default function CustomerCreation({
         <FormControl>
           <FormLabel>Classes</FormLabel>
           {prices
-            ?.filter((price) => price.active)
+            ?.sort(price => (price.active ? -1 : 1))
             ?.map((price, index) => {
               let classes = JSON.parse(customer.metadata.classes);
               return (
@@ -204,6 +205,7 @@ export default function CustomerCreation({
                   />
                   <Flex>
                     <NumberInput
+                      w="4em"
                       defaultValue={
                         +classes.find(
                           (classobject) => classobject.priceid === price.id
@@ -220,7 +222,9 @@ export default function CustomerCreation({
                       </NumberInputStepper>
                     </NumberInput>
                     <Spacer />
-                    <Text>{price.nickname}</Text>
+                    <Text><Badge colorScheme={price.active ? "green" : "red"}>
+                      {price.active ? "Enabled" : "Disabled"}
+                    </Badge>{price.nickname}</Text>
                   </Flex>
                 </Box>
               );
@@ -230,7 +234,7 @@ export default function CustomerCreation({
           Save
         </Button>
       </form>
-    </Layout>
+    </Layout >
   );
 }
 
