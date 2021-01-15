@@ -165,7 +165,6 @@ export default function Customers() {
             </Box>
           );
         })}
-      {isLoading ? <Spinner /> : null}
     </Layout>
   );
 }

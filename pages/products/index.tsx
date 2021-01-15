@@ -40,8 +40,6 @@ export default function Products() {
   // Component Functions
   const handleChange = (event) => setValue(event.target.value);
 
-  if (isLoading) return <Spinner />;
-
   return (
     <Layout>
       <Head>
