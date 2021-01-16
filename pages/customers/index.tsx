@@ -160,7 +160,7 @@ export default function Customers() {
                 </Center>
               </Flex>
               {students?.map((student) => (
-                <Badge key={student} m={1}>
+                <Badge key={student} m={1} colorScheme="blue">
                   {student}
                 </Badge>
               ))}
