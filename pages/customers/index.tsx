@@ -22,16 +22,18 @@ import Layout from "../../components/Layout";
 import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useCustomers } from "../../helpers/helpers";
+import { listFetcher, useCustomers } from "../../helpers/helpers";
 import { NextChakraLink } from "../../components/NextChakraLink";
 import axios from "axios";
 import ErrorHandler from "../../components/ErrorHandler";
+import useSWR from "swr";
 
 export default function Customers() {
   const router = useRouter();
   const toast = useToast();
   const [value, setValue] = useState("");
-  const { customers, isLoading, mutate } = useCustomers();
+  // const { customers, isLoading, mutate } = useCustomers();
+  const { data: customers , error , mutate} = useSWR(`/api/customers`, listFetcher)
   const handleChange = (event) => setValue(event.target.value);
 
   return (
@@ -56,7 +58,7 @@ export default function Customers() {
       </Center>
       <br />
       <Divider />
-      {isLoading ? (
+      {(!customers && !error) ? (
         <Box
           borderWidth="1px"
           borderRadius="10px"
