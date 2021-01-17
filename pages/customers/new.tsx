@@ -24,7 +24,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import "yup-phone";
 import ErrorHandler from "../../components/ErrorHandler";
 import { useCustomers, usePrices } from "../../helpers/helpers";
 

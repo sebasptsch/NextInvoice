@@ -35,9 +35,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import { fetcher, listFetcher } from "../../helpers/helpers";
+import { usePrices, useProduct } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -50,7 +49,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       product,
-      prices: prices.data,
+      prices,
     },
   };
 }
@@ -60,12 +59,9 @@ export default function Products(props) {
   const router = useRouter();
 
   const { handleSubmit, errors, register, formState } = useForm();
-  const { data: product, mutate } = useSWR(`/api/prices`, fetcher, {
-    initialData: props.product,
-  });
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
+
+  const { product } = useProduct(props.product.id, props.product);
+  const { prices } = usePrices(undefined, props.prices);
   const toast = useToast();
 
   // Component Functions
@@ -96,7 +92,7 @@ export default function Products(props) {
   return (
     <>
       <Head>
-        <title>View Product</title>
+        <title>View Product {product?.name}</title>
       </Head>
       <form onSubmit={handleSubmit(submitHandler)}>
         <Heading>{product?.name}</Heading>

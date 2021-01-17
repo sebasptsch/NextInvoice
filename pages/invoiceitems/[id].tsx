@@ -18,9 +18,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import { fetcher, listFetcher } from "../../helpers/helpers";
+import { useInvoiceItem, usePrices } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -33,7 +32,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      prices: prices.data,
+      prices,
       invoiceItem,
     },
   };
@@ -44,15 +43,11 @@ export default function NewInvoiceItem(props) {
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
-  const { data: invoiceItem, mutate } = useSWR(
-    `/api/invoiceitems/${router.query.id}`,
-    fetcher,
-    {
-      initialData: props.invoiceItem,
-    }
+
+  const { prices } = usePrices(undefined, props.prices);
+  const { invoiceItem, mutate } = useInvoiceItem(
+    props.invoiceItem.id,
+    props.invoiceItem
   );
 
   // Component Functions
