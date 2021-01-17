@@ -31,7 +31,7 @@ export function useCustomers(limit?, initialData?) {
       }&limit=${itemLimit}`;
     },
     fetcher,
-    { initialData }
+    initialData ? { initialData: [initialData] } : undefined
   );
   return {
     mutate,
@@ -73,12 +73,12 @@ export function usePrices(limit?, initialData?) {
       }&limit=${itemLimit}`;
     },
     fetcher,
-    { initialData }
+    initialData ? { initialData: [initialData] } : undefined
   );
   return {
     mutate,
     prices: data?.flatMap(
-      (pricesLists) => pricesLists.data
+      (priceLists) => priceLists.data
     ) as Array<Stripe.Price>,
     has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
@@ -101,7 +101,7 @@ export function usePrice(id, initialData?) {
   };
 }
 
-export function useInvoices(status, limit?) {
+export function useInvoices(status, limit?, initialData?) {
   const itemLimit = limit || 20;
   const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
@@ -115,7 +115,8 @@ export function useInvoices(status, limit?) {
         previousPageData.data[itemLimit - 1].id
       }&limit=${itemLimit}&status=${status}`;
     },
-    fetcher
+    fetcher,
+    initialData ? { initialData: [initialData] } : undefined
   );
   // concat all items in array - not done
   return {
@@ -159,7 +160,7 @@ export function useProducts(limit?, initialData?) {
       }&limit=${itemLimit}`;
     },
     fetcher,
-    { initialData }
+    initialData ? { initialData: [initialData] } : undefined
   );
   return {
     mutate,
@@ -201,7 +202,7 @@ export function useInvoiceItems(limit?, initialData?) {
       }&limit=${itemLimit}`;
     },
     fetcher,
-    { initialData }
+    initialData ? { initialData: [initialData] } : undefined
   );
   return {
     mutate,

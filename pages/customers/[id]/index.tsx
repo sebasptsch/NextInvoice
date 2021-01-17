@@ -42,7 +42,7 @@ export default function CustomerPage(props) {
   // Hooks
   const router = useRouter();
   const { prices } = usePrices(undefined, props.prices);
-  const { customer } = useCustomer(props.customer.id);
+  const { customer } = useCustomer(props.customer.id, props.customer);
 
   return (
     <>
