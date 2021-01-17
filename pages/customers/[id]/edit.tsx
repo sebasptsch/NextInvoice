@@ -172,7 +172,7 @@ export default function CustomerCreation(props) {
             placeholder="Enter student names seperated by a comma (,)"
             defaultValue={JSON.parse(
               customer?.metadata?.students ? customer?.metadata.students : null
-            ).join(",")}
+            )?.join(",")}
             ref={register({
               required: "This is required",
               validate: (value) => value.split(",").length > 0,
@@ -206,7 +206,7 @@ export default function CustomerCreation(props) {
                     <NumberInput
                       w="4em"
                       defaultValue={
-                        +classes.find(
+                        +classes?.find(
                           (classobject) => classobject.priceid === price.id
                         )?.amount
                       }
