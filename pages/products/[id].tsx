@@ -60,8 +60,8 @@ export default function Products(props) {
 
   const { handleSubmit, errors, register, formState } = useForm();
 
-  const { product } = useProduct(props.product.id, props.product);
-  const { prices } = usePrices(undefined, props.prices);
+  const { product, mutate } = useProduct(props.product.id, props.product);
+  const { prices, mutate: priceMutate } = usePrices(undefined, props.prices);
   const toast = useToast();
 
   // Component Functions
@@ -82,8 +82,8 @@ export default function Products(props) {
             title: "Success",
             status: "success",
           });
-          // mutate()
-          router.reload();
+          mutate();
+          // router.reload();
         }
       })
       .catch((error) => ErrorHandler(error, toast));
@@ -242,7 +242,7 @@ export default function Products(props) {
                                     title: "Success",
                                     status: "success",
                                   });
-                                  router.reload();
+                                  priceMutate();
                                 }
                               })
                               .catch((error) => ErrorHandler(error, toast));
