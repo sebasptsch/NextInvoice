@@ -70,10 +70,10 @@ export default function Products(props) {
   const router = useRouter();
 
   const { handleSubmit, errors, register, formState } = useForm();
-  const { data: product } = useSWR(`/api/prices`, fetcher, {
+  const { data: product, mutate: mutateProduct } = useSWR(`/api/prices`, fetcher, {
     initialData: props.product,
   });
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
+  const { data: prices, mutate: mutatePrice } = useSWR(`/api/prices`, listFetcher, {
     initialData: props.prices,
   });
   const toast = useToast();
@@ -96,7 +96,7 @@ export default function Products(props) {
             title: "Success",
             status: "success",
           });
-          router.reload();
+          mutateProduct()
         }
       })
       .catch((error) => ErrorHandler(error, toast));
@@ -255,7 +255,7 @@ export default function Products(props) {
                                     title: "Success",
                                     status: "success",
                                   });
-                                  router.reload();
+                                  mutatePrice()
                                 }
                               })
                               .catch((error) => ErrorHandler(error, toast));

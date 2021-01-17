@@ -48,7 +48,7 @@ export default function PriceView(props) {
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  const { data: price } = useSWR(`/api/prices/${router.query.id}`, fetcher, {
+  const { data: price, mutate } = useSWR(`/api/prices/${router.query.id}`, fetcher, {
     initialData: props.price,
   });
   // Component Functions
@@ -69,7 +69,7 @@ export default function PriceView(props) {
             status: "success",
           });
           //   router.push(`/customers/${res.data.id}`);
-          router.reload();
+          mutate()
         }
       })
       .catch((error) => ErrorHandler(error, toast));

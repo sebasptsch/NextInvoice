@@ -32,6 +32,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
+import { mutate } from "swr";
 import ErrorHandler from "./ErrorHandler";
 
 export default function BalanceModal({
@@ -59,7 +60,6 @@ export default function BalanceModal({
       })
       .then(() => {
         toast({ title: "Success", status: "success" });
-        router.reload();
       })
       .catch((error) => ErrorHandler(error, toast));
   }
