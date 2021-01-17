@@ -24,9 +24,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import { listFetcher } from "../../helpers/helpers";
+import { useCustomers, usePrices } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -38,8 +37,8 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      prices: prices.data,
-      customers: customers.data,
+      prices,
+      customers,
     },
   };
 }
@@ -49,12 +48,9 @@ export default function NewInvoice(props) {
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
   const router = useRouter();
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
-  const { data: customers } = useSWR(`/api/customers?limit=100`, listFetcher, {
-    initialData: props.customers,
-  });
+
+  const { prices } = usePrices(undefined, props.prices);
+  const { customers } = useCustomers(100, props.customers);
   const [customer, setCustomer] = useState(customers[0].id);
   const [invoiceItems, setInvoiceItems] = useState<Array<any>>([]);
   const handleInvoiceData = (values) => {

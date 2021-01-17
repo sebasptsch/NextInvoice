@@ -25,11 +25,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import useSWR from "swr";
 import * as yup from "yup";
 import "yup-phone";
 import ErrorHandler from "../../../components/ErrorHandler";
-import { fetcher, listFetcher } from "../../../helpers/helpers";
+import { useCustomer, usePrices } from "../../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -41,7 +40,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      prices: prices.data,
+      prices,
       customer,
     },
   };
@@ -61,14 +60,8 @@ export default function CustomerCreation(props) {
   // Hooks
   const router = useRouter();
   // const { prices } = usePrices();
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
-  const { data: customer, mutate } = useSWR(
-    `/api/customers/${router.query.id}`,
-    fetcher,
-    { initialData: props.customer }
-  );
+  const { prices } = usePrices(undefined, props.prices);
+  const { customer, mutate } = useCustomer(props.customer.id);
 
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
@@ -112,7 +105,10 @@ export default function CustomerCreation(props) {
   return (
     <>
       <Head>
-        <title>Edit Customer</title>
+        <title>
+          Edit Customer{" "}
+          {customer?.name?.length > 0 ? customer?.name : customer?.email}
+        </title>
       </Head>
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Edit Customer

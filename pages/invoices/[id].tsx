@@ -18,11 +18,10 @@ import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
 import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
-import { fetcher } from "../../helpers/helpers";
+import { useInvoice } from "../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -39,11 +38,7 @@ export async function getServerSideProps(context) {
 
 export default function InvoicePage(props) {
   const router = useRouter();
-  const { data: invoice, mutate } = useSWR(
-    `/api/invoices/${router.query.id}`,
-    fetcher,
-    { initialData: props.invoice }
-  );
+  const { invoice, mutate } = useInvoice(props.invoice.id, props.invoice);
   // Hooks
   const toast = useToast();
 

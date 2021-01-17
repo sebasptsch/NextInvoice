@@ -47,8 +47,10 @@ export function useCustomers(limit?, initialData?) {
   };
 }
 
-export function useCustomer(id) {
-  const { data, error, mutate } = useSWR([`/api/customers/${id}`], fetcher);
+export function useCustomer(id, initialData?) {
+  const { data, error, mutate } = useSWR([`/api/customers/${id}`], fetcher, {
+    initialData,
+  });
   return {
     mutate,
     customer: data as Stripe.Customer,
@@ -57,21 +59,40 @@ export function useCustomer(id) {
   };
 }
 
-export function usePrices() {
-  const { data, error, mutate } = useSWR([`/api/prices`], listFetcher);
+export function usePrices(limit?, initialData?) {
+  const itemLimit = limit || 20;
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
+    (pageIndex, previousPageData) => {
+      // reached the end
+      if (previousPageData && !previousPageData.has_more) return null;
+      // first page, we don't have `previousPageData`
+      if (pageIndex === 0) return `/api/prices?limit=${itemLimit}`;
+      // add the cursor to the API endpoint
+      return `/api/prices?starting_after=${
+        previousPageData.data[itemLimit - 1].id
+      }&limit=${itemLimit}`;
+    },
+    fetcher,
+    { initialData }
+  );
   return {
     mutate,
-    prices: data as Array<Stripe.Price>,
+    prices: data?.flatMap(
+      (pricesLists) => pricesLists.data
+    ) as Array<Stripe.Price>,
+    has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
+    isLoadingMore: data?.length !== size,
     isError: error,
+    size,
+    setSize,
   };
 }
 
-export function usePrice(id, params?) {
-  const { data, error, mutate } = useSWR(
-    [`/api/prices/${id}`, params],
-    fetcher
-  );
+export function usePrice(id, initialData?) {
+  const { data, error, mutate } = useSWR([`/api/prices/${id}`], fetcher, {
+    initialData,
+  });
   return {
     mutate,
     price: data as Stripe.Price,
@@ -111,11 +132,10 @@ export function useInvoices(status, limit?) {
   };
 }
 
-export function useInvoice(id, params?) {
-  const { data, error, mutate } = useSWR(
-    [`/api/invoices/${id}`, params],
-    fetcher
-  );
+export function useInvoice(id, initialData?) {
+  const { data, error, mutate } = useSWR([`/api/invoices/${id}`], fetcher, {
+    initialData,
+  });
   return {
     mutate,
     invoice: data as Stripe.Invoice,
@@ -155,11 +175,10 @@ export function useProducts(limit?, initialData?) {
   };
 }
 
-export function useProduct(id, params?) {
-  const { data, error, mutate } = useSWR(
-    [`/api/producuts/${id}`, params],
-    fetcher
-  );
+export function useProduct(id, initialData?) {
+  const { data, error, mutate } = useSWR([`/api/producuts/${id}`], {
+    initialData,
+  });
   return {
     mutate,
     product: data as Stripe.Product,
@@ -167,18 +186,41 @@ export function useProduct(id, params?) {
     isError: error,
   };
 }
-export function useInvoiceItems() {
-  const { data, error, mutate } = useSWR([`/api/invoiceitems`], listFetcher);
+export function useInvoiceItems(limit?, initialData?) {
+  // const limit = 20
+  const itemLimit = limit || 20;
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
+    (pageIndex, previousPageData) => {
+      // reached the end
+      if (previousPageData && !previousPageData.has_more) return null;
+      // first page, we don't have `previousPageData`
+      if (pageIndex === 0) return `/api/invoiceitems?limit=${itemLimit}`;
+      // add the cursor to the API endpoint
+      return `/api/invoiceitems?starting_after=${
+        previousPageData.data[itemLimit - 1].id
+      }&limit=${itemLimit}`;
+    },
+    fetcher,
+    { initialData }
+  );
   return {
     mutate,
-    invoiceItems: data as Array<Stripe.InvoiceItem>,
+    products: data?.flatMap(
+      (productLists) => productLists.data
+    ) as Array<Stripe.InvoiceItem>,
+    has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
+    isLoadingMore: data?.length !== size,
     isError: error,
+    size,
+    setSize,
   };
 }
 
-export function useInvoiceItem(id) {
-  const { data, error, mutate } = useSWR([`/api/invoiceitems/${id}`], fetcher);
+export function useInvoiceItem(id, initialData?) {
+  const { data, error, mutate } = useSWR([`/api/invoiceitems/${id}`], fetcher, {
+    initialData,
+  });
   return {
     mutate,
     invoiceItem: data as Stripe.InvoiceItem,
