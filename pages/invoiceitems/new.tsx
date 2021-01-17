@@ -15,33 +15,28 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import { listFetcher } from "../../helpers/helpers";
+import { useCustomers, usePrices } from "../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const customers = await stripe.customers.list({ limit: 100 });
 
   const prices = await stripe.prices.list();
 
   return {
     props: {
-      customers: customers.data,
-      prices: prices.data,
+      customers,
+      prices,
     },
   };
 }
 
 export default function NewInvoiceItem(props) {
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
-  const { data: customers } = useSWR(`/api/customers`, listFetcher, {
-    initialData: props.customers,
-  });
+  const { prices } = usePrices(undefined, props.prices);
+  const { customers } = useCustomers(100, props.customers);
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const toast = useToast();
   const router = useRouter();

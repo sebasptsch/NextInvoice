@@ -16,11 +16,10 @@ import {
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
-import useSWR from "swr";
 import BalanceModal from "../../../components/BalanceModal";
 import InvoiceList from "../../../components/InvoiceList";
 import { NextChakraLink } from "../../../components/NextChakraLink";
-import { fetcher, listFetcher } from "../../../helpers/helpers";
+import { useCustomer, usePrices } from "../../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -33,7 +32,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      prices: prices.data,
+      prices,
       customer,
     },
   };
@@ -42,19 +41,16 @@ export async function getServerSideProps(context) {
 export default function CustomerPage(props) {
   // Hooks
   const router = useRouter();
-  const { data: prices } = useSWR(`/api/prices`, listFetcher, {
-    initialData: props.prices,
-  });
-  const { data: customer } = useSWR(
-    `/api/customers/${router.query.id}`,
-    fetcher,
-    { initialData: props.customer }
-  );
+  const { prices } = usePrices(undefined, props.prices);
+  const { customer } = useCustomer(props.customer.id);
 
   return (
     <>
       <Head>
-        <title>View Customer</title>
+        <title>
+          View Customer{" "}
+          {customer?.name?.length > 0 ? customer?.name : customer?.email}
+        </title>
       </Head>
       <Heading as="a" href={`mailto: ${customer?.email}`}>
         {customer?.email}

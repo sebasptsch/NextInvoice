@@ -27,19 +27,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 // Serverside Imports
 import Stripe from "stripe";
-import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import { listFetcher } from "../../helpers/helpers";
+import { useProducts } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 
 export async function getServerSideProps(context) {
-  const products = await stripe.products.list();
+  const products = await stripe.products.list({ limit: 100 });
+  const prices = await stripe.prices.list({ limit: 100 });
   return {
     props: {
-      products: products.data,
+      products,
+      prices,
     },
   };
 }
@@ -50,9 +51,7 @@ export default function PriceView(props) {
   const toast = useToast();
   const router = useRouter();
   const [value, setValue] = useState("0");
-  const { data: products } = useSWR(`/api/products`, listFetcher, {
-    initialData: props.products,
-  });
+  const { products } = useProducts(undefined, props.products);
   // Component Functions
   let prevProduct;
   const format = (val) => `$` + val;
