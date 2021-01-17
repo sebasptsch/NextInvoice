@@ -31,7 +31,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
 import { useRouter } from "next/router";
-import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  ChevronDownIcon,
+  Icon,
+} from "@chakra-ui/icons";
 import { useInvoices } from "../../helpers/helpers";
 import { mutate } from "swr";
 import { NextChakraLink } from "../../components/NextChakraLink";
@@ -44,7 +50,10 @@ export default function Invoices() {
   const [value, setValue] = useState(router.query.status || "open");
   const toast = useToast();
 
-  const { invoices, isLoading, isError, mutate } = useInvoices(value);
+
+  const { invoices, isLoading, isError, mutate, setSize, size, has_more } = useInvoices(
+    value
+  );
   const handleStatus = (e) => {
     router.replace(`/invoices?status=${e.target.value}`);
     setValue(e.target.value);
@@ -55,7 +64,7 @@ export default function Invoices() {
         <title>Invoices</title>
       </Head>
 
-      <Stat textAlign="center">
+      {/* <Stat textAlign="center">
         <StatLabel textTransform="capitalize">
           Total Amount in {value} invoices
         </StatLabel>
@@ -63,7 +72,7 @@ export default function Invoices() {
         <StatNumber>
           ${invoices?.reduce((a, b) => a + b.amount_due, 0) / 100}
         </StatNumber>
-      </Stat>
+      </Stat> */}
 
       <br />
       <Flex>
@@ -108,7 +117,7 @@ export default function Invoices() {
           <SkeletonText height="100%" />
         </Box>
       ) : null}
-      {invoices?.map((invoice) => (
+      {invoices?.map(invoice =>
         <Box
           borderWidth="1px"
           borderRadius="10px"
@@ -134,13 +143,13 @@ export default function Invoices() {
                   invoice?.status == "paid"
                     ? "green"
                     : invoice?.status == "draft"
-                    ? "grey"
-                    : invoice?.due_date < Date.now() &&
-                      invoice?.status === "open"
-                    ? "red"
-                    : invoice?.status == "open"
-                    ? "blue"
-                    : null
+                      ? "grey"
+                      : invoice?.due_date < Date.now() &&
+                        invoice?.status === "open"
+                        ? "red"
+                        : invoice?.status == "open"
+                          ? "blue"
+                          : null
                 }
               >
                 {invoice?.due_date < Date.now() && invoice?.status == "open"
@@ -300,7 +309,13 @@ export default function Invoices() {
             </Center>
           </Flex>
         </Box>
-      ))}
+      )}
+      <Divider m={4} />
+      <Center>
+        <Button onClick={() => setSize(size + 1)} disabled={!has_more || invoices?.length === 0 || isLoading}>
+          Load More
+        </Button>
+      </Center>
     </Layout>
   );
 }

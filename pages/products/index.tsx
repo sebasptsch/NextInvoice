@@ -35,7 +35,7 @@ export default function Products() {
   // Hooks
   const router = useRouter();
   const [value, setValue] = useState("");
-  const { products, isLoading, mutate } = useProducts();
+  const { products, isLoading, mutate, setSize, size, has_more } = useProducts();
   const toast = useToast();
   // Component Functions
   const handleChange = (event) => setValue(event.target.value);
@@ -127,6 +127,12 @@ export default function Products() {
             </Flex>
           </Box>
         ))}
+      <Center>
+        <Button onClick={() => setSize(size + 1)} disabled={!has_more || products.length === 0 || isLoading}>
+          Load More
+        </Button>
+      </Center>
+
     </Layout>
   );
 }

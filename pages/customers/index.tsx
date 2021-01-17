@@ -33,7 +33,7 @@ export default function Customers() {
   const toast = useToast();
   const [value, setValue] = useState("");
   // const { customers, isLoading, mutate } = useCustomers();
-  const { data: customers , error , mutate} = useSWR(`/api/customers`, listFetcher)
+  const { setSize, size, customers, isLoading, isError, mutate, has_more } = useCustomers()
   const handleChange = (event) => setValue(event.target.value);
 
   return (
@@ -58,7 +58,7 @@ export default function Customers() {
       </Center>
       <br />
       <Divider />
-      {(!customers && !error) ? (
+      {isLoading ? (
         <Box
           borderWidth="1px"
           borderRadius="10px"
@@ -69,8 +69,10 @@ export default function Customers() {
           <SkeletonText height="100%" />
         </Box>
       ) : null}
-      {customers
-        ?.filter(
+      {
+
+
+        customers?.filter(
           (customer) =>
             customer.email?.toLowerCase().includes(value.toLowerCase()) ||
             customer.name?.toLowerCase().includes(value.toLowerCase()) ||
@@ -79,94 +81,100 @@ export default function Customers() {
               return studentName.includes(value.toLowerCase());
             })
         )
-        ?.map((customer) => {
-          const students = customer.metadata.students
-            ? JSON.parse(customer.metadata.students)
-            : [];
-          return (
-            <Box
-              borderWidth="1px"
-              borderRadius="10px"
-              p="1em"
-              m="1em"
-              key={customer.id}
-            >
-              <Flex>
-                <Center>
-                  <NextChakraLink
-                    href="/customers/[id]"
-                    as={`/customers/${customer?.id}`}
-                  >
-                    {customer?.name?.length > 0
-                      ? customer?.name
-                      : customer?.email}
-                  </NextChakraLink>
-                </Center>
-                <Spacer />
-
-                <Center>
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      size={"sm"}
-                      rightIcon={<ChevronDownIcon />}
-                      marginLeft="1em"
+          ?.map((customer) => {
+            const students = customer.metadata.students
+              ? JSON.parse(customer.metadata.students)
+              : [];
+            return (
+              <Box
+                borderWidth="1px"
+                borderRadius="10px"
+                p="1em"
+                m="1em"
+                key={customer.id}
+              >
+                <Flex>
+                  <Center>
+                    <NextChakraLink
+                      href="/customers/[id]"
+                      as={`/customers/${customer?.id}`}
                     >
-                      Actions
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() =>
-                          router.push(
-                            `/customers/[id]/edit`,
-                            `/customers/${customer?.id}/edit`
-                          )
-                        }
+                      {customer?.name?.length > 0
+                        ? customer?.name
+                        : customer?.email}
+                    </NextChakraLink>
+                  </Center>
+                  <Spacer />
+
+                  <Center>
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        size={"sm"}
+                        rightIcon={<ChevronDownIcon />}
+                        marginLeft="1em"
                       >
-                        Edit
+                        Actions
+                    </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() =>
+                            router.push(
+                              `/customers/[id]/edit`,
+                              `/customers/${customer?.id}/edit`
+                            )
+                          }
+                        >
+                          Edit
                       </MenuItem>
 
-                      <MenuItem
-                        key="Delete"
-                        onClick={() => {
-                          axios
-                            .delete(`/api/customers/${customer?.id}`)
-                            .then((response) => {
-                              if (response.status === 200) {
-                                toast({
-                                  title: "Success",
-                                  status: "success",
-                                });
-                                mutate();
-                              }
-                            })
-                            .catch((error) => ErrorHandler(error, toast));
-                        }}
-                      >
-                        Delete
+                        <MenuItem
+                          key="Delete"
+                          onClick={() => {
+                            axios
+                              .delete(`/api/customers/${customer?.id}`)
+                              .then((response) => {
+                                if (response.status === 200) {
+                                  toast({
+                                    title: "Success",
+                                    status: "success",
+                                  });
+                                  mutate();
+                                }
+                              })
+                              .catch((error) => ErrorHandler(error, toast));
+                          }}
+                        >
+                          Delete
                       </MenuItem>
-                      <MenuItem
-                        onClick={() =>
-                          router.push(
-                            `/invoices/new?customer=${customer?.id}`,
-                            `/invoices/new?customer=${customer?.id}`
-                          )
-                        }
-                      >
-                        Create Invoice
+                        <MenuItem
+                          onClick={() =>
+                            router.push(
+                              `/invoices/new?customer=${customer?.id}`,
+                              `/invoices/new?customer=${customer?.id}`
+                            )
+                          }
+                        >
+                          Create Invoice
                       </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Center>
-              </Flex>
-              {students?.map((student) => (
-                <Badge key={student} m={1} colorScheme="blue">
-                  {student}
-                </Badge>
-              ))}
-            </Box>
-          );
-        })}
+                      </MenuList>
+                    </Menu>
+                  </Center>
+                </Flex>
+                {students?.map((student) => (
+                  <Badge key={student} m={1} colorScheme="blue">
+                    {student}
+                  </Badge>
+                ))}
+              </Box>
+            );
+          })}
+      <Center>
+        <Button onClick={() => setSize(size + 1)} disabled={!has_more || customers.length === 0 || isLoading}>
+          Load More
+        </Button>
+      </Center>
+
     </Layout>
   );
 }
