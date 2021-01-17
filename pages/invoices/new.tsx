@@ -45,8 +45,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function NewInvoice(props) {
-  // Hooks
-
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();
@@ -59,7 +57,6 @@ export default function NewInvoice(props) {
   });
   const [customer, setCustomer] = useState(customers[0].id);
   const [invoiceItems, setInvoiceItems] = useState<Array<any>>([]);
-  // Component Functions
   const handleInvoiceData = (values) => {
     let { collection_method, days_until_due, description } = values;
     if (collection_method !== "send_invoice") {
