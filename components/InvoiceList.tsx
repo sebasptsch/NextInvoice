@@ -32,7 +32,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
   const router = useRouter();
   const [value, setValue] = useState(router.query.status || "open");
-  const { data: invoices, trigger } = useSWR(
+  const { data: invoices, mutate } = useSWR(
     `/api/invoices?status=${value}&customer=${customer}`,
     listFetcher
   );
@@ -172,7 +172,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                               title: "Sent!",
                               status: "success",
                             });
-                            trigger();
+                            mutate();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -190,7 +190,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                               title: "Success",
                               status: "success",
                             });
-                            trigger();
+                            mutate();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -211,7 +211,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
                               status: "success",
                             });
-                            trigger();
+                            mutate();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -234,7 +234,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -253,7 +253,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -271,7 +271,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}

@@ -29,9 +29,15 @@ export default function Products() {
   // Hooks
   const router = useRouter();
   const [value, setValue] = useState("");
-  const { products, isLoading, trigger, setSize, size, has_more } = useProducts(
-    20
-  );
+  const {
+    products,
+    isLoading,
+    mutate,
+    setSize,
+    size,
+    has_more,
+    isLoadingMore,
+  } = useProducts(20);
   const toast = useToast();
   // Component Functions
   const handleChange = (event) => setValue(event.target.value);
@@ -109,7 +115,7 @@ export default function Products() {
                                 title: "Success",
                                 status: "success",
                               });
-                              trigger();
+                              mutate();
                             }
                           })
                           .catch((error) => ErrorHandler(error, toast));
@@ -128,6 +134,7 @@ export default function Products() {
         <Button
           onClick={() => setSize(size + 1)}
           disabled={!has_more || products?.length === 0 || isLoading}
+          isLoading={isLoadingMore}
         >
           Load More
         </Button>

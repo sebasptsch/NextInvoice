@@ -19,7 +19,7 @@ export const listFetcher = (url) =>
 
 export function useCustomers(limit?, initialData?) {
   const itemLimit = limit || 20;
-  const { data, error, trigger, size, setSize } = useSWRInfinite(
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       // reached the end
       if (previousPageData && !previousPageData.has_more) return null;
@@ -34,7 +34,7 @@ export function useCustomers(limit?, initialData?) {
     initialData ? { initialData: [initialData] } : undefined
   );
   return {
-    trigger,
+    mutate,
     customers: data?.flatMap(
       (customerLists) => customerLists.data
     ) as Array<Stripe.Customer>,
@@ -48,11 +48,11 @@ export function useCustomers(limit?, initialData?) {
 }
 
 export function useCustomer(id, initialData?) {
-  const { data, error, trigger } = useSWR([`/api/customers/${id}`], fetcher, {
+  const { data, error, mutate } = useSWR([`/api/customers/${id}`], fetcher, {
     initialData,
   });
   return {
-    trigger,
+    mutate,
     customer: data as Stripe.Customer,
     isLoading: !error && !data,
     isError: error,
@@ -61,7 +61,7 @@ export function useCustomer(id, initialData?) {
 
 export function usePrices(limit?, initialData?) {
   const itemLimit = limit || 20;
-  const { data, error, trigger, size, setSize } = useSWRInfinite(
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       // reached the end
       if (previousPageData && !previousPageData.has_more) return null;
@@ -76,7 +76,7 @@ export function usePrices(limit?, initialData?) {
     initialData ? { initialData: [initialData] } : undefined
   );
   return {
-    trigger,
+    mutate,
     prices: data?.flatMap(
       (priceLists) => priceLists.data
     ) as Array<Stripe.Price>,
@@ -90,11 +90,11 @@ export function usePrices(limit?, initialData?) {
 }
 
 export function usePrice(id, initialData?) {
-  const { data, error, trigger } = useSWR([`/api/prices/${id}`], fetcher, {
+  const { data, error, mutate } = useSWR([`/api/prices/${id}`], fetcher, {
     initialData,
   });
   return {
-    trigger,
+    mutate,
     price: data as Stripe.Price,
     isLoading: !error && !data,
     isError: error,
@@ -103,7 +103,7 @@ export function usePrice(id, initialData?) {
 
 export function useInvoices(status, limit?, initialData?) {
   const itemLimit = limit || 20;
-  const { data, error, trigger, size, setSize } = useSWRInfinite(
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       // reached the end
       if (previousPageData && !previousPageData.has_more) return null;
@@ -120,7 +120,7 @@ export function useInvoices(status, limit?, initialData?) {
   );
   // concat all items in array - not done
   return {
-    trigger,
+    mutate,
     invoices: data?.flatMap(
       (invoiceLists) => invoiceLists.data
     ) as Array<Stripe.Invoice>,
@@ -134,11 +134,11 @@ export function useInvoices(status, limit?, initialData?) {
 }
 
 export function useInvoice(id, initialData?) {
-  const { data, error, trigger } = useSWR([`/api/invoices/${id}`], fetcher, {
+  const { data, error, mutate } = useSWR([`/api/invoices/${id}`], fetcher, {
     initialData,
   });
   return {
-    trigger,
+    mutate,
     invoice: data as Stripe.Invoice,
     isLoading: !error && !data,
     isError: error,
@@ -148,7 +148,7 @@ export function useInvoice(id, initialData?) {
 export function useProducts(limit?, initialData?) {
   // const limit = 20
   const itemLimit = limit || 20;
-  const { data, error, trigger, size, setSize } = useSWRInfinite(
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       // reached the end
       if (previousPageData && !previousPageData.has_more) return null;
@@ -163,7 +163,7 @@ export function useProducts(limit?, initialData?) {
     initialData ? { initialData: [initialData] } : undefined
   );
   return {
-    trigger,
+    mutate,
     products: data?.flatMap(
       (productLists) => productLists.data
     ) as Array<Stripe.Product>,
@@ -177,11 +177,11 @@ export function useProducts(limit?, initialData?) {
 }
 
 export function useProduct(id, initialData?) {
-  const { data, error, trigger } = useSWR([`/api/producuts/${id}`], {
+  const { data, error, mutate } = useSWR([`/api/producuts/${id}`], {
     initialData,
   });
   return {
-    trigger,
+    mutate,
     product: data as Stripe.Product,
     isLoading: !error && !data,
     isError: error,
@@ -190,7 +190,7 @@ export function useProduct(id, initialData?) {
 export function useInvoiceItems(limit?, initialData?) {
   // const limit = 20
   const itemLimit = limit || 20;
-  const { data, error, trigger, size, setSize } = useSWRInfinite(
+  const { data, error, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       // reached the end
       if (previousPageData && !previousPageData.has_more) return null;
@@ -205,7 +205,7 @@ export function useInvoiceItems(limit?, initialData?) {
     initialData ? { initialData: [initialData] } : undefined
   );
   return {
-    trigger,
+    mutate,
     products: data?.flatMap(
       (productLists) => productLists.data
     ) as Array<Stripe.InvoiceItem>,
@@ -219,15 +219,11 @@ export function useInvoiceItems(limit?, initialData?) {
 }
 
 export function useInvoiceItem(id, initialData?) {
-  const { data, error, trigger } = useSWR(
-    [`/api/invoiceitems/${id}`],
-    fetcher,
-    {
-      initialData,
-    }
-  );
+  const { data, error, mutate } = useSWR([`/api/invoiceitems/${id}`], fetcher, {
+    initialData,
+  });
   return {
-    trigger,
+    mutate,
     invoiceItem: data as Stripe.InvoiceItem,
     isLoading: !error && !data,
     isError: error,

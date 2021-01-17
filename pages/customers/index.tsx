@@ -25,7 +25,7 @@ import ErrorHandler from "../../components/ErrorHandler";
 import { NextChakraLink } from "../../components/NextChakraLink";
 import { useCustomers } from "../../helpers/helpers";
 
-export default function Customers(props) {
+export default function Customers() {
   const router = useRouter();
   const toast = useToast();
   const [value, setValue] = useState("");
@@ -35,8 +35,9 @@ export default function Customers(props) {
     customers,
     isLoading,
     isError,
-    trigger,
+    mutate,
     has_more,
+    isLoadingMore,
   } = useCustomers(20);
   const handleChange = (event) => setValue(event.target.value);
 
@@ -143,7 +144,7 @@ export default function Customers(props) {
                                 title: "Success",
                                 status: "success",
                               });
-                              trigger();
+                              mutate();
                             }
                           })
                           .catch((error) => ErrorHandler(error, toast));
@@ -177,6 +178,7 @@ export default function Customers(props) {
         <Button
           onClick={() => setSize(size + 1)}
           disabled={!has_more || customers?.length === 0 || isLoading}
+          isLoading={isLoadingMore}
         >
           Load More
         </Button>

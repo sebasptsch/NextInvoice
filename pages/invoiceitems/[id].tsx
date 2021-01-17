@@ -45,7 +45,7 @@ export default function NewInvoiceItem(props) {
   const router = useRouter();
 
   const { prices } = usePrices(undefined, props.prices);
-  const { invoiceItem, trigger } = useInvoiceItem(
+  const { invoiceItem, mutate } = useInvoiceItem(
     props.invoiceItem.id,
     props.invoiceItem
   );
@@ -62,7 +62,7 @@ export default function NewInvoiceItem(props) {
         // console.log(response.data);
         // router.push(`/customer/[id]`, `/customers/${response.data.customer}`);
         toast({ title: "Success" });
-        trigger();
+        mutate();
       })
       .catch((error) => ErrorHandler(error, toast));
   };

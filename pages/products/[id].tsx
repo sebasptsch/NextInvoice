@@ -60,8 +60,8 @@ export default function Products(props) {
 
   const { handleSubmit, errors, register, formState } = useForm();
 
-  const { product, trigger } = useProduct(props.product.id, props.product);
-  const { prices, trigger: pricetrigger } = usePrices(undefined, props.prices);
+  const { product, mutate } = useProduct(props.product.id, props.product);
+  const { prices, mutate: pricemutate } = usePrices(undefined, props.prices);
   const toast = useToast();
 
   // Component Functions
@@ -71,7 +71,7 @@ export default function Products(props) {
       method: "POST",
       url: `/api/products/${product.id}`,
       data: {
-        active, /// Fix broken trigger
+        active, /// Fix broken mutate
         name,
         description,
       },
@@ -82,7 +82,7 @@ export default function Products(props) {
             title: "Success",
             status: "success",
           });
-          trigger();
+          mutate();
           // router.reload();
         }
       })
@@ -242,7 +242,7 @@ export default function Products(props) {
                                     title: "Success",
                                     status: "success",
                                   });
-                                  pricetrigger();
+                                  pricemutate();
                                 }
                               })
                               .catch((error) => ErrorHandler(error, toast));

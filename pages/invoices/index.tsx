@@ -37,7 +37,7 @@ export default function Invoices() {
     invoices,
     isLoading,
     isLoadingMore,
-    trigger,
+    mutate,
     setSize,
     size,
     has_more,
@@ -179,7 +179,7 @@ export default function Invoices() {
                             title: "Sent!",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -197,7 +197,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -215,7 +215,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -237,7 +237,7 @@ export default function Invoices() {
 
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -256,7 +256,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -274,7 +274,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          trigger();
+                          mutate();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -287,7 +287,6 @@ export default function Invoices() {
           </Flex>
         </Box>
       ))}
-      <Divider m={4} />
       <Center>
         <Button
           onClick={() => setSize(size + 1)}
