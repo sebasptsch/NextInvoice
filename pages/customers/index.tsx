@@ -46,7 +46,7 @@ export default function Customers() {
       })
   )
 
-  useEffect(() => { filteredCustomers?.length === 0 ? setSize(size + 1) : null }, [customers])
+  // useEffect(() => { filteredCustomers?.length === 0 ? setSize(size + 1) : null }, [customers])
 
   return (
     <Layout>

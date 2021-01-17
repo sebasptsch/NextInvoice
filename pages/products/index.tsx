@@ -45,7 +45,7 @@ export default function Products() {
       product?.name.toLowerCase().includes(value.toLowerCase())
     )
 
-  useEffect(() => { filteredProducts?.length === 0 ? setSize(size + 1) : null }, [filteredProducts])
+  // useEffect(() => { filteredProducts?.length === 0 ? setSize(size + 1) : null }, [filteredProducts])
 
   return (
     <Layout>
