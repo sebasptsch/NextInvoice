@@ -13,23 +13,18 @@ import {
   MenuItem,
   MenuList,
   Select,
-  SkeletonText,
   Spacer,
   Stat,
-  StatGroup,
-  StatHelpText,
   StatLabel,
   StatNumber,
-  Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import ErrorHandler from "./ErrorHandler";
 import { useRouter } from "next/router";
-import { listFetcher, useInvoices } from "../helpers/helpers";
+import { useState } from "react";
 import useSWR from "swr";
+import { listFetcher } from "../helpers/helpers";
+import ErrorHandler from "./ErrorHandler";
 import { NextChakraLink } from "./NextChakraLink";
 
 export default function InvoiceList({ customer }: { customer?: string }) {
@@ -37,7 +32,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
   const router = useRouter();
   const [value, setValue] = useState(router.query.status || "open");
-  const { data: invoices, mutate } = useSWR(
+  const { data: invoices, trigger } = useSWR(
     `/api/invoices?status=${value}&customer=${customer}`,
     listFetcher
   );
@@ -177,7 +172,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                               title: "Sent!",
                               status: "success",
                             });
-                            mutate();
+                            trigger();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -195,7 +190,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                               title: "Success",
                               status: "success",
                             });
-                            mutate();
+                            trigger();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -216,7 +211,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
                               status: "success",
                             });
-                            mutate();
+                            trigger();
                           })
                           .catch((error) => ErrorHandler(error, toast));
                       }}
@@ -239,7 +234,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -258,7 +253,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -276,7 +271,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}

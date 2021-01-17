@@ -37,7 +37,7 @@ export default function Invoices() {
     invoices,
     isLoading,
     isLoadingMore,
-    mutate,
+    trigger,
     setSize,
     size,
     has_more,
@@ -179,7 +179,7 @@ export default function Invoices() {
                             title: "Sent!",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -197,7 +197,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -215,7 +215,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -237,7 +237,7 @@ export default function Invoices() {
 
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -256,7 +256,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}
@@ -274,7 +274,7 @@ export default function Invoices() {
                             title: "Success",
                             status: "success",
                           });
-                          mutate();
+                          trigger();
                         })
                         .catch((error) => ErrorHandler(error, toast));
                     }}

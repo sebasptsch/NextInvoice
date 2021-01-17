@@ -60,7 +60,7 @@ export default function CustomerCreation(props) {
   const router = useRouter();
   // const { prices } = usePrices();
   const { prices } = usePrices(undefined, props.prices);
-  const { customer, mutate } = useCustomer(props.customer.id);
+  const { customer, trigger } = useCustomer(props.customer.id);
 
   const { handleSubmit, errors, register, formState } = useForm({
     resolver: yupResolver(schema),
@@ -95,7 +95,7 @@ export default function CustomerCreation(props) {
             title: "Success",
             status: "success",
           });
-          mutate();
+          trigger();
         }
       })
       .catch((error) => ErrorHandler(error, toast));

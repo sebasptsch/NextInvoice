@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
 
 export default function InvoicePage(props) {
   const router = useRouter();
-  const { invoice, mutate } = useInvoice(props.invoice.id, props.invoice);
+  const { invoice, trigger } = useInvoice(props.invoice.id, props.invoice);
   // Hooks
   const toast = useToast();
 
@@ -97,7 +97,7 @@ export default function InvoicePage(props) {
                   title: "Sent!",
                   status: "success",
                 });
-                mutate();
+                trigger();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -116,7 +116,7 @@ export default function InvoicePage(props) {
                   title: "Success",
                   status: "success",
                 });
-                mutate();
+                trigger();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -136,7 +136,7 @@ export default function InvoicePage(props) {
 
                   status: "success",
                 });
-                mutate();
+                trigger();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -159,7 +159,7 @@ export default function InvoicePage(props) {
 
                   status: "success",
                 });
-                mutate();
+                trigger();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}
@@ -198,7 +198,7 @@ export default function InvoicePage(props) {
                   title: "Success",
                   status: "success",
                 });
-                mutate();
+                trigger();
               })
               .catch((error) => ErrorHandler(error, toast));
           }}

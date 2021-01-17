@@ -29,7 +29,7 @@ export default function Products() {
   // Hooks
   const router = useRouter();
   const [value, setValue] = useState("");
-  const { products, isLoading, mutate, setSize, size, has_more } = useProducts(
+  const { products, isLoading, trigger, setSize, size, has_more } = useProducts(
     20
   );
   const toast = useToast();
@@ -109,7 +109,7 @@ export default function Products() {
                                 title: "Success",
                                 status: "success",
                               });
-                              mutate();
+                              trigger();
                             }
                           })
                           .catch((error) => ErrorHandler(error, toast));

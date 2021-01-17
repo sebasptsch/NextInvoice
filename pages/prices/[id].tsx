@@ -42,7 +42,7 @@ export default function PriceView(props) {
   // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
-  const { price, mutate } = usePrice(props.price.id, props.price);
+  const { price, trigger } = usePrice(props.price.id, props.price);
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
@@ -61,7 +61,7 @@ export default function PriceView(props) {
             status: "success",
           });
           //   router.push(`/customers/${res.data.id}`);
-          mutate();
+          trigger();
         }
       })
       .catch((error) => ErrorHandler(error, toast));

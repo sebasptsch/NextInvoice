@@ -35,7 +35,7 @@ export default function Customers(props) {
     customers,
     isLoading,
     isError,
-    mutate,
+    trigger,
     has_more,
   } = useCustomers(20);
   const handleChange = (event) => setValue(event.target.value);
@@ -143,7 +143,7 @@ export default function Customers(props) {
                                 title: "Success",
                                 status: "success",
                               });
-                              mutate();
+                              trigger();
                             }
                           })
                           .catch((error) => ErrorHandler(error, toast));
