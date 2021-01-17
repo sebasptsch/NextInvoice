@@ -85,7 +85,7 @@ export default function Products(props) {
       method: "POST",
       url: `/api/products/${product.id}`,
       data: {
-        active,
+        active,                                                     /// Fix broken mutate
         name,
         description,
       },
@@ -96,7 +96,8 @@ export default function Products(props) {
             title: "Success",
             status: "success",
           });
-          mutate()
+          // mutate()
+          router.reload()
         }
       })
       .catch((error) => ErrorHandler(error, toast));
