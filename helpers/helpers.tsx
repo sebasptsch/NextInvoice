@@ -17,21 +17,22 @@ export const listFetcher = (url) =>
       throw error;
     });
 
-export function useCustomers() {
-  const limit = 20
+export function useCustomers(limit?) {
+  const itemLimit = limit || 20
   const { data, error, mutate, size, setSize } = useSWRInfinite((pageIndex, previousPageData) => {
     // reached the end
     if (previousPageData && !previousPageData.has_more) return null
     // first page, we don't have `previousPageData`
-    if (pageIndex === 0) return `/api/customers?limit=${limit}`
+    if (pageIndex === 0) return `/api/customers?limit=${itemLimit}`
     // add the cursor to the API endpoint
-    return `/api/customers?starting_after=${previousPageData.data[limit - 1].id}&limit=${limit}`
+    return `/api/customers?starting_after=${previousPageData.data[itemLimit - 1].id}&limit=${itemLimit}`
   }, fetcher);
   return {
     mutate,
     customers: data?.flatMap(customerLists => customerLists.data),
     has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
+    isLoadingMore: data?.length !== size,
     isError: error,
     size,
     setSize
@@ -71,15 +72,15 @@ export function usePrice(id, params?) {
   };
 }
 
-export function useInvoices(status) {
-  const limit = 20
+export function useInvoices(status, limit?) {
+  const itemLimit = limit || 20
   const { data, error, mutate, size, setSize } = useSWRInfinite((pageIndex, previousPageData) => {
     // reached the end
     if (previousPageData && !previousPageData.has_more) return null
     // first page, we don't have `previousPageData`
-    if (pageIndex === 0) return `/api/invoices?limit=${limit}&status=${status}`
+    if (pageIndex === 0) return `/api/invoices?limit=${itemLimit}&status=${status}`
     // add the cursor to the API endpoint
-    return `/api/invoices?starting_after=${previousPageData.data[limit - 1].id}&limit=${limit}&status=${status}`
+    return `/api/invoices?starting_after=${previousPageData.data[itemLimit - 1].id}&limit=${itemLimit}&status=${status}`
   }, fetcher);
   // concat all items in array - not done
   return {
@@ -87,6 +88,7 @@ export function useInvoices(status) {
     invoices: data?.flatMap(invoiceLists => invoiceLists.data),
     has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
+    isLoadingMore: data?.length !== size,
     isError: error,
     size,
     setSize
@@ -106,21 +108,23 @@ export function useInvoice(id, params?) {
   };
 }
 
-export function useProducts() {
-  const limit = 20
+export function useProducts(limit?) {
+  // const limit = 20
+  const itemLimit = limit || 20
   const { data, error, mutate, size, setSize } = useSWRInfinite((pageIndex, previousPageData) => {
     // reached the end
     if (previousPageData && !previousPageData.has_more) return null
     // first page, we don't have `previousPageData`
-    if (pageIndex === 0) return `/api/products?limit=${limit}`
+    if (pageIndex === 0) return `/api/products?limit=${itemLimit}`
     // add the cursor to the API endpoint
-    return `/api/products?starting_after=${previousPageData.data[limit - 1].id}&limit=${limit}`
+    return `/api/products?starting_after=${previousPageData.data[itemLimit - 1].id}&limit=${itemLimit}`
   }, fetcher);
   return {
     mutate,
     products: data?.flatMap(productLists => productLists.data),
     has_more: data && data[data?.length - 1]?.has_more,
     isLoading: !error && !data,
+    isLoadingMore: data?.length !== size,
     isError: error,
     size,
     setSize

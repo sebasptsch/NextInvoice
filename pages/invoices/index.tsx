@@ -39,7 +39,6 @@ import {
   Icon,
 } from "@chakra-ui/icons";
 import { useInvoices } from "../../helpers/helpers";
-import { mutate } from "swr";
 import { NextChakraLink } from "../../components/NextChakraLink";
 
 // Component Functions
@@ -51,7 +50,7 @@ export default function Invoices() {
   const toast = useToast();
 
 
-  const { invoices, isLoading, isError, mutate, setSize, size, has_more } = useInvoices(
+  const { invoices, isLoading, isLoadingMore, isError, mutate, setSize, size, has_more } = useInvoices(
     value
   );
   const handleStatus = (e) => {
@@ -63,17 +62,6 @@ export default function Invoices() {
       <Head>
         <title>Invoices</title>
       </Head>
-
-      {/* <Stat textAlign="center">
-        <StatLabel textTransform="capitalize">
-          Total Amount in {value} invoices
-        </StatLabel>
-        <StatHelpText></StatHelpText>
-        <StatNumber>
-          ${invoices?.reduce((a, b) => a + b.amount_due, 0) / 100}
-        </StatNumber>
-      </Stat> */}
-
       <br />
       <Flex>
         <Heading size="lg">Invoices</Heading>
@@ -312,7 +300,7 @@ export default function Invoices() {
       )}
       <Divider m={4} />
       <Center>
-        <Button onClick={() => setSize(size + 1)} disabled={!has_more || invoices?.length === 0 || isLoading}>
+        <Button onClick={() => setSize(size + 1)} disabled={!has_more || invoices?.length === 0 || isLoading} isLoading={isLoadingMore}>
           Load More
         </Button>
       </Center>
