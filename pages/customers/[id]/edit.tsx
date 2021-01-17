@@ -26,7 +26,6 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import * as yup from "yup";
-import "yup-phone";
 import ErrorHandler from "../../../components/ErrorHandler";
 import { useCustomer, usePrices } from "../../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
