@@ -1,32 +1,20 @@
+import { ExternalLinkIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
+  Button,
+  ButtonGroup,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Button,
-  useDisclosure,
-  Input,
-  Link as ChakraLink,
-  Text,
-  useColorMode,
-  Spacer,
-  Flex,
   IconButton,
-  ButtonGroup,
+  useColorMode,
 } from "@chakra-ui/react";
-import { useRef } from "react";
-import { signIn, signOut, useSession } from "next-auth/client";
-import {
-  ExternalLinkIcon,
-  HamburgerIcon,
-  MoonIcon,
-  SunIcon,
-} from "@chakra-ui/icons";
-import { NextChakraLink } from "./NextChakraLink";
+import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
+import { NextChakraLink } from "./NextChakraLink";
 
 export default function DrawerNavigation({ isOpen, onClose, btnRef }) {
   // Hooks
@@ -77,8 +65,7 @@ export default function DrawerNavigation({ isOpen, onClose, btnRef }) {
               </ButtonGroup>
 
               <br />
-              <br />
-              <NextChakraLink href="/">Dashboard</NextChakraLink>
+
               <br />
               <NextChakraLink href="/invoices">Invoices</NextChakraLink>
               <br />

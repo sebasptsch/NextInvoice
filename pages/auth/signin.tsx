@@ -1,25 +1,19 @@
-import React, { useState } from "react";
-import { csrfToken } from "next-auth/client";
-import Layout from "../../components/Layout";
 import {
   Button,
-  FormLabel,
-  Input,
-  Box,
-  Flex,
-  Spacer,
-  Container,
-  useColorMode,
-  Heading,
   Divider,
   FormControl,
-  useToast,
-  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
   InputGroup,
   InputRightElement,
+  useColorMode,
+  useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { csrfToken } from "next-auth/client";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 export default function SignIn({ csrfToken }) {
   const router = useRouter();
@@ -62,47 +56,40 @@ export default function SignIn({ csrfToken }) {
       <Head>
         <title>Sign In</title>
       </Head>
-      <Box p="1em" w="100%">
-        <Button onClick={toggleColorMode}>
-          Toggle {colorMode === "light" ? "Dark" : "Light"}
+
+      <Heading>Login</Heading>
+      <br />
+
+      <Divider />
+      <br />
+
+      <form method="post" action="/api/auth/callback/credentials">
+        <Input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+        <FormControl mt="4" isInvalid={errorMessage}>
+          <FormLabel>Username</FormLabel>
+          <Input name="username" type="text" placeholder="Enter username" />
+        </FormControl>
+        <FormControl mt="4" isInvalid={errorMessage}>
+          <FormLabel>Password</FormLabel>
+          <InputGroup>
+            <Input
+              name="password"
+              type={show ? "text" : "password"}
+              placeholder="Enter password"
+              pr="4.5rem"
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+
+        <Button mt="4" type="submit">
+          Sign in
         </Button>
-      </Box>
-
-      <Container>
-        <Heading>Login</Heading>
-        <br />
-
-        <Divider />
-        <br />
-
-        <form method="post" action="/api/auth/callback/credentials">
-          <Input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          <FormControl mt="4" isInvalid={errorMessage}>
-            <FormLabel>Username</FormLabel>
-            <Input name="username" type="text" placeholder="Enter username" />
-          </FormControl>
-          <FormControl mt="4" isInvalid={errorMessage}>
-            <FormLabel>Password</FormLabel>
-            <InputGroup>
-              <Input
-                name="password"
-                type={show ? "text" : "password"}
-                placeholder="Enter password"
-                pr="4.5rem"
-              />
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? "Hide" : "Show"}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
-
-          <Button mt="4" type="submit">
-            Sign in
-          </Button>
-        </form>
-      </Container>
+      </form>
     </>
   );
 }

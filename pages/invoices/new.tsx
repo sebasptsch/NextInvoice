@@ -6,22 +6,8 @@ import {
   Center,
   Flex,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   IconButton,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputLeftElement,
-  InputRightAddon,
-  InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -29,28 +15,24 @@ import {
   NumberInputStepper,
   Select,
   Spacer,
-  Spinner,
   Stack,
   Textarea,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import useSWR from "swr";
-import { array } from "yup/lib/locale";
 import ErrorHandler from "../../components/ErrorHandler";
-import Layout from "../../components/Layout";
 import { listFetcher } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const customers = await stripe.customers.list({ limit: 100 });
   const prices = await stripe.prices.list();
 
@@ -128,7 +110,7 @@ export default function NewInvoice(props) {
   };
 
   return (
-    <Layout>
+    <>
       <FormControl>
         <FormLabel>Select a customer</FormLabel>
         <Select
@@ -269,6 +251,6 @@ export default function NewInvoice(props) {
           Generate
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

@@ -1,44 +1,41 @@
 // UI Imports
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  StatGroup,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Heading,
-  Divider,
-  Select,
   Button,
+  Divider,
+  Heading,
+  Input,
   NumberInput,
   NumberInputField,
-  Input,
+  Select,
+  Stat,
+  StatGroup,
+  StatLabel,
+  StatNumber,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useToast,
 } from "@chakra-ui/react";
-
+import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
 // Hook Imports
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-
 // Serverside Imports
 import Stripe from "stripe";
-import Layout from "../../components/Layout";
-import axios from "axios";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import ErrorHandler from "../../components/ErrorHandler";
-import { listFetcher, useProducts } from "../../helpers/helpers";
 import useSWR from "swr";
+import ErrorHandler from "../../components/ErrorHandler";
+import { listFetcher } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const products = await stripe.products.list();
   return {
     props: {
@@ -91,7 +88,7 @@ export default function PriceView(props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>New Price</title>
       </Head>
@@ -168,6 +165,6 @@ export default function PriceView(props) {
           Save
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

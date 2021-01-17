@@ -1,21 +1,10 @@
-import Layout from "../../../components/Layout";
-
-import Stripe from "stripe";
 import {
-  Badge,
   Box,
   Button,
   ButtonGroup,
-  Center,
   Divider,
-  Flex,
   Heading,
-  IconButton,
-  Link,
   ListItem,
-  Select,
-  Spacer,
-  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -23,17 +12,16 @@ import {
   StatNumber,
   Text,
   UnorderedList,
-  useToast,
 } from "@chakra-ui/react";
-
-import InvoiceList from "../../../components/InvoiceList";
 import Head from "next/head";
-import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useRouter } from "next/router";
-import BalanceModal from "../../../components/BalanceModal";
-
-import { fetcher, listFetcher } from "../../../helpers/helpers";
+import Stripe from "stripe";
 import useSWR from "swr";
+import BalanceModal from "../../../components/BalanceModal";
+import InvoiceList from "../../../components/InvoiceList";
+import { NextChakraLink } from "../../../components/NextChakraLink";
+import { fetcher, listFetcher } from "../../../helpers/helpers";
+
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -64,7 +52,7 @@ export default function CustomerPage(props) {
   );
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>View Customer</title>
       </Head>
@@ -156,6 +144,6 @@ export default function CustomerPage(props) {
 
       <br />
       <InvoiceList customer={customer?.id} />
-    </Layout>
+    </>
   );
 }

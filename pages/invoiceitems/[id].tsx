@@ -5,38 +5,22 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   Select,
-  Spinner,
-  Stat,
-  StatGroup,
-  StatLabel,
-  StatNumber,
-  Textarea,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import ErrorHandler from "../../components/ErrorHandler";
-import Layout from "../../components/Layout";
-import Head from "next/head";
-import { fetcher, listFetcher, useInvoiceItem } from "../../helpers/helpers";
 import useSWR from "swr";
+import ErrorHandler from "../../components/ErrorHandler";
+import { fetcher, listFetcher } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -89,7 +73,7 @@ export default function NewInvoiceItem(props) {
   };
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Edit Invoice Item</title>
       </Head>
@@ -136,6 +120,6 @@ export default function NewInvoiceItem(props) {
           Save
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

@@ -1,6 +1,4 @@
-import Layout from "../../components/Layout";
-
-import Stripe from "stripe";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -10,14 +8,12 @@ import {
   Flex,
   Heading,
   Input,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Select,
   Spacer,
-  Spinner,
   Stat,
   StatGroup,
   StatHelpText,
@@ -32,22 +28,16 @@ import {
   Th,
   Thead,
   Tr,
-  useProps,
   useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
-import ErrorHandler from "../../components/ErrorHandler";
-import {
-  fetcher,
-  listFetcher,
-  usePrices,
-  useProduct,
-} from "../../helpers/helpers";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import Stripe from "stripe";
 import useSWR from "swr";
+import ErrorHandler from "../../components/ErrorHandler";
+import { fetcher, listFetcher } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -85,7 +75,7 @@ export default function Products(props) {
       method: "POST",
       url: `/api/products/${product.id}`,
       data: {
-        active,                                                     /// Fix broken mutate
+        active, /// Fix broken mutate
         name,
         description,
       },
@@ -97,14 +87,14 @@ export default function Products(props) {
             status: "success",
           });
           // mutate()
-          router.reload()
+          router.reload();
         }
       })
       .catch((error) => ErrorHandler(error, toast));
   };
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>View Product</title>
       </Head>
@@ -274,6 +264,6 @@ export default function Products(props) {
         {prices?.length == 0 && <Text>No Items here</Text>}
         <br />
       </form>
-    </Layout>
+    </>
   );
 }

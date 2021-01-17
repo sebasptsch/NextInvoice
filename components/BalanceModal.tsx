@@ -1,30 +1,30 @@
 import { EditIcon } from "@chakra-ui/icons";
 import {
+  Button,
+  FormControl,
+  FormLabel,
+  IconButton,
+  InputGroup,
+  InputLeftAddon,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-  Button,
-  IconButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  StatGroup,
-  Stat,
-  StatNumber,
-  StatLabel,
-  StatHelpText,
-  FormControl,
   Select,
-  FormLabel,
-  InputGroup,
-  InputLeftAddon,
+  Stat,
+  StatGroup,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -32,7 +32,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import { mutate } from "swr";
 import ErrorHandler from "./ErrorHandler";
 
 export default function BalanceModal({

@@ -1,36 +1,28 @@
 import {
   Badge,
   Box,
+  Button,
   Center,
   Divider,
   Flex,
-  Spacer,
-  Text,
   Heading,
+  Spacer,
   Table,
-  Thead,
   Tbody,
-  Tr,
-  Th,
   Td,
-  Button,
-  Tfoot,
+  Text,
+  Tr,
   useToast,
-  LinkBox,
-  ButtonGroup,
-  Stack,
-  Spinner,
 } from "@chakra-ui/react";
-import Layout from "../../components/Layout";
-import Stripe from "stripe";
 import axios from "axios";
 import Head from "next/head";
-import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
+import { useRouter } from "next/router";
+import Stripe from "stripe";
+import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
-import { useRouter } from "next/router";
-import { fetcher, listFetcher, useInvoice } from "../../helpers/helpers";
-import useSWR from "swr";
+import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
+import { fetcher } from "../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -56,7 +48,7 @@ export default function InvoicePage(props) {
   const toast = useToast();
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>View Invoice {invoice?.number}</title>
       </Head>
@@ -255,6 +247,6 @@ export default function InvoicePage(props) {
       <br />
       <br />
       <InvoiceItemList invoice={invoice} />
-    </Layout>
+    </>
   );
 }

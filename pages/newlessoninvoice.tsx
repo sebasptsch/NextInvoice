@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Flex,
   FormControl,
   FormLabel,
   Heading,
@@ -13,20 +12,15 @@ import {
   NumberInputStepper,
   Progress,
   Select,
-  Spacer,
   Stack,
-  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { urlObjectKeys } from "next/dist/next-server/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Stripe from "stripe";
 import ErrorHandler from "../components/ErrorHandler";
-import Layout from "../components/Layout";
 import { useCustomers } from "../helpers/helpers";
 
 export default function LessonInvoice() {
@@ -89,7 +83,7 @@ export default function LessonInvoice() {
     ).then(() => router.push(`/invoices?status=draft`));
   }
   return (
-    <Layout>
+    <>
       <Head>
         <title>Customers to be billed for classes</title>
       </Head>
@@ -181,6 +175,6 @@ export default function LessonInvoice() {
           Send Invoices
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

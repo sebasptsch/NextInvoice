@@ -1,33 +1,30 @@
 // UI Imports
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  StatGroup,
+  Button,
+  Divider,
+  Heading,
+  Input,
+  Select,
   Stat,
+  StatGroup,
   StatLabel,
   StatNumber,
-  Heading,
-  Divider,
-  Select,
-  Button,
-  Input,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useToast,
-  Spinner,
-  propNames,
 } from "@chakra-ui/react";
+import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
-import Layout from "../../components/Layout";
-import axios from "axios";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import ErrorHandler from "../../components/ErrorHandler";
-import { fetcher, usePrice } from "../../helpers/helpers";
 import useSWR from "swr";
+import ErrorHandler from "../../components/ErrorHandler";
+import { fetcher } from "../../helpers/helpers";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -48,9 +45,13 @@ export default function PriceView(props) {
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
-  const { data: price, mutate } = useSWR(`/api/prices/${router.query.id}`, fetcher, {
-    initialData: props.price,
-  });
+  const { data: price, mutate } = useSWR(
+    `/api/prices/${router.query.id}`,
+    fetcher,
+    {
+      initialData: props.price,
+    }
+  );
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
@@ -69,14 +70,14 @@ export default function PriceView(props) {
             status: "success",
           });
           //   router.push(`/customers/${res.data.id}`);
-          mutate()
+          mutate();
         }
       })
       .catch((error) => ErrorHandler(error, toast));
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>View Price</title>
       </Head>
@@ -146,6 +147,6 @@ export default function PriceView(props) {
           Save
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

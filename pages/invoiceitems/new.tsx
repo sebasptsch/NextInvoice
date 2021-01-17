@@ -12,19 +12,17 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Router, useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import useSWR from "swr";
 import ErrorHandler from "../../components/ErrorHandler";
-import Layout from "../../components/Layout";
 import { listFetcher } from "../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const customers = await stripe.customers.list({ limit: 100 });
 
   const prices = await stripe.prices.list();
@@ -62,7 +60,7 @@ export default function NewInvoiceItem(props) {
   };
 
   return (
-    <Layout>
+    <>
       <form onSubmit={handleSubmit(handleData)}>
         <FormControl isInvalid={errors.customer}>
           <FormLabel htmlFor="customer">
@@ -120,6 +118,6 @@ export default function NewInvoiceItem(props) {
           Add
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

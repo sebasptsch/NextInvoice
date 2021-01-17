@@ -1,3 +1,4 @@
+import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -14,26 +15,29 @@ import {
   MenuList,
   SkeletonText,
   Spacer,
-  Spinner,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import Layout from "../../components/Layout";
-import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import { listFetcher, useCustomers } from "../../helpers/helpers";
-import { NextChakraLink } from "../../components/NextChakraLink";
 import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
-import useSWR from "swr";
+import { NextChakraLink } from "../../components/NextChakraLink";
+import { useCustomers } from "../../helpers/helpers";
 
-export default function Customers() {
+export default function Customers(props) {
   const router = useRouter();
   const toast = useToast();
   const [value, setValue] = useState("");
-  // const { customers, isLoading, mutate } = useCustomers();
-  const { setSize, size, customers, isLoading, isError, mutate, has_more } = useCustomers()
+  const {
+    setSize,
+    size,
+    customers,
+    isLoading,
+    isError,
+    mutate,
+    has_more,
+  } = useCustomers(20);
   const handleChange = (event) => setValue(event.target.value);
 
   const filteredCustomers = customers?.filter(
@@ -44,12 +48,12 @@ export default function Customers() {
         const studentName = student.toLowerCase();
         return studentName.includes(value.toLowerCase());
       })
-  )
+  );
 
   // useEffect(() => { filteredCustomers?.length === 0 ? setSize(size + 1) : null }, [customers])
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Customers</title>
       </Head>
@@ -81,101 +85,102 @@ export default function Customers() {
           <SkeletonText height="100%" />
         </Box>
       ) : null}
-      {
-        filteredCustomers?.map((customer) => {
-          const students = customer.metadata.students
-            ? JSON.parse(customer.metadata.students)
-            : [];
-          return (
-            <Box
-              borderWidth="1px"
-              borderRadius="10px"
-              p="1em"
-              m="1em"
-              key={customer.id}
-            >
-              <Flex>
-                <Center>
-                  <NextChakraLink
-                    href="/customers/[id]"
-                    as={`/customers/${customer?.id}`}
+      {filteredCustomers?.map((customer) => {
+        const students = customer.metadata.students
+          ? JSON.parse(customer.metadata.students)
+          : [];
+        return (
+          <Box
+            borderWidth="1px"
+            borderRadius="10px"
+            p="1em"
+            m="1em"
+            key={customer.id}
+          >
+            <Flex>
+              <Center>
+                <NextChakraLink
+                  href="/customers/[id]"
+                  as={`/customers/${customer?.id}`}
+                >
+                  {customer?.name?.length > 0
+                    ? customer?.name
+                    : customer?.email}
+                </NextChakraLink>
+              </Center>
+              <Spacer />
+
+              <Center>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    size={"sm"}
+                    rightIcon={<ChevronDownIcon />}
+                    marginLeft="1em"
                   >
-                    {customer?.name?.length > 0
-                      ? customer?.name
-                      : customer?.email}
-                  </NextChakraLink>
-                </Center>
-                <Spacer />
-
-                <Center>
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      size={"sm"}
-                      rightIcon={<ChevronDownIcon />}
-                      marginLeft="1em"
+                    Actions
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() =>
+                        router.push(
+                          `/customers/[id]/edit`,
+                          `/customers/${customer?.id}/edit`
+                        )
+                      }
                     >
-                      Actions
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() =>
-                          router.push(
-                            `/customers/[id]/edit`,
-                            `/customers/${customer?.id}/edit`
-                          )
-                        }
-                      >
-                        Edit
-                      </MenuItem>
+                      Edit
+                    </MenuItem>
 
-                      <MenuItem
-                        key="Delete"
-                        onClick={() => {
-                          axios
-                            .delete(`/api/customers/${customer?.id}`)
-                            .then((response) => {
-                              if (response.status === 200) {
-                                toast({
-                                  title: "Success",
-                                  status: "success",
-                                });
-                                mutate();
-                              }
-                            })
-                            .catch((error) => ErrorHandler(error, toast));
-                        }}
-                      >
-                        Delete
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() =>
-                          router.push(
-                            `/invoices/new?customer=${customer?.id}`,
-                            `/invoices/new?customer=${customer?.id}`
-                          )
-                        }
-                      >
-                        Create Invoice
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Center>
-              </Flex>
-              {students?.map((student) => (
-                <Badge key={student} m={1} colorScheme="blue">
-                  {student}
-                </Badge>
-              ))}
-            </Box>
-          );
-        })}
+                    <MenuItem
+                      key="Delete"
+                      onClick={() => {
+                        axios
+                          .delete(`/api/customers/${customer?.id}`)
+                          .then((response) => {
+                            if (response.status === 200) {
+                              toast({
+                                title: "Success",
+                                status: "success",
+                              });
+                              mutate();
+                            }
+                          })
+                          .catch((error) => ErrorHandler(error, toast));
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        router.push(
+                          `/invoices/new?customer=${customer?.id}`,
+                          `/invoices/new?customer=${customer?.id}`
+                        )
+                      }
+                    >
+                      Create Invoice
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Center>
+            </Flex>
+            {students?.map((student) => (
+              <Badge key={student} m={1} colorScheme="blue">
+                {student}
+              </Badge>
+            ))}
+          </Box>
+        );
+      })}
       <Center>
-        <Button onClick={() => setSize(size + 1)} disabled={!has_more || customers?.length === 0 || isLoading}>
+        <Button
+          onClick={() => setSize(size + 1)}
+          disabled={!has_more || customers?.length === 0 || isLoading}
+        >
           Load More
         </Button>
       </Center>
-
-    </Layout>
+    </>
   );
 }

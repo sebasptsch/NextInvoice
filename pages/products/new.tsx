@@ -1,46 +1,25 @@
-import Layout from "../../components/Layout";
-
-import Stripe from "stripe";
 import {
-  Badge,
-  Box,
   Button,
-  Center,
   Divider,
-  Flex,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Heading,
   Input,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Select,
-  Spacer,
-  Stat,
-  StatGroup,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
   Table,
   TableCaption,
   Tbody,
   Td,
-  Text,
   Textarea,
   Th,
   Thead,
   Tr,
   useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 import ErrorHandler from "../../components/ErrorHandler";
 
 export default function Products() {
@@ -73,7 +52,7 @@ export default function Products() {
       .catch((error) => ErrorHandler(error, toast));
   };
   return (
-    <Layout>
+    <>
       <Head>
         <title>New Product</title>
       </Head>
@@ -140,6 +119,6 @@ export default function Products() {
           </Tbody>
         </Table>
       </form>
-    </Layout>
+    </>
   );
 }

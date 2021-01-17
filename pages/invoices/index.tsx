@@ -1,6 +1,4 @@
-import Layout from "../../components/Layout";
-
-import Head from "next/head";
+import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -17,29 +15,15 @@ import {
   Select,
   SkeletonText,
   Spacer,
-  Spinner,
-  Stat,
-  StatGroup,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
-  Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import ErrorHandler from "../../components/ErrorHandler";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import {
-  AddIcon,
-  ArrowBackIcon,
-  ArrowForwardIcon,
-  ChevronDownIcon,
-  Icon,
-} from "@chakra-ui/icons";
-import { useInvoices } from "../../helpers/helpers";
+import { useState } from "react";
+import ErrorHandler from "../../components/ErrorHandler";
 import { NextChakraLink } from "../../components/NextChakraLink";
+import { useInvoices } from "../../helpers/helpers";
 
 // Component Functions
 
@@ -49,16 +33,21 @@ export default function Invoices() {
   const [value, setValue] = useState(router.query.status || "open");
   const toast = useToast();
 
-
-  const { invoices, isLoading, isLoadingMore, isError, mutate, setSize, size, has_more } = useInvoices(
-    value
-  );
+  const {
+    invoices,
+    isLoading,
+    isLoadingMore,
+    mutate,
+    setSize,
+    size,
+    has_more,
+  } = useInvoices(value, 20);
   const handleStatus = (e) => {
     router.replace(`/invoices?status=${e.target.value}`);
     setValue(e.target.value);
   };
   return (
-    <Layout>
+    <>
       <Head>
         <title>Invoices</title>
       </Head>
@@ -105,7 +94,7 @@ export default function Invoices() {
           <SkeletonText height="100%" />
         </Box>
       ) : null}
-      {invoices?.map(invoice =>
+      {invoices?.map((invoice) => (
         <Box
           borderWidth="1px"
           borderRadius="10px"
@@ -131,13 +120,13 @@ export default function Invoices() {
                   invoice?.status == "paid"
                     ? "green"
                     : invoice?.status == "draft"
-                      ? "grey"
-                      : invoice?.due_date < Date.now() &&
-                        invoice?.status === "open"
-                        ? "red"
-                        : invoice?.status == "open"
-                          ? "blue"
-                          : null
+                    ? "grey"
+                    : invoice?.due_date < Date.now() &&
+                      invoice?.status === "open"
+                    ? "red"
+                    : invoice?.status == "open"
+                    ? "blue"
+                    : null
                 }
               >
                 {invoice?.due_date < Date.now() && invoice?.status == "open"
@@ -297,13 +286,17 @@ export default function Invoices() {
             </Center>
           </Flex>
         </Box>
-      )}
+      ))}
       <Divider m={4} />
       <Center>
-        <Button onClick={() => setSize(size + 1)} disabled={!has_more || invoices?.length === 0 || isLoading} isLoading={isLoadingMore}>
+        <Button
+          onClick={() => setSize(size + 1)}
+          disabled={!has_more || invoices?.length === 0 || isLoading}
+          isLoading={isLoadingMore}
+        >
           Load More
         </Button>
       </Center>
-    </Layout>
+    </>
   );
 }

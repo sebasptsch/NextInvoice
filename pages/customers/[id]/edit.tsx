@@ -1,42 +1,35 @@
 import {
+  Badge,
+  Box,
+  Button,
   Divider,
-  Heading,
-  Textarea,
-  useToast,
+  Flex,
+  FormControl,
   FormErrorMessage,
   FormLabel,
-  FormControl,
+  Heading,
   Input,
-  Button,
-  Box,
-  Flex,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Spacer,
   Text,
-  Badge,
-  Spinner,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import Layout from "../../../components/Layout";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import Stripe from "stripe";
+import useSWR from "swr";
 import * as yup from "yup";
 import "yup-phone";
-import Head from "next/head";
 import ErrorHandler from "../../../components/ErrorHandler";
-import {
-  listFetcher,
-  fetcher,
-  useCustomer,
-  usePrices,
-} from "../../../helpers/helpers";
-import useSWR from "swr";
-import Stripe from "stripe";
+import { fetcher, listFetcher } from "../../../helpers/helpers";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -117,7 +110,7 @@ export default function CustomerCreation(props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Edit Customer</title>
       </Head>
@@ -248,6 +241,6 @@ export default function CustomerCreation(props) {
           Save
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

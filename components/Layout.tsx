@@ -1,44 +1,37 @@
+import { ArrowBackIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Button,
   Center,
   Container,
   Flex,
   Heading,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Spacer,
   Spinner,
-  Text,
-  useColorMode,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import DrawerNavigation from "./Drawer";
-import { signIn, signOut, useSession } from "next-auth/client";
-import { Router, useRouter } from "next/router";
+import { useSession } from "next-auth/client";
 import Head from "next/head";
+import { Router, useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { ArrowBackIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { NextChakraLink } from "./NextChakraLink";
+import DrawerNavigation from "./Drawer";
 
-export default function Layout({ children }: { children: any }) {
+export default function Layout({ children }) {
   // Hooks
-  const [session] = useSession();
+  const [session, loading] = useSession();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [routerLoading, setRouterLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-
+  const toast = useToast();
   // Loading Screen
-  Router.events.on("routeChangeStart", () => setLoading(true));
-  Router.events.on("routeChangeComplete", () => setLoading(false));
-  Router.events.on("routeChangeError", () => setLoading(false));
+  Router.events.on("routeChangeStart", () => setRouterLoading(true));
+  Router.events.on("routeChangeComplete", () => {
+    setRouterLoading(false);
+    onClose();
+  });
+  Router.events.on("routeChangeError", () => setRouterLoading(false));
   if (loading) {
     return (
       <>
@@ -50,6 +43,11 @@ export default function Layout({ children }: { children: any }) {
         </Center>
       </>
     );
+  }
+
+  if (!session && !loading && router.pathname !== "/auth/signin") {
+    router.push("/auth/signin");
+    return <></>;
   }
 
   return (
@@ -81,21 +79,7 @@ export default function Layout({ children }: { children: any }) {
           <DrawerNavigation isOpen={isOpen} onClose={onClose} btnRef={btnRef} />
         </Flex>
       </Box>
-      {session ? (
-        <Container>{children}</Container>
-      ) : (
-        <>
-          <Center>
-            <Button
-              onClick={() => {
-                router.push(`/api/auth/signin`);
-              }}
-            >
-              Sign In
-            </Button>
-          </Center>
-        </>
-      )}
+      <Container>{children}</Container>
       <br />
       <Box w="100%">
         <Center>Made by Sebastian for Juli</Center>

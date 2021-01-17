@@ -1,37 +1,30 @@
 import {
+  Box,
+  Button,
   Divider,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Heading,
-  InputGroup,
-  InputRightElement,
-  Textarea,
-  useToast,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
-  Button,
-  Box,
-  Flex,
   Spacer,
   Text,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import Layout from "../../components/Layout";
-import { useForm } from "react-hook-form";
-
-import axios from "axios";
-import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import "yup-phone";
-import { useEffect, useState } from "react";
-import Stripe from "stripe";
-import { CheckIcon } from "@chakra-ui/icons";
-import Head from "next/head";
 import ErrorHandler from "../../components/ErrorHandler";
 import { useCustomers, usePrices } from "../../helpers/helpers";
 
@@ -92,7 +85,7 @@ export default function CustomerCreation() {
   }
 
   return (
-    <Layout>
+    <>
       <Head>New Customer</Head>
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Create Customer
@@ -189,6 +182,6 @@ export default function CustomerCreation() {
           Submit
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }
