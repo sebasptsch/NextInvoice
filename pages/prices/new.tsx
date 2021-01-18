@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 // Serverside Imports
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
-import { useProducts } from "../../helpers/helpers";
+import { useProducts } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",

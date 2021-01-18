@@ -7,7 +7,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import { csrfToken } from "next-auth/client";
@@ -18,7 +17,6 @@ import React, { useState } from "react";
 export default function SignIn({ csrfToken }) {
   const router = useRouter();
   const { email, error } = router.query;
-  const { colorMode, toggleColorMode } = useColorMode();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   // Dev

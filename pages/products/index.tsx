@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
 import { NextChakraLink } from "../../components/NextChakraLink";
-import { useProducts } from "../../helpers/helpers";
+import { useProducts } from "../../extras/resourceHooks";
 
 export default function Products() {
   // Hooks

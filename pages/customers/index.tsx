@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
 import { NextChakraLink } from "../../components/NextChakraLink";
-import { useCustomers } from "../../helpers/helpers";
+import { useCustomers } from "../../extras/resourceHooks";
 
 export default function Customers() {
   const router = useRouter();
