@@ -7,15 +7,14 @@ import {
   Heading,
   IconButton,
   Spacer,
-  Spinner,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/client";
-import Head from "next/head";
 import { Router, useRouter } from "next/router";
 import { useRef, useState } from "react";
 import DrawerNavigation from "./Drawer";
+import LoadingScreen from "./LoadingScreen.";
 
 export default function Layout({ children }) {
   // Hooks
@@ -33,16 +32,7 @@ export default function Layout({ children }) {
   });
   Router.events.on("routeChangeError", () => setRouterLoading(false));
   if (loading) {
-    return (
-      <>
-        <Head>
-          <title>Loading...</title>
-        </Head>
-        <Center h="100vh" w="100%">
-          <Spinner size="xl" />
-        </Center>
-      </>
-    );
+    return <LoadingScreen />;
   }
 
   if (!session && !loading && router.pathname !== "/auth/signin") {
