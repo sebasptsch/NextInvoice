@@ -49,6 +49,7 @@ export default function PriceView(
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
+    mutate({ active, nickname }, false);
     return axios({
       method: "POST",
       url: `/api/prices/${price.id}`,

@@ -80,7 +80,16 @@ export default function CustomerCreation(
       students: JSON.stringify(students),
       classes: JSON.stringify(classes),
     };
-
+    mutate(
+      {
+        email,
+        description,
+        name,
+        phone,
+        metadata,
+      },
+      false
+    );
     return axios({
       url: `/api/customers/${router.query.id}`,
       method: "POST",

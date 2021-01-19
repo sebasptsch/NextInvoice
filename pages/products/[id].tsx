@@ -70,6 +70,14 @@ export default function Products(
   // Component Functions
   const submitHandler = (values) => {
     const { active, name, description } = values;
+    mutate(
+      {
+        active,
+        name,
+        description,
+      },
+      false
+    );
     return axios({
       method: "POST",
       url: `/api/products/${product.id}`,
