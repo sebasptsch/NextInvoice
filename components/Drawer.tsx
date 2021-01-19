@@ -68,10 +68,10 @@ export default function DrawerNavigation({ isOpen, onClose, btnRef }) {
 
               <br />
               <NextChakraLink href="/invoices">Invoices</NextChakraLink>
-              <br />
+              {/* <br />
               <NextChakraLink ml={4} href="/newlessoninvoice">
                 Invoice for Lessons
-              </NextChakraLink>
+              </NextChakraLink> */}
               <br />
               <NextChakraLink href="/customers">Customers</NextChakraLink>
               <br />

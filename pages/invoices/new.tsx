@@ -80,7 +80,7 @@ export default function NewInvoice(
     const tax_rates =
       process.env.NODE_ENV === "production"
         ? { default_tax_rates: ["txr_1I9gWSIK06OmoiJke5vnXGgL"] }
-        : null;
+        : { default_tax_rates: ["txr_1HQWR0IK06OmoiJkkVxUf7pn"] };
     return new Promise<void>((resolve) =>
       addItems().then(() => {
         axios
