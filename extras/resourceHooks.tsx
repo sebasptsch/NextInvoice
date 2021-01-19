@@ -162,7 +162,7 @@ export function useProducts(limit?, initialData?) {
 }
 
 export function useProduct(id, initialData?) {
-  const { data, error, mutate } = useSWR([`/api/producuts/${id}`], {
+  const { data, error, mutate } = useSWR([`/api/products/${id}`], {
     initialData,
   });
   return {
