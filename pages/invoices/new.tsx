@@ -89,6 +89,7 @@ export default function NewInvoice(
             collection_method,
             days_until_due,
             auto_advance: true,
+            description,
             ...tax_rates,
           })
           .then((response) => {
