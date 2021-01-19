@@ -164,41 +164,34 @@ export default function NewInvoice(
           </Stack>
         </FormControl>
         <br />
-        <Box borderWidth="1px" borderRadius="0.375rem">
-          <Flex>
-            <NumberInput defaultValue={"1"} width={100} borderWidth={0}>
-              <NumberInputField
-                ref={register()}
-                name="invoiceitem.quantity"
-                borderWidth={0}
-              />
-              <NumberInputStepper></NumberInputStepper>
-            </NumberInput>
 
-            <Select
-              ref={register}
-              name={`invoiceitem.price`}
-              // as={Input}
-              borderWidth={0}
-              textAlign="center"
-            >
-              {prices
-                .filter((price) => price.active)
-                .map((price) => (
-                  <option value={JSON.stringify(price)} key={price.id}>
-                    {price.nickname}
-                  </option>
-                ))}
-            </Select>
+        <Flex>
+          <NumberInput defaultValue={"1"} width={100}>
+            <NumberInputField ref={register()} name="invoiceitem.quantity" />
+            <NumberInputStepper></NumberInputStepper>
+          </NumberInput>
 
-            <IconButton
-              aria-label="add invoice item"
-              icon={<AddIcon />}
-              type="submit"
-              variant="ghost"
-            />
-          </Flex>
-        </Box>
+          <Select
+            ref={register}
+            name={`invoiceitem.price`}
+            // as={Input}
+            textAlign="center"
+          >
+            {prices
+              .filter((price) => price.active)
+              .map((price) => (
+                <option value={JSON.stringify(price)} key={price.id}>
+                  {price.nickname}
+                </option>
+              ))}
+          </Select>
+
+          <IconButton
+            aria-label="add invoice item"
+            icon={<AddIcon />}
+            type="submit"
+          />
+        </Flex>
       </form>
       <br />
       <form onSubmit={handleSubmit(handleInvoiceData)}>
