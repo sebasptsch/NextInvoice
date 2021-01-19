@@ -72,6 +72,7 @@ export default function Products(
     const { active, name, description } = values;
     mutate(
       {
+        ...product,
         active,
         name,
         description,
@@ -94,7 +95,6 @@ export default function Products(
             status: "success",
           });
           mutate();
-          // router.reload();
         }
       })
       .catch((error) => ErrorHandler(error, toast));

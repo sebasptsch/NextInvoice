@@ -56,7 +56,7 @@ export default function NewInvoiceItem(
   // Component Functions
   const handleData = (values) => {
     let { price, quantity } = values;
-    mutate({ price, quantity }, false);
+    mutate({ ...invoiceItem, price, quantity }, false);
     return axios
       .post(`/api/invoiceitems/${router.query.id}`, {
         price,

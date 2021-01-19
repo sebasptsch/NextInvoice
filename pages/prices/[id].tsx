@@ -46,10 +46,11 @@ export default function PriceView(
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const { price, mutate } = usePrice(props.price.id, props.price);
+  console.log(price);
   // Component Functions
   function submitHandler(values) {
     const { active, nickname, unit_amount } = values;
-    mutate({ active, nickname }, false);
+    mutate({ ...price, active, nickname }, false);
     return axios({
       method: "POST",
       url: `/api/prices/${price.id}`,

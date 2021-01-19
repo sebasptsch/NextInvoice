@@ -82,6 +82,7 @@ export default function CustomerCreation(
     };
     mutate(
       {
+        ...customer,
         email,
         description,
         name,
