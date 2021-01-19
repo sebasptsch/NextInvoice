@@ -15,6 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
@@ -36,7 +37,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function InvoicePage(props) {
+export default function InvoicePage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const router = useRouter();
   const { invoice, mutate } = useInvoice(props.invoice.id, props.invoice);
   // Hooks

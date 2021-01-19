@@ -13,6 +13,7 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
@@ -38,7 +39,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function CustomerPage(props) {
+export default function CustomerPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   // Hooks
   const router = useRouter();
   const { prices } = usePrices(undefined, props.prices);

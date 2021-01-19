@@ -31,6 +31,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -54,7 +55,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Products(props) {
+export default function Products(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   // Hooks
   const router = useRouter();
 

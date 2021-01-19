@@ -20,6 +20,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -43,7 +44,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function NewInvoice(props) {
+export default function NewInvoice(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const { handleSubmit, errors, register, formState, watch } = useForm();
   const [DUDDisabled, setDUDDisabled] = useState(false);
   const toast = useToast();

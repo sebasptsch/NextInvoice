@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
@@ -34,7 +35,9 @@ export async function getServerSideProps() {
   };
 }
 
-export default function NewInvoiceItem(props) {
+export default function NewInvoiceItem(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const { prices } = usePrices(undefined, props.prices);
   const { customers } = useCustomers(100, props.customers);
   const { handleSubmit, errors, register, formState, watch } = useForm();

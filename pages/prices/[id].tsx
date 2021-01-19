@@ -18,6 +18,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
@@ -38,7 +39,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function PriceView(props) {
+export default function PriceView(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   // Hooks
   const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();

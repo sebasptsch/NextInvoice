@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -45,7 +46,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function CustomerCreation(props) {
+export default function CustomerCreation(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   // Validation Schema for form
   const schema = yup.object().shape({
     email: yup.string().email().required(),
