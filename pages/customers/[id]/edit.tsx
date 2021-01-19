@@ -1,21 +1,11 @@
 import {
-  Badge,
-  Box,
   Button,
   Divider,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Spacer,
-  Text,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
@@ -74,12 +64,10 @@ export default function CustomerCreation(
   // Component Functions
   function onSubmit(values) {
     const { email, description, phone, name } = values;
-    let { students, classes } = values;
+    let { students } = values;
     students = students?.split(",")?.map((el) => el.trim());
-    classes = classes?.filter((classitem) => classitem.amount > 0);
     const metadata = {
       students: JSON.stringify(students),
-      classes: JSON.stringify(classes),
     };
     mutate(
       {
@@ -194,58 +182,6 @@ export default function CustomerCreation(
             })}
           />
           <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Classes</FormLabel>
-          {prices
-            ?.sort((price) => (price.active ? -1 : 1))
-            ?.map((price, index) => {
-              let classes = JSON.parse(
-                customer?.metadata?.classes ? customer?.metadata.classes : null
-              );
-              return (
-                <Box
-                  borderRadius="10px"
-                  borderWidth="1px"
-                  key={price.id}
-                  m={4}
-                  p={2}
-                >
-                  <Input
-                    type="hidden"
-                    value={price.id}
-                    name={`classes[${index}].priceid`}
-                    ref={register}
-                  />
-                  <Flex>
-                    <NumberInput
-                      w="4em"
-                      defaultValue={
-                        +classes?.find(
-                          (classobject) => classobject.priceid === price.id
-                        )?.amount
-                      }
-                    >
-                      <NumberInputField
-                        ref={register()}
-                        name={`classes[${index}].amount`}
-                      />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                    <Spacer />
-                    <Text>
-                      <Badge colorScheme={price.active ? "green" : "red"}>
-                        {price.active ? "Enabled" : "Disabled"}
-                      </Badge>
-                      {price.nickname}
-                    </Text>
-                  </Flex>
-                </Box>
-              );
-            })}
         </FormControl>
         <Button mt={4} isLoading={formState.isSubmitting} type="submit">
           Save

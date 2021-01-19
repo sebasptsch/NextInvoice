@@ -1,20 +1,11 @@
 import {
-  Box,
   Button,
   Divider,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Spacer,
-  Text,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
@@ -56,13 +47,9 @@ export default function CustomerCreation() {
   function onSubmit(values) {
     const { email, description, phone, name } = values;
     let { students } = values;
-    let { classes } = values;
     students = students.split(",").map((el) => el.trim());
-    classes = classes.filter((classitem) => classitem.amount > 0);
-    // console.log(classes);
     const metadata = {
       students: JSON.stringify(students),
-      classes: JSON.stringify(classes),
     };
     return axios
       .post("/api/customers", {
@@ -137,41 +124,6 @@ export default function CustomerCreation() {
             })}
           />
           <FormErrorMessage>{errors.students?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Classes per Week</FormLabel>
-          {prices
-            ?.filter((price) => price.active)
-            ?.map((price, index) => (
-              <Box
-                borderRadius="10px"
-                borderWidth="1px"
-                key={price.id}
-                m={4}
-                p={2}
-              >
-                <Input
-                  type="hidden"
-                  value={price.id}
-                  name={`classes[${index}].priceid`}
-                  ref={register}
-                />
-                <Flex>
-                  <NumberInput defaultValue={0}>
-                    <NumberInputField
-                      ref={register()}
-                      name={`classes[${index}].amount`}
-                    />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <Spacer />
-                  <Text>{price.nickname}</Text>
-                </Flex>
-              </Box>
-            ))}
         </FormControl>
         <Button
           mt={4}

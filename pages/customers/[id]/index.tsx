@@ -106,28 +106,6 @@ export default function CustomerPage(
           <br />
         </>
       ) : null}
-
-      <Box w="100%">
-        <Heading marginTop="1em" marginBottom="0.5em" size="lg">
-          Classes
-        </Heading>
-        <Divider marginBottom={2} />
-        <UnorderedList>
-          {customer?.metadata?.classes
-            ? JSON.parse(customer?.metadata.classes)?.map((customerclass) => {
-                return (
-                  <ListItem key={customerclass.priceid}>
-                    {customerclass?.amount +
-                      "x " +
-                      prices?.find(
-                        (price) => price.id === customerclass.priceid
-                      )?.nickname}
-                  </ListItem>
-                );
-              })
-            : null}
-        </UnorderedList>
-      </Box>
       <Box w="100%">
         <Heading marginTop="1em" marginBottom="0.5em" size="lg">
           Students

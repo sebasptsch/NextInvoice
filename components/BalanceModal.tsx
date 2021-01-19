@@ -114,7 +114,6 @@ export default function BalanceModal({
                   <NumberInput defaultValue={customer.balance}>
                     <NumberInputField
                       ref={register()}
-                      //   name={`classes[${index}].amount`}
                       name="newBalance"
                       value={balance}
                       onChange={(e) => {
