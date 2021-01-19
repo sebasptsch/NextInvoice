@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import Stripe from "stripe";
 import BalanceModal from "../../../components/BalanceModal";
 import InvoiceList from "../../../components/InvoiceList";
+import Layout from "../../../components/Layout";
 import { NextChakraLink } from "../../../components/NextChakraLink";
 import { useCustomer, usePrices } from "../../../extras/resourceHooks";
 
@@ -48,7 +49,7 @@ export default function CustomerPage(
   const { customer } = useCustomer(props.customer.id, props.customer);
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>
           View Customer{" "}
@@ -143,6 +144,6 @@ export default function CustomerPage(
 
       <br />
       <InvoiceList customer={customer?.id} />
-    </>
+    </Layout>
   );
 }

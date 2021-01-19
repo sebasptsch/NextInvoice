@@ -28,6 +28,7 @@ import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import * as yup from "yup";
 import ErrorHandler from "../../../components/ErrorHandler";
+import Layout from "../../../components/Layout";
 import { useCustomer, usePrices } from "../../../extras/resourceHooks";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -115,13 +116,14 @@ export default function CustomerCreation(
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>
           Edit Customer{" "}
           {customer?.name?.length > 0 ? customer?.name : customer?.email}
         </title>
       </Head>
+
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Edit Customer
       </Heading>
@@ -249,6 +251,6 @@ export default function CustomerCreation(
           Save
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

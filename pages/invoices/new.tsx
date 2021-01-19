@@ -26,6 +26,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { useCustomers, usePrices } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
@@ -106,7 +107,7 @@ export default function NewInvoice(
   };
 
   return (
-    <>
+    <Layout>
       <FormControl>
         <FormLabel>Select a customer</FormLabel>
         <Select
@@ -247,6 +248,6 @@ export default function NewInvoice(
           Generate
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

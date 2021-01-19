@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { useCustomers, usePrices } from "../../extras/resourceHooks";
 
 export default function CustomerCreation() {
@@ -84,7 +85,7 @@ export default function CustomerCreation() {
   }
 
   return (
-    <>
+    <Layout>
       <Head>New Customer</Head>
       <Heading marginTop="1em" marginBottom="0.5em" size="lg">
         Create Customer
@@ -181,6 +182,6 @@ export default function CustomerCreation() {
           Submit
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

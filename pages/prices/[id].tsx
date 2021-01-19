@@ -23,6 +23,7 @@ import Head from "next/head";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { usePrice } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
@@ -73,7 +74,7 @@ export default function PriceView(
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>View Price {price?.nickname}</title>
       </Head>
@@ -143,6 +144,6 @@ export default function PriceView(
           Save
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

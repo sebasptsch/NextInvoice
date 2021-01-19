@@ -22,6 +22,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { NextChakraLink } from "../../components/NextChakraLink";
 import { useProducts } from "../../extras/resourceHooks";
 
@@ -47,7 +48,7 @@ export default function Products() {
   );
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Products</title>
       </Head>
@@ -139,6 +140,6 @@ export default function Products() {
           Load More
         </Button>
       </Center>
-    </>
+    </Layout>
   );
 }

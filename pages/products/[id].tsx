@@ -37,6 +37,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { usePrices, useProduct } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
@@ -101,7 +102,7 @@ export default function Products(
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>View Product {product?.name}</title>
       </Head>
@@ -271,6 +272,6 @@ export default function Products(
         {prices?.length == 0 && <Text>No Items here</Text>}
         <br />
       </form>
-    </>
+    </Layout>
   );
 }

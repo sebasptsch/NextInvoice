@@ -21,6 +21,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 
 export default function Products() {
   // Hooks
@@ -52,7 +53,7 @@ export default function Products() {
       .catch((error) => ErrorHandler(error, toast));
   };
   return (
-    <>
+    <Layout>
       <Head>
         <title>New Product</title>
       </Head>
@@ -119,6 +120,6 @@ export default function Products() {
           </Tbody>
         </Table>
       </form>
-    </>
+    </Layout>
   );
 }

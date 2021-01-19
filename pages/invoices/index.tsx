@@ -22,6 +22,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { NextChakraLink } from "../../components/NextChakraLink";
 import { useInvoices } from "../../extras/resourceHooks";
 
@@ -47,7 +48,7 @@ export default function Invoices() {
     setValue(e.target.value);
   };
   return (
-    <>
+    <Layout>
       <Head>
         <title>Invoices</title>
       </Head>
@@ -296,6 +297,6 @@ export default function Invoices() {
           Load More
         </Button>
       </Center>
-    </>
+    </Layout>
   );
 }

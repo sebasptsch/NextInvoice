@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { useCustomers, usePrices } from "../../extras/resourceHooks";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
@@ -58,7 +59,7 @@ export default function NewInvoiceItem(
   };
 
   return (
-    <>
+    <Layout>
       <form onSubmit={handleSubmit(handleData)}>
         <FormControl isInvalid={errors.customer}>
           <FormLabel htmlFor="customer">
@@ -116,6 +117,6 @@ export default function NewInvoiceItem(
           Add
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

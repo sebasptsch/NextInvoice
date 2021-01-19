@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { useInvoiceItem, usePrices } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
@@ -72,7 +73,7 @@ export default function NewInvoiceItem(
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Edit Invoice Item</title>
       </Head>
@@ -119,6 +120,6 @@ export default function NewInvoiceItem(
           Save
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }

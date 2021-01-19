@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
+import Layout from "../../components/Layout";
 import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
 import { useInvoice } from "../../extras/resourceHooks";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
@@ -46,7 +47,7 @@ export default function InvoicePage(
   const toast = useToast();
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>View Invoice {invoice?.number}</title>
       </Head>
@@ -245,6 +246,6 @@ export default function InvoicePage(
       <br />
       <br />
       <InvoiceItemList invoice={invoice} />
-    </>
+    </Layout>
   );
 }

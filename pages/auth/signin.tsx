@@ -13,6 +13,7 @@ import { csrfToken } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import Layout from "../../components/Layout";
 
 export default function SignIn({ csrfToken }) {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function SignIn({ csrfToken }) {
   }
   errorMessage ? toast({ description: errorMessage, status: "error" }) : null;
   return (
-    <>
+    <Layout>
       <Head>
         <title>Sign In</title>
       </Head>
@@ -88,7 +89,7 @@ export default function SignIn({ csrfToken }) {
           Sign in
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }
 

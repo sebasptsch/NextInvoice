@@ -22,6 +22,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
+import Layout from "../../components/Layout";
 import { NextChakraLink } from "../../components/NextChakraLink";
 import { useCustomers } from "../../extras/resourceHooks";
 
@@ -54,7 +55,7 @@ export default function Customers() {
   // useEffect(() => { filteredCustomers?.length === 0 ? setSize(size + 1) : null }, [customers])
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Customers</title>
       </Head>
@@ -183,6 +184,6 @@ export default function Customers() {
           Load More
         </Button>
       </Center>
-    </>
+    </Layout>
   );
 }

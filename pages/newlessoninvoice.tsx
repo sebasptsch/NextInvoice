@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ErrorHandler from "../components/ErrorHandler";
+import Layout from "../components/Layout";
 import { useCustomers } from "../extras/resourceHooks";
 
 export default function LessonInvoice() {
@@ -83,7 +84,7 @@ export default function LessonInvoice() {
     ).then(() => router.push(`/invoices?status=draft`));
   }
   return (
-    <>
+    <Layout>
       <Head>
         <title>Customers to be billed for classes</title>
       </Head>
@@ -175,6 +176,6 @@ export default function LessonInvoice() {
           Send Invoices
         </Button>
       </form>
-    </>
+    </Layout>
   );
 }
