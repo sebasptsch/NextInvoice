@@ -21,7 +21,7 @@ import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
 import InvoiceItemList from "../../components/InvoiceItemList";
 import { NextChakraLinkBox } from "../../components/NextChakraLinkBox";
-import { useInvoice } from "../../helpers/helpers";
+import { useInvoice } from "../../extras/resourceHooks";
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
 });

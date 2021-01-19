@@ -23,7 +23,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
-import { listFetcher } from "../helpers/helpers";
+import { listFetcher } from "../extras/helpers";
 import ErrorHandler from "./ErrorHandler";
 import { NextChakraLink } from "./NextChakraLink";
 

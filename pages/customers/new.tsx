@@ -25,7 +25,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorHandler from "../../components/ErrorHandler";
-import { useCustomers, usePrices } from "../../helpers/helpers";
+import { useCustomers, usePrices } from "../../extras/resourceHooks";
 
 export default function CustomerCreation() {
   // Validation Schema for Form

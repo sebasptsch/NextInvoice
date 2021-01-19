@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ErrorHandler from "../components/ErrorHandler";
-import { useCustomers } from "../helpers/helpers";
+import { useCustomers } from "../extras/resourceHooks";
 
 export default function LessonInvoice() {
   const [progress, setProgress] = useState<number>(0);

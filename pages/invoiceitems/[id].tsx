@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
-import { useInvoiceItem, usePrices } from "../../helpers/helpers";
+import { useInvoiceItem, usePrices } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",

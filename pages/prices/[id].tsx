@@ -22,7 +22,7 @@ import Head from "next/head";
 import { useForm } from "react-hook-form";
 import Stripe from "stripe";
 import ErrorHandler from "../../components/ErrorHandler";
-import { usePrice } from "../../helpers/helpers";
+import { usePrice } from "../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",

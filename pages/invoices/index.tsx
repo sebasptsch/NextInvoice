@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ErrorHandler from "../../components/ErrorHandler";
 import { NextChakraLink } from "../../components/NextChakraLink";
-import { useInvoices } from "../../helpers/helpers";
+import { useInvoices } from "../../extras/resourceHooks";
 
 // Component Functions
 

@@ -19,7 +19,7 @@ import Stripe from "stripe";
 import BalanceModal from "../../../components/BalanceModal";
 import InvoiceList from "../../../components/InvoiceList";
 import { NextChakraLink } from "../../../components/NextChakraLink";
-import { useCustomer, usePrices } from "../../../helpers/helpers";
+import { useCustomer, usePrices } from "../../../extras/resourceHooks";
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
   apiVersion: "2020-08-27",
