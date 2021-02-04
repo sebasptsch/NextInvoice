@@ -163,6 +163,7 @@ export default function Invoices() {
                   </MenuItem>
 
                   <MenuItem
+                    as="a"
                     href={invoice.hosted_invoice_url}
                     key="webpage"
                     hidden={invoice.status !== "open"}
