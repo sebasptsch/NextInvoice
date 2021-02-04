@@ -43,7 +43,6 @@ export default function InvoicePage(
 ) {
   const router = useRouter();
   const { invoice, mutate } = useInvoice(props.invoice.id, props.invoice);
-  // Hooks
   const toast = useToast();
 
   return (
@@ -82,6 +81,7 @@ export default function InvoicePage(
         </Button>
 
         <Button
+          as="a"
           m={2}
           href={invoice.hosted_invoice_url}
           key="webpage"

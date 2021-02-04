@@ -155,6 +155,7 @@ export default function InvoiceList({ customer }: { customer?: string }) {
 
                   <>
                     <MenuItem
+                      as="a"
                       href={invoice.hosted_invoice_url}
                       key="webpage"
                       hidden={invoice.status !== "open"}
