@@ -113,7 +113,10 @@ export default function NewInvoice(
           defaultValue={router.query.customer}
           onChange={(e) => setCustomer(e.target.value)}
         />
-        <datalist id="customers">
+        <datalist
+          id="customers"
+          // onChange={(e) => setCustomer(e.currentTarget.nodeValue)}
+        >
           {customers.map((customer) => (
             <option
               key={customer.id}
