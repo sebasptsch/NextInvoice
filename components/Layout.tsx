@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import DrawerNavigation from "./Drawer";
 import LoadingScreen from "./LoadingScreen.";
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: any }) {
   // Hooks
   const [session, loading] = useSession();
   const router = useRouter();

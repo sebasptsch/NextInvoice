@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   IconButton,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -106,18 +107,27 @@ export default function NewInvoice(
     <Layout>
       <FormControl>
         <FormLabel>Select a customer</FormLabel>
-        <Select
+        <Input
+          list="customers"
+          name="customer"
+          defaultValue={router.query.customer}
+        />
+        {/* <Select
           name="customer"
           defaultValue={router.query.customer}
           onChange={(e) => setCustomer(e.target.value)}
           value={customer}
-        >
+        > */}
+        <datalist id="customers">
           {customers.map((customer) => (
-            <option key={customer.id} value={customer.id}>
-              {customer.name?.length > 0 ? customer?.name : customer?.email}
-            </option>
+            <option
+              key={customer.id}
+              value={customer.id}
+              label={customer.name}
+            />
           ))}
-        </Select>
+        </datalist>
+        {/* </Select> */}
       </FormControl>
 
       <form onSubmit={handleSubmit(handleLineData)}>
