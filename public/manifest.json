@@ -20,7 +20,7 @@
     ],
     "theme_color": "#FFFFFF",
     "background_color": "#FFFFFF",
-    "start_url": "/",
+    "start_url": "/invoices",
     "display": "standalone",
     "orientation": "portrait"
 }
