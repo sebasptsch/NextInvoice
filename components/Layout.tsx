@@ -70,10 +70,6 @@ export default function Layout({ children }) {
         </Flex>
       </Box>
       <Container>{children}</Container>
-      <br />
-      <Box w="100%">
-        <Center>Made by Sebastian for Juli</Center>
-      </Box>
     </>
   );
 }

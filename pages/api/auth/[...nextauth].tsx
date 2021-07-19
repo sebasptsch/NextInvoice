@@ -1,7 +1,7 @@
-import NextAuth, { InitOptions } from "next-auth";
+import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
-const options: InitOptions = {
+const options = {
   pages: {
     signIn: "/auth/signin",
     // signOut: "/auth/signout",

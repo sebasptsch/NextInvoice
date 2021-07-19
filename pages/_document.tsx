@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -22,7 +22,7 @@ class MyDocument extends Document {
           />
           <meta
             name="description"
-            content="An invoicing system made for Juli by Sebastian"
+            content="An invoicing system made for Juli."
           />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
