@@ -3,12 +3,12 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Select,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -49,20 +49,20 @@ export default function NewInvoiceItem() {
               Which Customer do you want to add an invoice item to?
             </FormLabel>
             {customers?.length > 0 ? (
-              <Select
+              <Input
                 name="customer"
                 defaultValue={router.query.customer}
                 ref={register}
-              >
-                {customers?.map((customer) => (
-                  <option key={customer.id} value={customer.id}>
-                    {customer.name?.length > 0
-                      ? customer?.name
-                      : customer?.email}
-                  </option>
-                ))}
-              </Select>
+                list="customers"
+              />
             ) : null}
+            <datalist id="customers">
+              {customers?.map((customer) => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.name?.length > 0 ? customer?.name : customer?.email}
+                </option>
+              ))}
+            </datalist>
             <FormErrorMessage>{errors.customer?.message}</FormErrorMessage>
           </FormControl>
           <FormControl></FormControl>
@@ -71,11 +71,13 @@ export default function NewInvoiceItem() {
               Which Price / Product Would you like to add?
             </FormLabel>
 
-            <Select
+            <Input
               name="price"
               ref={register({ required: "This is required" })}
               defaultValue={router.query.price}
-            >
+              list="prices"
+            />
+            <datalist id="prices">
               {prices
                 ?.filter((price) => price.active)
                 ?.map((price) => (
@@ -83,7 +85,7 @@ export default function NewInvoiceItem() {
                     {price.nickname}
                   </option>
                 ))}
-            </Select>
+            </datalist>
 
             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
           </FormControl>

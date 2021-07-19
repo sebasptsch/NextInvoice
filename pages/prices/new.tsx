@@ -132,17 +132,19 @@ export default function PriceView() {
               <Tr>
                 <Td>Product</Td>
                 <Td>
-                  <Select
+                  <Input
                     ref={register()}
                     name="product"
                     defaultValue={router.query?.product}
-                  >
+                    list="products"
+                  />
+                  <datalist id="products">
                     {products?.map((product) => (
                       <option value={product.id} key={product.id}>
                         {product.name}
                       </option>
                     ))}
-                  </Select>
+                  </datalist>
                 </Td>
               </Tr>
             </Tbody>

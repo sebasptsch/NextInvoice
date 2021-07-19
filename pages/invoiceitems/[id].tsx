@@ -5,12 +5,12 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Select,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -66,20 +66,22 @@ export default function NewInvoiceItem() {
           <FormControl isInvalid={errors.price}>
             <FormLabel htmlFor="customer">What price should it use?</FormLabel>
             {prices?.length > 0 ? (
-              <Select
+              <Input
                 name="price"
                 ref={register({ required: "This is required" })}
                 defaultValue={invoiceItem?.price.id}
-              >
-                {prices
-                  ?.filter((price) => price.active)
-                  ?.map((price) => (
-                    <option key={price.id} value={price.id}>
-                      {price.nickname}
-                    </option>
-                  ))}
-              </Select>
+                list="prices"
+              />
             ) : null}
+            <datalist id="prices">
+              {prices
+                ?.filter((price) => price.active)
+                ?.map((price) => (
+                  <option key={price.id} value={price.id}>
+                    {price.nickname}
+                  </option>
+                ))}
+            </datalist>
             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
           </FormControl>
           <FormControl>

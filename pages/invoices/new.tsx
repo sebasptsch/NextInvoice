@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   IconButton,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -52,7 +53,7 @@ export default function NewInvoice() {
           return await axios
             .post(`/api/invoiceitems`, {
               customer,
-              price: price.id,
+              price: price,
               quantity: quantity,
             })
             .catch((error) => ErrorHandler(error, toast));
@@ -92,18 +93,20 @@ export default function NewInvoice() {
       <Layout>
         <FormControl>
           <FormLabel>Select a customer</FormLabel>
-          <Select
+          <Input
             name="customer"
             defaultValue={router.query.customer}
             onChange={(e) => setCustomer(e.target.value)}
             value={customer}
-          >
+            list="customers"
+          />
+          <datalist id="customers">
             {customers?.map((customer) => (
               <option key={customer.id} value={customer.id}>
                 {customer.name?.length > 0 ? customer?.name : customer?.email}
               </option>
             ))}
-          </Select>
+          </datalist>
         </FormControl>
 
         <form onSubmit={handleSubmit(handleLineData)}>
@@ -153,20 +156,24 @@ export default function NewInvoice() {
               <NumberInputStepper></NumberInputStepper>
             </NumberInput>
 
-            <Select
+            <Input
               ref={register}
               name={`invoiceitem.price`}
               // as={Input}
               textAlign="center"
-            >
+              list="invoiceitems"
+            />
+
+            <datalist id="invoiceitems">
+              {" "}
               {prices
                 ?.filter((price) => price.active)
                 ?.map((price) => (
-                  <option value={JSON.stringify(price)} key={price.id}>
+                  <option value={price.id} key={price.id}>
                     {price.nickname}
                   </option>
                 ))}
-            </Select>
+            </datalist>
 
             <IconButton
               aria-label="add invoice item"
