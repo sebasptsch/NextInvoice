@@ -10,14 +10,12 @@ export default async function handler(req, res) {
     res.status(403).json({
       message: "Please Login using valid credentials",
     });
-  }
-  if (req.method == "POST") {
+  } else if (req.method == "POST") {
     await stripe.customers
       .create(req.body)
       .then((value) => res.status(200).json(value))
       .catch((error) => res.status(error.statusCode).json(error));
-  }
-  if (req.method == "GET") {
+  } else if (req.method == "GET") {
     await stripe.customers
       .list(req.query)
       .then((value) => res.status(200).json(value))

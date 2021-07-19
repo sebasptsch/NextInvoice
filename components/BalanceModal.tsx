@@ -63,6 +63,8 @@ export default function BalanceModal({
       .catch((error) => ErrorHandler(error, toast));
   }
 
+  if (!customer) return null;
+
   return (
     <>
       <IconButton

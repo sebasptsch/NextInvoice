@@ -9,37 +9,18 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import ErrorHandler from "../../components/ErrorHandler";
 import Layout from "../../components/Layout";
-import { useCustomers, usePrices } from "../../extras/resourceHooks";
+import { useCustomers } from "../../extras/resourceHooks";
 
 export default function CustomerCreation() {
-  // Validation Schema for Form
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email()
-      .required()
-      .test("email-test", "This email is already in use", (value) => {
-        return !customers.some((customer) => customer.email === value);
-      }),
-    description: yup.string(),
-    phone: yup.string(),
-    name: yup.string(),
-  });
-
   // Hooks
   const { customers } = useCustomers();
-  const { prices } = usePrices();
-  const { handleSubmit, errors, register, formState } = useForm({
-    resolver: yupResolver(schema),
-  });
+  const { handleSubmit, errors, register, formState } = useForm();
   const toast = useToast();
   const router = useRouter();
 
@@ -92,7 +73,11 @@ export default function CustomerCreation() {
             placeholder="email"
             isRequired
             type="email"
-            ref={register}
+            ref={register({
+              validate: (value) => {
+                return !customers.some((customer) => customer.email === value);
+              },
+            })}
           />
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
