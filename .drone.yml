@@ -16,13 +16,15 @@ steps:
         - ./.next/cache
   - name: Install Dependancies
     pull: if-not-exists
-    image: node:lts-bullseye-slim
+    image: node:alpine
     commands:
+      - apk add libc6-compat
       - yarn install --frozen-lockfile
   - name: Build
     pull: if-not-exists
-    image: node:lts-bullseye-slim
+    image: node:alpine
     commands:
+      - apk add libc6-compat
       - yarn build
   - name: Publish
     image: plugins/docker
