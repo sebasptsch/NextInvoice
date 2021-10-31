@@ -1,5 +1,6 @@
 # Install dependencies only when needed
-FROM node:lts-bullseye-slim 
+FROM node:alpine
+RUN apk add --no-cache libc6-compat bash
 WORKDIR /app
 COPY ./public ./public
 COPY  ./.next ./.next
@@ -10,7 +11,7 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 EXPOSE 3000
-
-
-CMD ["yarn", "start"]
+SHELL [ "/bin/bash -c" ]
+CMD ["yarn start"]
+ 
  
