@@ -16,13 +16,13 @@ steps:
         - ./.next/cache
   - name: Install Dependancies
     pull: if-not-exists
-    image: node:alpine
+    image: node:lts-alpine
     commands:
       - apk add libc6-compat
       - yarn install --frozen-lockfile
   - name: Build
     pull: if-not-exists
-    image: node:alpine
+    image: node:lts-alpine
     commands:
       - apk add libc6-compat
       - yarn build

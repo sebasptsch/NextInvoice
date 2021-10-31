@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:lts-alpine
 WORKDIR /app
 RUN apk add libc6-compat
 COPY ./public ./public
